@@ -1,0 +1,42 @@
+version: '3.7'
+
+
+services:
+
+  parking-db:
+    platform: linux/x86_64
+    image: mysql:8.0.33
+    restart: always
+    container_name: parking-db
+    networks:
+      - services
+    ports:
+      - 3306:3306
+    volumes:
+      - parking-db-volume:/var/lib/mysql
+    environment:
+      - MYSQL_USER=parking
+      - MYSQL_DATABASE=parking
+      - MYSQL_PASSWORD=parking
+      - MYSQL_ROOT_PASSWORD=parking
+    command: --innodb_use_native_aio=0 --socket=/tmp/mysql.sock --bind_address=0.0.0.0
+
+  parking:
+    container_name: parking-hexa-java
+    image: pablords/parking-hexa-java
+    depends_on:
+      - parking-db
+    build: .
+    networks:
+      - services
+    ports:
+      - 8080:8080
+      - 35729:35729
+      - 5005:5005
+
+volumes:
+  parking-db-volume:
+
+networks:
+  services:
+    driver: 'bridge'
