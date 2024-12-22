@@ -1,7 +1,10 @@
 package com.pablords.parking.core.ports.outbound.repository;
 
-import com.pablords.parking.core.models.Car;
+import java.util.Optional;
+
+import com.pablords.parking.core.entities.Car;
 
 public interface CarRepositoryPort {
-    void create(Car car);
+    Optional<Car> findById(Long id);
+    Car create(Car car);
 }

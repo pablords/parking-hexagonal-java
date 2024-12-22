@@ -1,4 +1,4 @@
-package com.pablords.parking.core.valuesObjects;
+package com.pablords.parking.core.valueObjects;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

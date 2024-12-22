@@ -14,3 +14,4 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<String>("Placa invalida", HttpStatus.BAD_REQUEST);
     }
 }
+

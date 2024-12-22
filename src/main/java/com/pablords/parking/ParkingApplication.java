@@ -7,12 +7,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-import com.pablords.parking.adapters.outbound.db.CarJpaDbAdapter;
+import com.pablords.parking.adapters.outbound.repositories.JpaRepositoryCar;
 
 import lombok.extern.slf4j.Slf4j;
 
 @SpringBootApplication
-@EnableJpaRepositories(basePackageClasses = CarJpaDbAdapter.class)
+@EnableJpaRepositories(basePackageClasses = JpaRepositoryCar.class)
 @Slf4j
 public class ParkingApplication implements CommandLineRunner {
 

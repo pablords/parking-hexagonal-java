@@ -14,6 +14,7 @@ services:
       - 3306:3306
     volumes:
       - parking-db-volume:/var/lib/mysql
+      - ./sql:/docker-entrypoint-initdb.d/
     environment:
       - MYSQL_USER=parking
       - MYSQL_DATABASE=parking
@@ -21,14 +22,16 @@ services:
       - MYSQL_ROOT_PASSWORD=parking
     command: --innodb_use_native_aio=0 --socket=/tmp/mysql.sock --bind_address=0.0.0.0
 
-  parking:
-    container_name: parking-hexa-java
-    image: pablords/parking-hexa-java
+  parking-api-hexagonal-java:
+    container_name: parking-api-hexagonal-java
+    image: pablords/parking-api-hexagonal-java:latest
     depends_on:
       - parking-db
     build: .
     networks:
       - services
+    volumes:
+      - ./:/app
     ports:
       - 8080:8080
       - 35729:35729

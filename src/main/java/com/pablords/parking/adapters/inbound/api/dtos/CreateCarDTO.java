@@ -1,19 +1,10 @@
-package com.pablords.parking.core.models;
+package com.pablords.parking.adapters.inbound.api.dtos;
 
-import com.pablords.parking.core.valuesObjects.Plate;
+import com.pablords.parking.core.valueObjects.Plate;
 
-public class Car {
-    Long id;
+public class CreateCarDTO {
     Plate plate;
     String brand;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public Plate getPlate() {
         return plate;

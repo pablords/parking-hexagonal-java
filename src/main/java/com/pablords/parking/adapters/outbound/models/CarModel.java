@@ -1,8 +1,4 @@
 package com.pablords.parking.adapters.outbound.models;
-
-import com.pablords.parking.core.models.Car;
-import com.pablords.parking.core.valuesObjects.Plate;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -13,8 +9,8 @@ import lombok.Data;
 
 @Entity
 @Data
-@Table(name = "parking")
-public class CarAdapter {
+@Table(name = "cars")
+public class CarModel {
     @Column(name = "id")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,8 +22,4 @@ public class CarAdapter {
     @Column(name = "brand")
     private String brand;
 
-    public CarAdapter(Car car) {
-        this.brand = car.getBrand();
-        this.plate = car.getPlate().getValue();
-    }
 }

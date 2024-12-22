@@ -1,10 +1,19 @@
-package com.pablords.parking.core.models.dtos;
+package com.pablords.parking.core.entities;
 
-import com.pablords.parking.core.valuesObjects.Plate;
+import com.pablords.parking.core.valueObjects.Plate;
 
-public class CreateCarDto {
+public class Car {
+    Long id;
     Plate plate;
     String brand;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public Plate getPlate() {
         return plate;
