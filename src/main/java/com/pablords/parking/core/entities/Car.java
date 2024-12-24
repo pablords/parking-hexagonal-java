@@ -8,6 +8,17 @@ public class Car {
     String brand;
     String color;
 
+    
+
+    public Car() {
+    }
+
+    public Car(Plate plate, String brand, String color) {
+        this.plate = plate;
+        this.brand = brand;
+        this.color = color;
+    }
+
     public Long getId() {
         return id;
     }
