@@ -22,4 +22,7 @@ public class CarModel {
     @Column(name = "brand")
     private String brand;
 
+    @Column(name = "color")
+    private String color;
+
 }

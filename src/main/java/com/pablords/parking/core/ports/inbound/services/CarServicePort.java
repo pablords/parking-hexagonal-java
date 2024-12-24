@@ -1,8 +1,11 @@
 package com.pablords.parking.core.ports.inbound.services;
 
-import com.pablords.parking.adapters.inbound.api.dtos.CreateCarDTO;
+import java.util.List;
+
+
 import com.pablords.parking.core.entities.Car;
 
 public interface CarServicePort {
-    Car create(CreateCarDTO createCarDto); 
+    Car create(Car car); 
+    List<Car> find();
 }

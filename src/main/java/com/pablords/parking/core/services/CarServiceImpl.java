@@ -1,6 +1,7 @@
 package com.pablords.parking.core.services;
 
-import com.pablords.parking.adapters.inbound.api.dtos.CreateCarDTO;
+import java.util.List;
+
 import com.pablords.parking.core.entities.Car;
 import com.pablords.parking.core.ports.inbound.services.CarServicePort;
 import com.pablords.parking.core.ports.outbound.repository.CarRepositoryPort;
@@ -13,12 +14,13 @@ public class CarServiceImpl implements CarServicePort {
     }
 
     @Override
-    public Car create(CreateCarDTO createCarDto) {
-        var car = new Car();
-        car.setBrand(createCarDto.getBrand());
-        car.setPlate(createCarDto.getPlate());
+    public Car create(Car car) {
         return this.carRepositoryPort.create(car);
-  
+    }
+
+    @Override
+    public List<Car> find() {
+        return this.carRepositoryPort.find();
     }
 
 }

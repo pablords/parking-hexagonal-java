@@ -15,7 +15,7 @@ public class Plate {
 
     }
 
-    Plate(String value) {
+    public Plate(String value) {
         this.value = value != null ? value : "";
         Matcher matcher = VALID_PLATE_REGEX.matcher(value);
         if (!matcher.find()) {

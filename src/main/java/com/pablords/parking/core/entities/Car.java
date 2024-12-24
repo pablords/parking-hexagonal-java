@@ -6,6 +6,7 @@ public class Car {
     Long id;
     Plate plate;
     String brand;
+    String color;
 
     public Long getId() {
         return id;
@@ -29,6 +30,14 @@ public class Car {
 
     public void setBrand(String brand) {
         this.brand = brand;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public String getColor() {
+        return color;
     }
 
 }
