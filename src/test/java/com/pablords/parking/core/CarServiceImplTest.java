@@ -31,8 +31,8 @@ class CarServiceImplTest {
 
         var plate1 = new Plate("ABC1234");
         var plate2 = new Plate("ABC1234");
-        Car existingCar = new Car(plate1, "Toyota", "Corolla");
-        Car newCar = new Car(plate2, "Honda", "Civic");
+        Car existingCar = new Car(plate1, "Toyota", "Red", "Corolla");
+        Car newCar = new Car(plate2, "Honda", "Green", "Civic");
 
         when(carRepositoryPortMock.find()).thenReturn(List.of(existingCar));
 
@@ -48,7 +48,7 @@ class CarServiceImplTest {
     @Test
     void testCreateCarWithUniquePlate() {
         var plate = new Plate("XYZ5678");
-        Car newCar = new Car(plate, "Honda", "Civic");
+        Car newCar = new Car(plate, "Honda", "Civic", "Green");
 
         when(carRepositoryPortMock.find()).thenReturn(List.of());
         when(carRepositoryPortMock.create(newCar)).thenReturn(newCar);
@@ -70,13 +70,15 @@ class CarServiceImplTest {
         var hondaCar = new Car();
         var plateHondaCar = new Plate("XYZ5678");
         hondaCar.setBrand("Honda");
-        hondaCar.setColor("blue");
+        hondaCar.setColor("Blue");
+        hondaCar.setModel("Civic");
         hondaCar.setPlate(plateHondaCar);
 
         var fordCar = new Car();
         var plateFordCar = new Plate("LMN3456");
         fordCar.setBrand("Ford");
-        fordCar.setColor("blue");
+        fordCar.setColor("Blue");
+        fordCar.setModel("Focus");
         fordCar.setPlate(plateFordCar);
 
         carList.add(hondaCar);

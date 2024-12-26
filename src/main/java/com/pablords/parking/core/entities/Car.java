@@ -7,16 +7,16 @@ public class Car {
     Plate plate;
     String brand;
     String color;
-
-    
+    String model;
 
     public Car() {
     }
 
-    public Car(Plate plate, String brand, String color) {
+    public Car(Plate plate, String brand, String color, String model) {
         this.plate = plate;
         this.brand = brand;
         this.color = color;
+        this.model = model;
     }
 
     public Long getId() {
@@ -49,6 +49,14 @@ public class Car {
 
     public String getColor() {
         return color;
+    }
+
+    public String getModel() {
+        return model;
+    }
+
+    public void setModel(String model) {
+        this.model = model;
     }
 
 }

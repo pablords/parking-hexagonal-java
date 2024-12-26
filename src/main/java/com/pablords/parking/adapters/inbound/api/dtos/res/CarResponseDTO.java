@@ -8,6 +8,7 @@ public class CarResponseDTO {
     private String plate;
     private String brand;
     private String color;
+    private String model;
 }
 
 

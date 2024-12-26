@@ -16,6 +16,7 @@ public class CarMapper {
         car.setPlate(plate);
         car.setBrand(createCarDTO.getBrand());
         car.setColor(createCarDTO.getColor());
+        car.setModel(createCarDTO.getModel());
         return car;
     }
 
@@ -25,6 +26,7 @@ public class CarMapper {
         carResponse.setPlate(car.getPlate().getValue());
         carResponse.setBrand(car.getBrand());
         carResponse.setColor(car.getColor());
+        carResponse.setModel(car.getModel());
         return carResponse;
     }
 }

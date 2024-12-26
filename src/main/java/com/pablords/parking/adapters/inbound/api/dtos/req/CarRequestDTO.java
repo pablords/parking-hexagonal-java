@@ -11,5 +11,7 @@ public class CarRequestDTO {
     String brand;
     @NotBlank
     String color;
+    @NotBlank
+    String model;
 
 }
