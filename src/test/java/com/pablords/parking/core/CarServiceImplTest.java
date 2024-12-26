@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import com.pablords.parking.core.entities.Car;
 import com.pablords.parking.core.exceptions.ExistPlateException;
-import com.pablords.parking.core.ports.outbound.repository.CarRepositoryPort;
+import com.pablords.parking.core.ports.outbound.repositories.CarRepositoryPort;
 import com.pablords.parking.core.services.CarServiceImpl;
 import com.pablords.parking.core.valueObjects.Plate;
 

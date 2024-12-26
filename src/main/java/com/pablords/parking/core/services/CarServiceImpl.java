@@ -6,7 +6,7 @@ import com.pablords.parking.core.entities.Car;
 import com.pablords.parking.core.exceptions.InvalidPlateException;
 import com.pablords.parking.core.exceptions.ExistPlateException;
 import com.pablords.parking.core.ports.inbound.services.CarServicePort;
-import com.pablords.parking.core.ports.outbound.repository.CarRepositoryPort;
+import com.pablords.parking.core.ports.outbound.repositories.CarRepositoryPort;
 import com.pablords.parking.core.utils.StringUtils;
 
 public class CarServiceImpl implements CarServicePort {

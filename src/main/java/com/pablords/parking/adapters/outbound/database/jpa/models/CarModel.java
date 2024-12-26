@@ -1,4 +1,4 @@
-package com.pablords.parking.adapters.outbound.models;
+package com.pablords.parking.adapters.outbound.database.jpa.models;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

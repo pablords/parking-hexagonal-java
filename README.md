@@ -7,40 +7,50 @@ parking
 ├── ParkingApplication.java
 ├── adapters
 │   ├── inbound
-│   │   └── api
+│   │   └── http
 │   │       ├── controllers
 │   │       │   └── CarController.java
 │   │       ├── dtos
-│   │       │   └── CreateCarDTO.java
+│   │       │   ├── req
+│   │       │   │   └── CarRequestDTO.java
+│   │       │   └── res
+│   │       │       └── CarResponseDTO.java
 │   │       ├── handlers
+│   │       │   ├── ApiError.java
 │   │       │   └── GlobalExceptionHandler.java
 │   │       └── mappers
 │   │           └── CarMapper.java
 │   └── outbound
-│       ├── mappers
-│       │   └── CarMapper.java
-│       ├── models
-│       │   └── CarModel.java
-│       └── repositories
-│           ├── CarRepositoryAdapter.java
-│           └── JpaRepositoryCar.java
+│       └── database
+│           └── jpa
+│               ├── mappers
+│               │   └── CarMapper.java
+│               ├── models
+│               │   └── CarModel.java
+│               └── repositories
+│                   ├── CarRepositoryAdapter.java
+│                   └── JpaRepositoryCar.java
 ├── config
-│   └── BeanConfiguration.java
+│   ├── BeanConfiguration.java
+│   └── SwaggerConfig.java
 └── core
     ├── entities
     │   └── Car.java
     ├── exceptions
+    │   ├── ExistPlateException.java
     │   └── InvalidPlateException.java
     ├── ports
     │   ├── inbound
     │   │   └── services
     │   │       └── CarServicePort.java
     │   └── outbound
-    │       └── repository
+    │       └── repositories
     │           └── CarRepositoryPort.java
     ├── services
     │   └── CarServiceImpl.java
-    └── valuesObjects
+    ├── utils
+    │   └── StringUtils.java
+    └── valueObjects
         └── Plate.java
 
 ```

@@ -1,4 +1,4 @@
-package com.pablords.parking.core.ports.outbound.repository;
+package com.pablords.parking.core.ports.outbound.repositories;
 
 import java.util.List;
 import java.util.Optional;

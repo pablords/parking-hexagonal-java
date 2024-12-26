@@ -1,4 +1,4 @@
-package com.pablords.parking.adapters.inbound.api.dtos.req;
+package com.pablords.parking.adapters.inbound.http.dtos.req;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;

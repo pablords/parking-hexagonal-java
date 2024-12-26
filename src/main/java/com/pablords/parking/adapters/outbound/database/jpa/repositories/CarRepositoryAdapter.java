@@ -1,4 +1,4 @@
-package com.pablords.parking.adapters.outbound.repositories;
+package com.pablords.parking.adapters.outbound.database.jpa.repositories;
 
 import java.util.List;
 import java.util.Optional;
@@ -7,11 +7,9 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 
 import com.pablords.parking.core.entities.Car;
-import com.pablords.parking.core.ports.outbound.repository.CarRepositoryPort;
-
-
-import com.pablords.parking.adapters.outbound.mappers.CarMapper;
-import com.pablords.parking.adapters.outbound.models.CarModel;
+import com.pablords.parking.core.ports.outbound.repositories.CarRepositoryPort;
+import com.pablords.parking.adapters.outbound.database.jpa.mappers.CarMapper;
+import com.pablords.parking.adapters.outbound.database.jpa.models.CarModel;
 
 
 @Component

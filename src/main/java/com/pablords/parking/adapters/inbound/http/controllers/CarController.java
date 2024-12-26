@@ -1,4 +1,4 @@
-package com.pablords.parking.adapters.inbound.api.controllers;
+package com.pablords.parking.adapters.inbound.http.controllers;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -11,10 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.pablords.parking.adapters.inbound.api.dtos.req.CarRequestDTO;
-import com.pablords.parking.adapters.inbound.api.dtos.res.CarResponseDTO;
-import com.pablords.parking.adapters.inbound.api.mappers.CarMapper;
-
+import com.pablords.parking.adapters.inbound.http.dtos.req.CarRequestDTO;
+import com.pablords.parking.adapters.inbound.http.dtos.res.CarResponseDTO;
+import com.pablords.parking.adapters.inbound.http.mappers.CarMapper;
 import com.pablords.parking.core.ports.inbound.services.CarServicePort;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;

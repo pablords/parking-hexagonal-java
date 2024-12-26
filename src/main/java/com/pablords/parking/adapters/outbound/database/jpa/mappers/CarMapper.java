@@ -1,5 +1,5 @@
-package com.pablords.parking.adapters.outbound.mappers;
-import com.pablords.parking.adapters.outbound.models.CarModel;
+package com.pablords.parking.adapters.outbound.database.jpa.mappers;
+import com.pablords.parking.adapters.outbound.database.jpa.models.CarModel;
 import com.pablords.parking.core.entities.Car;
 import com.pablords.parking.core.valueObjects.Plate;
 

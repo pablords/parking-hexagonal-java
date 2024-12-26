@@ -1,4 +1,4 @@
-package com.pablords.parking.adapters.inbound.api.handlers;
+package com.pablords.parking.adapters.inbound.http.handlers;
 
 import java.time.LocalDateTime;
 
