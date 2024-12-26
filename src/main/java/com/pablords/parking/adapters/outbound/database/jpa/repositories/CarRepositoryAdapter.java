@@ -23,12 +23,12 @@ public class CarRepositoryAdapter implements CarRepositoryPort {
 
     @Override
     public Optional<Car> findById(Long id) {
-        return this.jpaRepositoryCar.findById(id).map(CarMapper::toEntity);
+        return jpaRepositoryCar.findById(id).map(CarMapper::toEntity);
     }
 
     @Override
     public List<Car> find() {
-        List<CarModel> carsModel = this.jpaRepositoryCar.findAll();
+        List<CarModel> carsModel = jpaRepositoryCar.findAll();
         return carsModel.stream()
                 .map(car -> CarMapper.toEntity(car))
                 .collect(Collectors.toList());
@@ -36,8 +36,13 @@ public class CarRepositoryAdapter implements CarRepositoryPort {
 
     @Override
     public Car create(Car car) {
-        CarModel carModel = this.jpaRepositoryCar.save(CarMapper.toModel(car));
+        CarModel carModel = jpaRepositoryCar.save(CarMapper.toModel(car));
         return CarMapper.toEntity(carModel);
+    }
+
+    @Override
+    public boolean existsByPlate(String plate) {
+        return jpaRepositoryCar.existsByPlate(plate);
     }
 
 }

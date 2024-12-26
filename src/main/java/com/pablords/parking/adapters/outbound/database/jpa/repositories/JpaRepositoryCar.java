@@ -8,4 +8,6 @@ import com.pablords.parking.adapters.outbound.database.jpa.models.CarModel;
 
 
 @Repository
-public interface JpaRepositoryCar extends JpaRepository<CarModel, Long> {}
+public interface JpaRepositoryCar extends JpaRepository<CarModel, Long> {
+    boolean existsByPlate(String plate);
+}

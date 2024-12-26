@@ -5,6 +5,7 @@ import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.pablords.parking.core.entities.Car;
+import com.pablords.parking.core.exceptions.ErrorMessages;
 import com.pablords.parking.core.exceptions.ExistPlateException;
 import com.pablords.parking.core.ports.outbound.repositories.CarRepositoryPort;
 import com.pablords.parking.core.services.CarServiceImpl;
@@ -31,17 +32,16 @@ class CarServiceImplTest {
 
         var plate1 = new Plate("ABC1234");
         var plate2 = new Plate("ABC1234");
-        Car existingCar = new Car(plate1, "Toyota", "Red", "Corolla");
         Car newCar = new Car(plate2, "Honda", "Green", "Civic");
 
-        when(carRepositoryPortMock.find()).thenReturn(List.of(existingCar));
+        when(carRepositoryPortMock.existsByPlate(plate1.getValue())).thenReturn(true);
 
         // Act & Assert
         ExistPlateException exception = assertThrows(
                 ExistPlateException.class,
                 () -> carService.create(newCar));
 
-        assertEquals("A car with this plate already exists: ABC1234", exception.getMessage());
+        assertEquals(String.format(ErrorMessages.CAR_WITH_PLATE_EXISTS, newCar.getPlate().getValue()), exception.getMessage());
         verify(carRepositoryPortMock, never()).create(any(Car.class)); // O método create não deve ser chamado
     }
 
