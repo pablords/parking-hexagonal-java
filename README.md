@@ -26,28 +26,50 @@ parking
 │               ├── mappers
 │               │   └── CarMapper.java
 │               ├── models
-│               │   └── CarModel.java
+│               │   ├── CarModel.java
+│               │   ├── CheckinModel.java
+│               │   ├── CheckoutModel.java
+│               │   └── SlotModel.java
 │               └── repositories
 │                   ├── CarRepositoryAdapter.java
-│                   └── JpaRepositoryCar.java
+│                   ├── CheckinRepositoryAdapter.java
+│                   ├── CheckoutRepositoryAdapter.java
+│                   ├── JpaRepositoryCar.java
+│                   ├── JpaRepositoryCheckin.java
+│                   ├── JpaRepositoryCheckout.java
+│                   ├── JpaRepositorySlot.java
+│                   └── SlotRepositoryAdapter.java
 ├── config
 │   ├── BeanConfiguration.java
 │   └── SwaggerConfig.java
 └── core
     ├── entities
-    │   └── Car.java
+    │   ├── Car.java
+    │   ├── Checkin.java
+    │   ├── Checkout.java
+    │   └── Slot.java
     ├── exceptions
+    │   ├── CheckinTimeMissingException.java
+    │   ├── ErrorMessages.java
     │   ├── ExistPlateException.java
-    │   └── InvalidPlateException.java
+    │   ├── InvalidPlateException.java
+    │   ├── ParkingFullException.java
+    │   └── SlotOcupiedException.java
     ├── ports
     │   ├── inbound
     │   │   └── services
     │   │       └── CarServicePort.java
     │   └── outbound
     │       └── repositories
-    │           └── CarRepositoryPort.java
+    │           ├── CarRepositoryPort.java
+    │           ├── CheckinRepositoryPort.java
+    │           ├── CheckoutRepositoryPort.java
+    │           └── SlotRepositoryPort.java
     ├── services
-    │   └── CarServiceImpl.java
+    │   ├── CarService.java
+    │   ├── CheckinService.java
+    │   ├── CheckoutService.java
+    │   └── SlotService.java
     ├── utils
     │   └── StringUtils.java
     └── valueObjects
