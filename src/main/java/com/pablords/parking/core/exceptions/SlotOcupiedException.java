@@ -4,6 +4,6 @@ public class SlotOcupiedException extends RuntimeException {
     private static final long serialVersionUID = 1L;
 
     public SlotOcupiedException() {
-        super("Slot Ocupied");
+        super("This slot is already occupied");
     }
 }

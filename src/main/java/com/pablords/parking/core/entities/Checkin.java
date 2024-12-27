@@ -33,4 +33,8 @@ public class Checkin {
     public LocalDateTime getCheckOutTime() {
         return this.checkOutTime;
     }
+
+    public void setCheckInTime(LocalDateTime minusHours) {
+        this.checkInTime = minusHours;
+    }
 }
