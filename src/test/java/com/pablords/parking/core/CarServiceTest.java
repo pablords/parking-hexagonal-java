@@ -8,7 +8,7 @@ import com.pablords.parking.core.entities.Car;
 import com.pablords.parking.core.exceptions.ErrorMessages;
 import com.pablords.parking.core.exceptions.ExistPlateException;
 import com.pablords.parking.core.ports.outbound.repositories.CarRepositoryPort;
-import com.pablords.parking.core.services.CarServiceImpl;
+import com.pablords.parking.core.services.CarService;
 import com.pablords.parking.core.valueObjects.Plate;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -17,14 +17,14 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.ArrayList;
 
-class CarServiceImplTest {
+class CarServiceTest {
     private CarRepositoryPort carRepositoryPortMock;
-    private CarServiceImpl carService;
+    private CarService carService;
 
     @BeforeEach
     void setUp() {
         carRepositoryPortMock = mock(CarRepositoryPort.class); // Criando o mock do repositório
-        carService = new CarServiceImpl(carRepositoryPortMock); // Injetando o mock
+        carService = new CarService(carRepositoryPortMock); // Injetando o mock
     }
 
     @Test

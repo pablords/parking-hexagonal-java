@@ -8,10 +8,10 @@ import com.pablords.parking.core.exceptions.ExistPlateException;
 import com.pablords.parking.core.ports.inbound.services.CarServicePort;
 import com.pablords.parking.core.ports.outbound.repositories.CarRepositoryPort;
 
-public class CarServiceImpl implements CarServicePort {
+public class CarService implements CarServicePort {
     private final CarRepositoryPort carRepositoryPort;
 
-    public CarServiceImpl(CarRepositoryPort carRepositoryPort) {
+    public CarService(CarRepositoryPort carRepositoryPort) {
         this.carRepositoryPort = carRepositoryPort;
     }
 
