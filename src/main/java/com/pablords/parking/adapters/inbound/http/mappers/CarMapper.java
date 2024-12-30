@@ -1,7 +1,7 @@
 package com.pablords.parking.adapters.inbound.http.mappers;
 
-import com.pablords.parking.adapters.inbound.http.dtos.req.CarRequestDTO;
-import com.pablords.parking.adapters.inbound.http.dtos.res.CarResponseDTO;
+import com.pablords.parking.adapters.inbound.http.dtos.CarRequestDTO;
+import com.pablords.parking.adapters.inbound.http.dtos.CarResponseDTO;
 import com.pablords.parking.core.entities.Car;
 import com.pablords.parking.core.valueObjects.Plate;
 

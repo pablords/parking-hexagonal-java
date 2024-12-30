@@ -6,5 +6,6 @@ import java.util.Optional;
 
 public interface CheckinRepositoryPort {
     Checkin save(Checkin checkin);
-    Optional<Checkin> findByCarId(Long carId);
+    Optional<Checkin> findByPlate(String plate);
+    Optional<Checkin> findById(Long id);
 }

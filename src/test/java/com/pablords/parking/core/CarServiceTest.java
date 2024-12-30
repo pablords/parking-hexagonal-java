@@ -42,7 +42,7 @@ class CarServiceTest {
                 () -> carService.create(newCar));
 
         assertEquals(String.format(ErrorMessages.CAR_WITH_PLATE_EXISTS, newCar.getPlate().getValue()), exception.getMessage());
-        verify(carRepositoryPortMock, never()).create(any(Car.class)); // O método create não deve ser chamado
+        verify(carRepositoryPortMock, never()).save(any(Car.class)); // O método create não deve ser chamado
     }
 
     @Test
@@ -51,7 +51,7 @@ class CarServiceTest {
         Car newCar = new Car(plate, "Honda", "Civic", "Green");
 
         when(carRepositoryPortMock.find()).thenReturn(List.of());
-        when(carRepositoryPortMock.create(newCar)).thenReturn(newCar);
+        when(carRepositoryPortMock.save(newCar)).thenReturn(newCar);
 
         // Act
         Car createdCar = carService.create(newCar);
@@ -59,7 +59,7 @@ class CarServiceTest {
         // Assert
         assertNotNull(createdCar);
         assertEquals("XYZ5678", createdCar.getPlate().getValue());
-        verify(carRepositoryPortMock, times(1)).create(newCar);
+        verify(carRepositoryPortMock, times(1)).save(newCar);
     }
 
     @Test

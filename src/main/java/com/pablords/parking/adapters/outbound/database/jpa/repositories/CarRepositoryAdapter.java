@@ -11,7 +11,6 @@ import com.pablords.parking.core.ports.outbound.repositories.CarRepositoryPort;
 import com.pablords.parking.adapters.outbound.database.jpa.mappers.CarMapper;
 import com.pablords.parking.adapters.outbound.database.jpa.models.CarModel;
 
-
 @Component
 public class CarRepositoryAdapter implements CarRepositoryPort {
 
@@ -35,7 +34,7 @@ public class CarRepositoryAdapter implements CarRepositoryPort {
     }
 
     @Override
-    public Car create(Car car) {
+    public Car save(Car car) {
         CarModel carModel = jpaRepositoryCar.save(CarMapper.toModel(car));
         return CarMapper.toEntity(carModel);
     }
@@ -43,6 +42,12 @@ public class CarRepositoryAdapter implements CarRepositoryPort {
     @Override
     public boolean existsByPlate(String plate) {
         return jpaRepositoryCar.existsByPlate(plate);
+    }
+
+    @Override
+    public Optional<Car> findByPlate(String plate) {
+        var carModel = jpaRepositoryCar.findByPlate(plate);
+        return Optional.of(CarMapper.toEntity(carModel.get()));
     }
 
 }

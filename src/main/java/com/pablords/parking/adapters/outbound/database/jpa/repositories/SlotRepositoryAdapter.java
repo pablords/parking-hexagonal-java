@@ -1,5 +1,6 @@
 package com.pablords.parking.adapters.outbound.database.jpa.repositories;
 
+import com.pablords.parking.adapters.outbound.database.jpa.mappers.SlotMapper;
 import com.pablords.parking.core.entities.Slot;
 import com.pablords.parking.core.ports.outbound.repositories.SlotRepositoryPort;
 import org.springframework.stereotype.Component;
@@ -18,8 +19,12 @@ public class SlotRepositoryAdapter implements SlotRepositoryPort {
 
     @Override
     public Optional<Slot> findAvailableSlot() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findAvailableSlot'");
+        // Recupera o Optional<SlotModel> do repositório
+        var slotModel = jpaRepositorySlot.findFirstByOccupiedFalse();
+
+        // Usa map para transformar o Optional<SlotModel> em Optional<Slot> usando o
+        // mapper
+        return slotModel.map(SlotMapper::toEntity);
     }
 
     @Override
@@ -36,7 +41,8 @@ public class SlotRepositoryAdapter implements SlotRepositoryPort {
 
     @Override
     public Slot save(Slot slot) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'save'");
+        var slotModel = SlotMapper.toModel(slot);
+        var createdSlot = jpaRepositorySlot.save(slotModel);
+        return SlotMapper.toEntity(createdSlot);
     }
 }

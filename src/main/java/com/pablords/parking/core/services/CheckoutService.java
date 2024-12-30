@@ -2,46 +2,94 @@ package com.pablords.parking.core.services;
 
 import com.pablords.parking.core.entities.Checkout;
 import com.pablords.parking.core.entities.Slot;
+import com.pablords.parking.core.exceptions.CheckinNotFoundException;
 import com.pablords.parking.core.exceptions.CheckinTimeMissingException;
 import com.pablords.parking.core.entities.Checkin;
+import com.pablords.parking.core.ports.inbound.services.CheckoutServicePort;
+import com.pablords.parking.core.ports.outbound.repositories.CarRepositoryPort;
 import com.pablords.parking.core.ports.outbound.repositories.CheckinRepositoryPort;
 import com.pablords.parking.core.ports.outbound.repositories.CheckoutRepositoryPort;
 import com.pablords.parking.core.ports.outbound.repositories.SlotRepositoryPort;
 
 import java.time.LocalDateTime;
+import java.util.Random;
 
-public class CheckoutService {
+public class CheckoutService implements CheckoutServicePort {
+    private static final long HOURLY_RATE_IN_CENTS = 250;
+
     private final CheckinRepositoryPort checkinRepository;
     private final CheckoutRepositoryPort checkoutRepository;
     private final SlotRepositoryPort slotRepository;
+    private final CarRepositoryPort carRepository;
 
-    public CheckoutService(CheckinRepositoryPort checkinRepository, CheckoutRepositoryPort checkoutRepository,
-            SlotRepositoryPort slotRepository) {
+    public CheckoutService(
+            CheckinRepositoryPort checkinRepository,
+            CheckoutRepositoryPort checkoutRepository,
+            SlotRepositoryPort slotRepository,
+            CarRepositoryPort carRepository) {
         this.checkinRepository = checkinRepository;
         this.checkoutRepository = checkoutRepository;
         this.slotRepository = slotRepository;
+        this.carRepository = carRepository;
     }
 
-    public Checkout checkout(Checkin checkin) {
-        if (checkin.getCheckInTime() == null) {
+    public Checkout checkout(String plate) {
+        var checkinByPlate = checkinRepository.findByPlate(plate)
+                .orElseThrow(() -> new CheckinNotFoundException("No check-in found for plate: " + plate));
+        var chekinById = checkinRepository.findById(checkinByPlate.getId())
+                .orElseThrow(() -> new IllegalArgumentException("No check-in found for id: " + checkinByPlate.getId()));
+        var carByPlate = carRepository.findByPlate(plate)
+                .orElseThrow(() -> new IllegalArgumentException("No car found for plate: " + plate));
+
+        if (chekinById.getCheckInTime() == null) {
             throw new CheckinTimeMissingException();
         }
-        checkin.setCheckOutTime(LocalDateTime.now()); // Registra a hora de saída
+        chekinById.setCheckOutTime(LocalDateTime.now()); // Registra a hora de saída
+        chekinById.setCar(carByPlate);
 
-        long parkingFee = calculateParkingFee(checkin);
-        Checkout checkout = new Checkout(checkin);
+        long parkingFee = calculateParkingFee(chekinById);
+        Checkout checkout = new Checkout(chekinById);
+
         checkout.setParkingFee(parkingFee);
-        checkoutRepository.save(checkout); // Salva o checkout
 
-        Slot slot = checkin.getSlot();
+        Slot slot = chekinById.getSlot();
         slot.free(); // Libera a vaga
-        slotRepository.save(slot); // Atualiza a vaga
 
-        return checkout;
+        slotRepository.save(slot); // Atualiza a vaga
+        checkinRepository.save(chekinById); // Atualiza a checkin
+
+        var checkoutResponse = checkoutRepository.save(checkout); // Salva o checkout
+
+        return checkoutResponse;
+
     }
 
     private long calculateParkingFee(Checkin checkin) {
-        long hours = java.time.Duration.between(checkin.getCheckInTime(), LocalDateTime.now()).toHours();
-        return hours * 250; // Cobrança de 2,50 por hora, multiplicado por 100 para representar centavos
+        LocalDateTime checkInTime = checkin.getCheckInTime();
+        if (checkInTime == null) {
+            throw new IllegalArgumentException("Check-in time cannot be null");
+        }
+
+        var random = new Random();
+        int randomNumber = random.nextInt(500) + 1;
+        var plusDate = LocalDateTime.now().plusMinutes(randomNumber);
+        // Calcula a duração total em segundos
+        long seconds = java.time.Duration.between(checkInTime, plusDate).getSeconds();
+
+        // Converte segundos para minutos (arredondando para cima, garantindo cobrança
+        // mínima de 1 minuto)
+        long minutes = (long) Math.ceil(seconds / 60.0);
+
+        // Converte a taxa horária para minutos (2,50 por 60 minutos)
+        double ratePerMinute = (double) HOURLY_RATE_IN_CENTS / 60;
+
+        // Calcula a taxa total
+        long totalFee = Math.round(minutes * ratePerMinute);
+
+        System.out.printf(
+                "Check-in time: %s, Total seconds: %d, Total minutes: %d, Rate per minute: %.2f, Total fee in cents: %d%n",
+                checkInTime, seconds, minutes, ratePerMinute, totalFee);
+
+        return totalFee;
     }
 }

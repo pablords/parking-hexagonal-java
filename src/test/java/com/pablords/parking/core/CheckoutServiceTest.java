@@ -58,7 +58,7 @@ class CheckoutServiceTest {
         when(checkoutRepository.save(any(Checkout.class))).thenReturn(checkout);
         when(slotRepository.save(any(Slot.class))).thenReturn(slot);
 
-        Checkout result = checkoutService.checkout(checkin);
+        Checkout result = checkoutService.checkout(checkin.getCar().getPlate().getValue());
 
         // Verifica se a hora de saída foi registrada
         assertNotNull(result.getCheckOutTime());
@@ -81,7 +81,7 @@ class CheckoutServiceTest {
         // Cenário: Testa o caso em que o checkin não tem hora registrada (deve dar erro ou não permitir o checkout)
         checkin.setCheckInTime(null);
 
-        CheckinTimeMissingException thrown = assertThrows(CheckinTimeMissingException.class, () -> checkoutService.checkout(checkin));
+        CheckinTimeMissingException thrown = assertThrows(CheckinTimeMissingException.class, () -> checkoutService.checkout(checkin.getCar().getPlate().getValue()));
         assertEquals("Checkin time is missing", thrown.getMessage());
     }
 
@@ -91,7 +91,7 @@ class CheckoutServiceTest {
         // Cenário: Verifica se a vaga é liberada corretamente
         when(checkoutRepository.save(any(Checkout.class))).thenReturn(new Checkout(checkin));
 
-        checkoutService.checkout(checkin);
+        checkoutService.checkout(checkin.getCar().getPlate().getValue());
 
         // Verifica se a vaga foi liberada
         verify(slotRepository, times(1)).save(slot);

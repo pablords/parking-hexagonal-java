@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.pablords.parking.adapters.inbound.http.dtos.req.CarRequestDTO;
-import com.pablords.parking.adapters.inbound.http.dtos.res.CarResponseDTO;
+import com.pablords.parking.adapters.inbound.http.dtos.CarRequestDTO;
+import com.pablords.parking.adapters.inbound.http.dtos.CarResponseDTO;
 import com.pablords.parking.adapters.inbound.http.mappers.CarMapper;
 import com.pablords.parking.core.ports.inbound.services.CarServicePort;
 import jakarta.validation.Valid;
@@ -42,7 +42,7 @@ public class CarController {
     public List<CarResponseDTO> find() {
         var cars = this.carServiceAdapter.find();
         return cars.stream()
-                .map(car ->  CarMapper.toResponse(car))
+                .map(car -> CarMapper.toResponse(car))
                 .collect(Collectors.toList());
     }
 }

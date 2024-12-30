@@ -7,7 +7,8 @@ import com.pablords.parking.core.entities.Car;
 
 public interface CarRepositoryPort {
     boolean existsByPlate(String plate);
+    Optional<Car> findByPlate(String plate);
     Optional<Car> findById(Long id);
-    Car create(Car car);
+    Car save(Car car);
     List<Car> find();
 }

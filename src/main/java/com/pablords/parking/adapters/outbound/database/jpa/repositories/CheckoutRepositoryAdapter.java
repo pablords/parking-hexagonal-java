@@ -1,5 +1,6 @@
 package com.pablords.parking.adapters.outbound.database.jpa.repositories;
 
+import com.pablords.parking.adapters.outbound.database.jpa.mappers.CheckoutMapper;
 import com.pablords.parking.core.entities.Checkout;
 import com.pablords.parking.core.ports.outbound.repositories.CheckoutRepositoryPort;
 import org.springframework.stereotype.Component;
@@ -15,7 +16,7 @@ public class CheckoutRepositoryAdapter implements CheckoutRepositoryPort {
 
     @Override
     public Checkout save(Checkout checkout) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'save'");
+        var createdCheckout = jpaRepositoryCheckout.save(CheckoutMapper.toModel(checkout));
+        return CheckoutMapper.toEntity(createdCheckout, checkout.getCheckin());
     }
 }

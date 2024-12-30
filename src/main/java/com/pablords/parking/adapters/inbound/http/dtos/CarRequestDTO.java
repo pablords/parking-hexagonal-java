@@ -1,4 +1,4 @@
-package com.pablords.parking.adapters.inbound.http.dtos.req;
+package com.pablords.parking.adapters.inbound.http.dtos;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
@@ -13,5 +13,4 @@ public class CarRequestDTO {
     String color;
     @NotBlank
     String model;
-
 }

@@ -8,10 +8,11 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.Data;
 
 @Entity
 @Table(name = "checkins")
-
+@Data
 public class CheckinModel {
     @Column(name = "id")
     @Id
@@ -21,8 +22,8 @@ public class CheckinModel {
     @Column(name = "slotId")
     private Long slotId;
 
-    @Column(name = "carId")
-    private Long carId;
+    @Column(name = "carPlate")
+    private String carPlate;
 
     @Column(name = "checkInTime")
     private LocalDateTime checkInTime;

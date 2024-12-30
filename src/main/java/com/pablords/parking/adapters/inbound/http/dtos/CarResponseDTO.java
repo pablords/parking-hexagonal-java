@@ -1,4 +1,4 @@
-package com.pablords.parking.adapters.inbound.http.dtos.res;
+package com.pablords.parking.adapters.inbound.http.dtos;
 
 import lombok.Data;
 

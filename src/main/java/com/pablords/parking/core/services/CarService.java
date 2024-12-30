@@ -23,7 +23,7 @@ public class CarService implements CarServicePort {
             throw new ExistPlateException(
                     String.format(ErrorMessages.CAR_WITH_PLATE_EXISTS, car.getPlate().getValue()));
         }
-        return carRepositoryPort.create(car);
+        return carRepositoryPort.save(car);
     }
 
     @Override
