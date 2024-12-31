@@ -1,7 +1,8 @@
 package com.pablords.parking.core.services;
 
 import com.pablords.parking.core.entities.Checkin;
-
+import com.pablords.parking.core.exceptions.ErrorMessages;
+import com.pablords.parking.core.exceptions.InvalidCheckinException;
 import com.pablords.parking.core.exceptions.ParkingFullException;
 import com.pablords.parking.core.entities.Car;
 import com.pablords.parking.core.ports.inbound.services.CheckinServicePort;
@@ -37,7 +38,7 @@ public class CheckinService implements CheckinServicePort {
         if (checkinByPlate != null) {
             var checkout = checkoutRepository.findByCheckinId(checkinByPlate.getId());
             if (!checkout.isPresent()) {
-                throw new IllegalArgumentException("Invalid Checkin");
+                throw new InvalidCheckinException(ErrorMessages.INVALID_CHECKIN_CHECKOUT_NOT_FOUND);
             }
         }
 
