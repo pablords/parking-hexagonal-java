@@ -75,11 +75,11 @@ public class CheckoutService implements CheckoutServicePort {
             throw new CheckinTimeMissingException(ErrorMessages.CHECKIN_TIME_IS_MISSING);
         }
 
-        var random = new Random();
-        int randomNumber = random.nextInt(500) + 1;
-        var plusDate = LocalDateTime.now().plusMinutes(randomNumber);
+        // var random = new Random();
+        // int randomNumber = random.nextInt(500) + 1;
+        // var plusDate = LocalDateTime.now().plusMinutes(randomNumber);
         // Calcula a duração total em segundos
-        long seconds = java.time.Duration.between(checkInTime, plusDate).getSeconds();
+        long seconds = java.time.Duration.between(checkInTime, LocalDateTime.now()).getSeconds();
 
         // Converte segundos para minutos (arredondando para cima, garantindo cobrança
         // mínima de 1 minuto)

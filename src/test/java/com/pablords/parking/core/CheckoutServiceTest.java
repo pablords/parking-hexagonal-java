@@ -5,6 +5,7 @@ import com.pablords.parking.core.entities.Car;
 import com.pablords.parking.core.entities.Checkin;
 import com.pablords.parking.core.entities.Slot;
 import com.pablords.parking.core.exceptions.CheckinTimeMissingException;
+import com.pablords.parking.core.ports.outbound.repositories.CarRepositoryPort;
 import com.pablords.parking.core.ports.outbound.repositories.CheckinRepositoryPort;
 import com.pablords.parking.core.ports.outbound.repositories.CheckoutRepositoryPort;
 import com.pablords.parking.core.ports.outbound.repositories.SlotRepositoryPort;
@@ -19,6 +20,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -36,17 +38,21 @@ class CheckoutServiceTest {
     @Mock
     private SlotRepositoryPort slotRepository;
 
+    @Mock
+    private CarRepositoryPort carRepository;
+
     @InjectMocks
     private CheckoutService checkoutService;
 
     private Checkin checkin;
     private Slot slot;
+    private Car car;
 
     @BeforeEach
     void setUp() {
         slot = new Slot();
         var plate = new Plate("ABC1234");
-        var car = new Car(plate, "Honda", "Green", "Civic"); // Criar um objeto de carro com uma placa fictícia
+        car = new Car(plate, "Honda", "Green", "Civic"); // Criar um objeto de carro com uma placa fictícia
         checkin = new Checkin(slot, car);
         checkin.setCheckInTime(LocalDateTime.now().minusHours(2));  // Simula um checkin feito há 2 horas
     }
@@ -55,6 +61,13 @@ class CheckoutServiceTest {
     void testCheckout_Success() {
         // Cenário: Realizando checkout com sucesso
         Checkout checkout = new Checkout(checkin);
+        checkout.setParkingFee(500);
+        checkin.setId(1l);
+
+        when(checkinRepository.findByPlate("ABC1234")).thenReturn(Optional.of(checkin));
+        when(checkinRepository.findById(1l)).thenReturn(Optional.of(checkin));
+        when(carRepository.findByPlate("ABC1234")).thenReturn(Optional.of(car));
+
         when(checkoutRepository.save(any(Checkout.class))).thenReturn(checkout);
         when(slotRepository.save(any(Slot.class))).thenReturn(slot);
 
@@ -78,6 +91,13 @@ class CheckoutServiceTest {
 
     @Test
     void testCheckout_EmptyCheckinTime() {
+        Checkout checkout = new Checkout(checkin);
+        checkout.setParkingFee(500);
+        checkin.setId(1l);
+        
+        when(checkinRepository.findByPlate("ABC1234")).thenReturn(Optional.of(checkin));
+        when(checkinRepository.findById(1l)).thenReturn(Optional.of(checkin));
+        when(carRepository.findByPlate("ABC1234")).thenReturn(Optional.of(car));
         // Cenário: Testa o caso em que o checkin não tem hora registrada (deve dar erro ou não permitir o checkout)
         checkin.setCheckInTime(null);
 
@@ -88,6 +108,14 @@ class CheckoutServiceTest {
 
     @Test
     void testCheckout_UpdatesSlotAvailability() {
+        Checkout checkout = new Checkout(checkin);
+        checkout.setParkingFee(500);
+        checkin.setId(1l);
+
+        when(checkinRepository.findByPlate("ABC1234")).thenReturn(Optional.of(checkin));
+        when(checkinRepository.findById(1l)).thenReturn(Optional.of(checkin));
+        when(carRepository.findByPlate("ABC1234")).thenReturn(Optional.of(car));
+
         // Cenário: Verifica se a vaga é liberada corretamente
         when(checkoutRepository.save(any(Checkout.class))).thenReturn(new Checkout(checkin));
 

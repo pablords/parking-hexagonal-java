@@ -4,6 +4,7 @@ import com.pablords.parking.core.entities.Checkin;
 import com.pablords.parking.core.entities.Slot;
 import com.pablords.parking.core.entities.Car;
 import com.pablords.parking.core.exceptions.ParkingFullException;
+import com.pablords.parking.core.ports.outbound.repositories.CarRepositoryPort;
 import com.pablords.parking.core.ports.outbound.repositories.CheckinRepositoryPort;
 import com.pablords.parking.core.ports.outbound.repositories.SlotRepositoryPort;
 import com.pablords.parking.core.services.CheckinService;
@@ -27,6 +28,9 @@ class CheckinServiceTest {
 
     @Mock
     private CheckinRepositoryPort checkinRepository;
+
+    @Mock
+    private CarRepositoryPort carRepository;
 
     @Mock
     private SlotRepositoryPort slotRepository;
@@ -66,7 +70,7 @@ class CheckinServiceTest {
 
         // Verifica se o ParkingFullException é lançado
         ParkingFullException thrown = assertThrows(ParkingFullException.class, () -> checkinService.checkIn(car));
-        assertEquals("There are no vacancies available.", thrown.getMessage());
+        assertEquals("No available parking slots", thrown.getMessage());
     }
 
     @Test
