@@ -90,7 +90,7 @@ jobs:
           ls -la
           docker build \
             -t pablords/parking:${{ needs.build.outputs.VERSION }} \
-            --build-arg JAR_FILE=target/parking-${{ needs.build.outputs.VERSION }}.jar .
+            --build-arg JAR_FILE=parking-${{ needs.build.outputs.VERSION }}.jar .
 
       # Push da imagem Docker para o registry
       - name: Push Docker Image
