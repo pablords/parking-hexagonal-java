@@ -1,34 +1,46 @@
 package com.pablords.parking.core.services;
 
 import com.pablords.parking.core.entities.Checkin;
-import com.pablords.parking.core.entities.Slot;
+
 import com.pablords.parking.core.exceptions.ParkingFullException;
 import com.pablords.parking.core.entities.Car;
 import com.pablords.parking.core.ports.inbound.services.CheckinServicePort;
 import com.pablords.parking.core.ports.outbound.repositories.CarRepositoryPort;
 import com.pablords.parking.core.ports.outbound.repositories.CheckinRepositoryPort;
+import com.pablords.parking.core.ports.outbound.repositories.CheckoutRepositoryPort;
 import com.pablords.parking.core.ports.outbound.repositories.SlotRepositoryPort;
-
-import jakarta.transaction.Transactional;
 
 public class CheckinService implements CheckinServicePort {
     private final CheckinRepositoryPort checkinRepository;
     private final SlotRepositoryPort slotRepository;
     private final CarRepositoryPort carRepository;
+    private final CheckoutRepositoryPort checkoutRepository;
 
     public CheckinService(CheckinRepositoryPort checkinRepository,
             SlotRepositoryPort slotRepository,
-            CarRepositoryPort carRepository) {
+            CarRepositoryPort carRepository,
+            CheckoutRepositoryPort checkoutRepository) {
         this.checkinRepository = checkinRepository;
         this.slotRepository = slotRepository;
         this.carRepository = carRepository;
+        this.checkoutRepository = checkoutRepository;
     }
 
+   
     @Override
     public Checkin checkIn(Car car) {
-        Slot availableSlot = slotRepository.findAvailableSlot()
+        var availableSlot = slotRepository.findAvailableSlot()
                 .orElseThrow(() -> new ParkingFullException());
-        
+
+        var checkinByPlate = checkinRepository.findByPlate(car.getPlate().getValue()).orElse(null); 
+
+        if (checkinByPlate != null) {
+            var checkout = checkoutRepository.findByCheckinId(checkinByPlate.getId());
+            if (!checkout.isPresent()) {
+                throw new IllegalArgumentException("Invalid Checkin");
+            }
+        }
+
         var carByPlate = carRepository.existsByPlate(car.getPlate().getValue());
         if (!carByPlate) {
             carRepository.save(car);

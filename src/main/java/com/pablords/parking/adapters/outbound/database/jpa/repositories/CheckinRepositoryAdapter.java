@@ -27,14 +27,13 @@ public class CheckinRepositoryAdapter implements CheckinRepositoryPort {
     @Override
     public Optional<Checkin> findByPlate(String plate) {
         plate = plate.trim().toUpperCase();
-        var checkinModel = jpaRepositoryCheckin.findLatestByCarPlate(plate);
-        return Optional.of(CheckinMapper.toEntity(checkinModel.get()));
+        return jpaRepositoryCheckin.findLatestByCarPlate(plate)
+                .map(CheckinMapper::toEntity);
     }
 
     @Override
     public Optional<Checkin> findById(Long id) {
-        var checkinModel = jpaRepositoryCheckin.findById(id);
-        return Optional.of(CheckinMapper.toEntity(checkinModel.get()));
+        return jpaRepositoryCheckin.findById(id).map(CheckinMapper::toEntity);
     }
 
 }
