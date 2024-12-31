@@ -1,6 +1,6 @@
 # parking-hexagonal-java
 
-Api de controler de entrada e saida de veiculos estacionamento
+Api controle de entrada e saida de veiculos estacionamento
 
 ```tree
 parking

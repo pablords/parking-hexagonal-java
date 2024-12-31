@@ -22,12 +22,14 @@ services:
       - MYSQL_ROOT_PASSWORD=parking
     command: --innodb_use_native_aio=0 --socket=/tmp/mysql.sock --bind_address=0.0.0.0
 
-  parking-api-hexagonal-java:
-    container_name: parking-api-hexagonal-java
-    image: pablords/parking-api-hexagonal-java:latest
+  parking-hexagonal-java:
+    container_name: parking-hexagonal-java
+    image: pablords/parking-hexagonal-java:latest
     depends_on:
       - parking-db
-    build: .
+    build: 
+      context: 
+        dockerfile: Dockerfile.dev
     networks:
       - services
     volumes:
