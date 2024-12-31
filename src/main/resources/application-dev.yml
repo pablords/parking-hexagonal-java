@@ -1,0 +1,25 @@
+# Configuração do datasource
+spring:
+  datasource:
+    initialization-mode: always
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:parking-db;DB_CLOSE_DELAY=-1
+    username: parking
+    password: parking
+
+# Configuração do JPA/Hibernate
+  config:
+    activate:
+      on-profile: dev
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
+    hibernate:
+      ddl-auto: update
+
+# Configuração do H2 Console
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
