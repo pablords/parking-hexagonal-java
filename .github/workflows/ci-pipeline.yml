@@ -1,5 +1,8 @@
 name: CI/CD Pipeline
 
+env:
+  DOCKER_REPO: "pablords"
+
 on:
   push:
     branches:
@@ -87,15 +90,14 @@ jobs:
       # Build da imagem Docker
       - name: Build Docker Image
         run: |
-          ls -la
           docker build \
-            -t pablords/parking:${{ needs.build.outputs.VERSION }} \
+            -t $DOCKER_REPO/parking:${{ needs.build.outputs.VERSION }} \
             --build-arg JAR_FILE=parking-${{ needs.build.outputs.VERSION }}.jar .
 
       # Push da imagem Docker para o registry
       - name: Push Docker Image
         run: |
-          docker push pablords/parking:${{ needs.build.outputs.VERSION }}
+          docker push $DOCKER_REPO/parking:${{ needs.build.outputs.VERSION }}
 
   deploy:
     name: Deploy Application
