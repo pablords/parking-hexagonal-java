@@ -74,6 +74,7 @@ jobs:
       # Build da imagem Docker
       - name: Build Docker Image
         run: |
+          ls -la
           docker build \
             -t pablords/parking:${{ needs.build.outputs.VERSION }} \
             --build-arg JAR_FILE=target/parking-${{ needs.build.outputs.VERSION }}.jar .
