@@ -9,22 +9,30 @@ parking
 │   ├── inbound
 │   │   └── http
 │   │       ├── controllers
-│   │       │   └── CarController.java
+│   │       │   ├── CarController.java
+│   │       │   ├── CheckinController.java
+│   │       │   └── CheckoutController.java
 │   │       ├── dtos
-│   │       │   ├── req
-│   │       │   │   └── CarRequestDTO.java
-│   │       │   └── res
-│   │       │       └── CarResponseDTO.java
+│   │       │   ├── CarRequestDTO.java
+│   │       │   ├── CarResponseDTO.java
+│   │       │   ├── CheckinRequestDTO.java
+│   │       │   ├── CheckinResponseDTO.java
+│   │       │   ├── CheckoutRequestDTO.java
+│   │       │   └── CheckoutResponseDTO.java
 │   │       ├── handlers
 │   │       │   ├── ApiError.java
 │   │       │   └── GlobalExceptionHandler.java
 │   │       └── mappers
-│   │           └── CarMapper.java
+│   │           ├── CarMapper.java
+│   │           └── CheckinMapper.java
 │   └── outbound
 │       └── database
 │           └── jpa
 │               ├── mappers
-│               │   └── CarMapper.java
+│               │   ├── CarMapper.java
+│               │   ├── CheckinMapper.java
+│               │   ├── CheckoutMapper.java
+│               │   └── SlotMapper.java
 │               ├── models
 │               │   ├── CarModel.java
 │               │   ├── CheckinModel.java
@@ -49,16 +57,22 @@ parking
     │   ├── Checkout.java
     │   └── Slot.java
     ├── exceptions
+    │   ├── CarNotFoundException.java
+    │   ├── CheckinNotFoundException.java
     │   ├── CheckinTimeMissingException.java
     │   ├── ErrorMessages.java
     │   ├── ExistPlateException.java
+    │   ├── InvalidCheckinException.java
     │   ├── InvalidPlateException.java
     │   ├── ParkingFullException.java
     │   └── SlotOcupiedException.java
     ├── ports
     │   ├── inbound
     │   │   └── services
-    │   │       └── CarServicePort.java
+    │   │       ├── CarServicePort.java
+    │   │       ├── CheckinServicePort.java
+    │   │       ├── CheckoutServicePort.java
+    │   │       └── SlotServicePort.java
     │   └── outbound
     │       └── repositories
     │           ├── CarRepositoryPort.java
