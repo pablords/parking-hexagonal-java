@@ -56,6 +56,9 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
+      - name: Debug Version
+        run: echo "VERSION=${{ env.VERSION }}"
+
       # Login no Docker Hub (ou outro registry)
       - name: Login to Docker Hub
         uses: docker/login-action@v2
@@ -67,14 +70,14 @@ jobs:
       - name: Build Docker Image
         run: |
           docker build \
-            -t ${{ secrets.DOCKER_USERNAME }}/parking:${{ env.VERSION }} \
+            -t pablords/parking:${{ env.VERSION }} \
             --build-arg JAR_FILE=target/parking-${{ env.VERSION }}.jar .
 
 
       # Push da imagem Docker para o registry
       - name: Push Docker Image
         run: |
-          docker push ${{ secrets.DOCKER_USERNAME }}/parking:${{ env.VERSION }}
+          docker push pablords/parking:${{ env.VERSION }}
 
   deploy:
     name: Deploy Application
