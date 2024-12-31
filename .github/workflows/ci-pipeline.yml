@@ -33,10 +33,14 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
+      
+      - name: Get Project Version
+        id: project-version
+        run: echo "VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
 
       # Build da aplicação
       - name: Build Application
-        run: mvn clean package -DskipTests=true
+        run: mvn clean package -Dproject.version=${{ env.VERSION }}
 
       # Executa os testes
       - name: Run Tests
@@ -62,12 +66,15 @@ jobs:
       # Build da imagem Docker
       - name: Build Docker Image
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/parking-hexagonal-java:latest .
+          docker build \
+            -t ${{ secrets.DOCKER_USERNAME }}/parking:${{ env.VERSION }} \
+            --build-arg JAR_FILE=target/parking-${{ env.VERSION }}.jar .
+
 
       # Push da imagem Docker para o registry
       - name: Push Docker Image
         run: |
-          docker push ${{ secrets.DOCKER_USERNAME }}/parking-hexagonal-java:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/parking:${{ env.VERSION }}
 
   deploy:
     name: Deploy Application
