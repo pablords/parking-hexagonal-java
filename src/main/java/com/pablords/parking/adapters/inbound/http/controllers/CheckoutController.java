@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.pablords.parking.adapters.inbound.http.dtos.CheckoutRequestDTO;
 import com.pablords.parking.adapters.inbound.http.dtos.CheckoutResponseDTO;
 import com.pablords.parking.core.ports.inbound.services.CheckoutServicePort;
 
@@ -29,8 +30,8 @@ public class CheckoutController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @Transactional
-    public CheckoutResponseDTO checkOut(@RequestBody @Valid String plate) {
-        var response = checkoutServicePort.checkout(plate);
+    public CheckoutResponseDTO checkOut(@RequestBody @Valid CheckoutRequestDTO checkoutRequestDTO) {
+        var response = checkoutServicePort.checkout(checkoutRequestDTO.getPlate());
         return modelMapper.map(response, CheckoutResponseDTO.class);
     }
 }

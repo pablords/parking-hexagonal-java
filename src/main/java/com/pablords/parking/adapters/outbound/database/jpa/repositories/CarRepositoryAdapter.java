@@ -41,6 +41,7 @@ public class CarRepositoryAdapter implements CarRepositoryPort {
 
     @Override
     public Car save(Car car) {
+        log.debug("Salvando carro: {}", car.toString());
         CarModel carModel = jpaRepositoryCar.save(CarMapper.toModel(car));
         return CarMapper.toEntity(carModel);
     }

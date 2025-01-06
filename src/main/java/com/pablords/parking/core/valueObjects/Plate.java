@@ -5,6 +5,8 @@ import java.util.regex.Pattern;
 
 import com.pablords.parking.core.exceptions.InvalidPlateException;
 
+import lombok.extern.slf4j.Slf4j;
+@Slf4j
 public class Plate {
     private String value;
 
@@ -16,6 +18,7 @@ public class Plate {
     }
 
     public Plate(String value) {
+        log.debug("Iniciando validação da placa: {}", value);
         this.value = value != null ? value : "";
         Matcher matcher = VALID_PLATE_REGEX.matcher(value);
         if (!matcher.find()) {

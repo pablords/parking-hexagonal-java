@@ -11,6 +11,8 @@ import lombok.Data;
 public class CheckoutResponseDTO {
     @JsonProperty
     private Checkin checkin;
+    @JsonProperty
     private LocalDateTime checkOutTime;
+    @JsonProperty
     private long parkingFee;
 }

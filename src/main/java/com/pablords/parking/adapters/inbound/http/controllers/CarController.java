@@ -41,6 +41,7 @@ public class CarController {
     @ResponseStatus(HttpStatus.OK)
     public List<CarResponseDTO> find() {
         var cars = this.carServiceAdapter.find();
+        log.debug("CarController: cars = {}", cars);
         return cars.stream()
                 .map(car -> CarMapper.toResponse(car))
                 .collect(Collectors.toList());

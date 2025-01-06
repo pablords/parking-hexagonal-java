@@ -1,34 +1,30 @@
 package com.pablords.parking.adapters.inbound.http.mappers;
 
-
 import com.pablords.parking.adapters.inbound.http.dtos.CheckinRequestDTO;
 import com.pablords.parking.adapters.inbound.http.dtos.CheckinResponseDTO;
 import com.pablords.parking.core.entities.Car;
 import com.pablords.parking.core.entities.Checkin;
 import com.pablords.parking.core.valueObjects.Plate;
-
+import org.modelmapper.ModelMapper;
 
 public class CheckinMapper {
-    private CheckinMapper() {
-        // private constructor to hide the implicit public one
-    }
 
-    public static Car toEntity(CheckinRequestDTO chekinRequestDTO) {
-        Car car = new Car();
-        var plate = new Plate(chekinRequestDTO.getPlate());
-        car.setPlate(plate);
-        car.setBrand(chekinRequestDTO.getBrand());
-        car.setColor(chekinRequestDTO.getColor());
-        car.setModel(chekinRequestDTO.getModel());
-        return car;
+    private static final ModelMapper modelMapper = new ModelMapper();
+
+    public static Car toEntity(CheckinRequestDTO checkinRequestDTO) {
+        modelMapper.typeMap(CheckinRequestDTO.class, Car.class)
+                .addMappings(mapper -> mapper.skip(Car::setPlate)) // Skip default mapping for Plate
+                .setPostConverter(context -> {
+                    var source = context.getSource();
+                    var destination = context.getDestination();
+                    destination.setPlate(new Plate(source.getPlate()));
+                    return destination;
+                });
+        return modelMapper.map(checkinRequestDTO, Car.class);
     }
 
     public static CheckinResponseDTO toResponse(Checkin checkin) {
-        var chekinResponse = new CheckinResponseDTO();
-        var slot = checkin.getSlot();
-        chekinResponse.setSlot(slot);
-        chekinResponse.setCheckInTime(checkin.getCheckInTime());
-        chekinResponse.setId(checkin.getId());
-        return chekinResponse;
+
+        return modelMapper.map(checkin, CheckinResponseDTO.class);
     }
 }

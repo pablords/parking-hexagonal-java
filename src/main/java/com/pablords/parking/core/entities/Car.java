@@ -61,4 +61,15 @@ public class Car {
         this.model = model;
     }
 
+    @Override
+    public String toString() {
+        return "Car{" +
+                "id='" + id + '\'' +
+                ", brand='" + brand + '\'' +
+                ", model='" + model + '\'' +
+                ", color='" + color + '\'' +
+                ", plate=" + (plate != null ? plate.getValue() : null) +
+                '}';
+    }
+
 }

@@ -26,6 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 public class GlobalExceptionHandler {
 
     private static final Map<Class<? extends RuntimeException>, HttpStatus> EXCEPTION_STATUS_MAP = new HashMap<>();
+    private static final String DEFAULT_MESSAGE_SERVER_ERROR = "Contact Admin Server";
 
     static {
         EXCEPTION_STATUS_MAP.put(CarNotFoundException.class, HttpStatus.NOT_FOUND);
@@ -48,7 +49,7 @@ public class GlobalExceptionHandler {
                 .timestamp(LocalDateTime.now())
                 .status(status.value())
                 .error(status.getReasonPhrase())
-                .message(ex.getMessage())
+                .message(HttpStatus.valueOf(status.value()).value() == 500 ? DEFAULT_MESSAGE_SERVER_ERROR : ex.getMessage())
                 .path(request.getRequestURI())
                 .build();
         return ResponseEntity.status(status.value()).body(error);
