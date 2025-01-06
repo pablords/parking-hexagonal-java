@@ -1,4 +1,4 @@
-package com.pablords.parking.core;
+package com.pablords.parking.core.services;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -8,7 +8,6 @@ import com.pablords.parking.core.entities.Car;
 import com.pablords.parking.core.exceptions.ErrorMessages;
 import com.pablords.parking.core.exceptions.ExistPlateException;
 import com.pablords.parking.core.ports.outbound.repositories.CarRepositoryPort;
-import com.pablords.parking.core.services.CarService;
 import com.pablords.parking.core.valueObjects.Plate;
 
 import org.junit.jupiter.api.BeforeEach;

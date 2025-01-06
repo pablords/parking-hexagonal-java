@@ -1,4 +1,4 @@
-package com.pablords.parking.core;
+package com.pablords.parking.core.services;
 
 import com.pablords.parking.core.entities.Checkin;
 import com.pablords.parking.core.entities.Slot;
