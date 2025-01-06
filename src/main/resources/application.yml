@@ -19,4 +19,4 @@ server:
 logging:
   level:
     root: WARN
-    com.baeldung: TRACE
+    com.pablords.parking: TRACE

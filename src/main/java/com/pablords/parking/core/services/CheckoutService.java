@@ -13,9 +13,11 @@ import com.pablords.parking.core.ports.outbound.repositories.CheckinRepositoryPo
 import com.pablords.parking.core.ports.outbound.repositories.CheckoutRepositoryPort;
 import com.pablords.parking.core.ports.outbound.repositories.SlotRepositoryPort;
 
-import java.time.LocalDateTime;
-import java.util.Random;
+import lombok.extern.slf4j.Slf4j;
 
+import java.time.LocalDateTime;
+
+@Slf4j
 public class CheckoutService implements CheckoutServicePort {
     private static final long HOURLY_RATE_IN_CENTS = 250;
 
@@ -75,9 +77,7 @@ public class CheckoutService implements CheckoutServicePort {
             throw new CheckinTimeMissingException(ErrorMessages.CHECKIN_TIME_IS_MISSING);
         }
 
-        // var random = new Random();
-        // int randomNumber = random.nextInt(500) + 1;
-        // var plusDate = LocalDateTime.now().plusMinutes(randomNumber);
+
         // Calcula a duração total em segundos
         long seconds = java.time.Duration.between(checkInTime, LocalDateTime.now()).getSeconds();
 
@@ -91,9 +91,8 @@ public class CheckoutService implements CheckoutServicePort {
         // Calcula a taxa total
         long totalFee = Math.round(minutes * ratePerMinute);
 
-        System.out.printf(
-                "Check-in time: %s, Total seconds: %d, Total minutes: %d, Rate per minute: %.2f, Total fee in cents: %d%n",
-                checkInTime, seconds, minutes, ratePerMinute, totalFee);
+        log.info(String.format("Check-in time: %s, Total seconds: %d, Total minutes: %d, Rate per minute: %.2f, Total fee in cents: %d%n",
+                checkInTime, seconds, minutes, ratePerMinute, totalFee));
 
         return totalFee;
     }
