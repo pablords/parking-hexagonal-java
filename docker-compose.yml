@@ -1,6 +1,3 @@
-version: '3.7'
-
-
 services:
 
   parking-db:
@@ -22,16 +19,11 @@ services:
       - MYSQL_ROOT_PASSWORD=parking
     command: --innodb_use_native_aio=0 --socket=/tmp/mysql.sock --bind_address=0.0.0.0
 
-  parking-hexagonal-java:
-    container_name: parking-hexagonal-java
-    image: pablords/parking-hexagonal-java:latest
-    depends_on:
-      - parking-db
-    build: 
-      context: 
-        dockerfile: Dockerfile.dev
-    networks:
-      - services
+  parking-hexagonal-java-dev:
+    container_name: parking-hexagonal-java-dev
+    image: pablords/parking-hexagonal-java-dev:latest
+    build:
+      context: Dockerfile.dev
     volumes:
       - ./:/app
     ports:
@@ -39,8 +31,28 @@ services:
       - 35729:35729
       - 5005:5005
 
+  parking-hexagonal-java:
+    container_name: parking-hexagonal-java
+    image: pablords/parking-hexagonal-java:latest
+    depends_on:
+      - parking-db
+    build: 
+      args:
+        JAR_FILE: target/parking-0.0.1-SNAPSHOT.jar
+    networks:
+      - services
+    volumes:
+      - ./src/main/resources/application.yml:/app/config/application.yml
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+    ports:
+      - 8080:8080
+    command: java -jar /app.jar --spring.config.location=file:/app/config/application.yml
+    # command: sleep infinity
+
 volumes:
   parking-db-volume:
+
 
 networks:
   services:
