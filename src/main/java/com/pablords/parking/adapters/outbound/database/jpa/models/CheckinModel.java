@@ -1,6 +1,9 @@
 package com.pablords.parking.adapters.outbound.database.jpa.models;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
+
+import org.hibernate.annotations.GenericGenerator;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -16,11 +19,12 @@ import lombok.Data;
 public class CheckinModel {
     @Column(name = "id")
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    private UUID id;
 
     @Column(name = "slotId")
-    private Long slotId;
+    private UUID slotId;
 
     @Column(name = "carPlate")
     private String carPlate;

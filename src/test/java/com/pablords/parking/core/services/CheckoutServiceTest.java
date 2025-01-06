@@ -9,7 +9,6 @@ import com.pablords.parking.core.ports.outbound.repositories.CarRepositoryPort;
 import com.pablords.parking.core.ports.outbound.repositories.CheckinRepositoryPort;
 import com.pablords.parking.core.ports.outbound.repositories.CheckoutRepositoryPort;
 import com.pablords.parking.core.ports.outbound.repositories.SlotRepositoryPort;
-import com.pablords.parking.core.services.CheckoutService;
 import com.pablords.parking.core.valueObjects.Plate;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -21,6 +20,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -47,6 +47,7 @@ class CheckoutServiceTest {
     private Checkin checkin;
     private Slot slot;
     private Car car;
+    private UUID uuid = UUID.randomUUID();
 
     @BeforeEach
     void setUp() {
@@ -54,7 +55,7 @@ class CheckoutServiceTest {
         var plate = new Plate("ABC1234");
         car = new Car(plate, "Honda", "Green", "Civic"); // Criar um objeto de carro com uma placa fictícia
         checkin = new Checkin(slot, car);
-        checkin.setCheckInTime(LocalDateTime.now().minusHours(2));  // Simula um checkin feito há 2 horas
+        checkin.setCheckInTime(LocalDateTime.now().minusHours(2)); // Simula um checkin feito há 2 horas
     }
 
     @Test
@@ -62,10 +63,10 @@ class CheckoutServiceTest {
         // Cenário: Realizando checkout com sucesso
         Checkout checkout = new Checkout(checkin);
         checkout.setParkingFee(500);
-        checkin.setId(1l);
+        checkin.setId(uuid);
 
         when(checkinRepository.findByPlate("ABC1234")).thenReturn(Optional.of(checkin));
-        when(checkinRepository.findById(1l)).thenReturn(Optional.of(checkin));
+        when(checkinRepository.findById(uuid)).thenReturn(Optional.of(checkin));
         when(carRepository.findByPlate("ABC1234")).thenReturn(Optional.of(car));
 
         when(checkoutRepository.save(any(Checkout.class))).thenReturn(checkout);
@@ -76,9 +77,9 @@ class CheckoutServiceTest {
         // Verifica se a hora de saída foi registrada
         assertNotNull(result.getCheckOutTime());
         assertTrue(result.getCheckOutTime().isAfter(checkin.getCheckInTime()));
-        
+
         // Verifica se a taxa de estacionamento foi calculada corretamente
-        long expectedFee = 2 * 250;  // 2 horas * 2,50 (em centavos)
+        long expectedFee = 2 * 250; // 2 horas * 2,50 (em centavos)
         assertEquals(expectedFee, result.getParkingFee());
 
         // Verifica se o checkout foi salvo no repositório
@@ -93,27 +94,28 @@ class CheckoutServiceTest {
     void testCheckout_EmptyCheckinTime() {
         Checkout checkout = new Checkout(checkin);
         checkout.setParkingFee(500);
-        checkin.setId(1l);
-        
+        checkin.setId(uuid);
+
         when(checkinRepository.findByPlate("ABC1234")).thenReturn(Optional.of(checkin));
-        when(checkinRepository.findById(1l)).thenReturn(Optional.of(checkin));
+        when(checkinRepository.findById(uuid)).thenReturn(Optional.of(checkin));
         when(carRepository.findByPlate("ABC1234")).thenReturn(Optional.of(car));
-        // Cenário: Testa o caso em que o checkin não tem hora registrada (deve dar erro ou não permitir o checkout)
+        // Cenário: Testa o caso em que o checkin não tem hora registrada (deve dar erro
+        // ou não permitir o checkout)
         checkin.setCheckInTime(null);
 
-        CheckinTimeMissingException thrown = assertThrows(CheckinTimeMissingException.class, () -> checkoutService.checkout(checkin.getCar().getPlate().getValue()));
+        CheckinTimeMissingException thrown = assertThrows(CheckinTimeMissingException.class,
+                () -> checkoutService.checkout(checkin.getCar().getPlate().getValue()));
         assertEquals("Checkin time is missing", thrown.getMessage());
     }
-
 
     @Test
     void testCheckout_UpdatesSlotAvailability() {
         Checkout checkout = new Checkout(checkin);
         checkout.setParkingFee(500);
-        checkin.setId(1l);
+        checkin.setId(uuid);
 
         when(checkinRepository.findByPlate("ABC1234")).thenReturn(Optional.of(checkin));
-        when(checkinRepository.findById(1l)).thenReturn(Optional.of(checkin));
+        when(checkinRepository.findById(uuid)).thenReturn(Optional.of(checkin));
         when(carRepository.findByPlate("ABC1234")).thenReturn(Optional.of(car));
 
         // Cenário: Verifica se a vaga é liberada corretamente

@@ -1,9 +1,10 @@
 package com.pablords.parking.core.entities;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public class Checkout {
-    private Long id;
+    private UUID id;
     private Checkin checkin;
     private LocalDateTime checkOutTime;
     private long parkingFee;
@@ -29,11 +30,11 @@ public class Checkout {
         this.parkingFee = parkingFee;
     }
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

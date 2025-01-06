@@ -2,6 +2,7 @@ package com.pablords.parking.adapters.outbound.database.jpa.repositories;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
@@ -21,7 +22,7 @@ public class CarRepositoryAdapter implements CarRepositoryPort {
     }
 
     @Override
-    public Optional<Car> findById(Long id) {
+    public Optional<Car> findById(UUID id) {
         return jpaRepositoryCar.findById(id).map(CarMapper::toEntity);
     }
 

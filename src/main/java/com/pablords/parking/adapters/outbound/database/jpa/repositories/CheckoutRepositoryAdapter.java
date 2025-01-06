@@ -1,12 +1,12 @@
 package com.pablords.parking.adapters.outbound.database.jpa.repositories;
 
-import com.pablords.parking.adapters.outbound.database.jpa.mappers.CheckinMapper;
 import com.pablords.parking.adapters.outbound.database.jpa.mappers.CheckoutMapper;
 import com.pablords.parking.core.entities.Checkin;
 import com.pablords.parking.core.entities.Checkout;
 import com.pablords.parking.core.ports.outbound.repositories.CheckoutRepositoryPort;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.stereotype.Component;
 
@@ -26,7 +26,7 @@ public class CheckoutRepositoryAdapter implements CheckoutRepositoryPort {
     }
 
     @Override
-    public Optional<Checkout> findByCheckinId(Long checkinId) {
+    public Optional<Checkout> findByCheckinId(UUID checkinId) {
         var optionalCheckoutModel = jpaRepositoryCheckout.findByCheckinId(checkinId);
         
         // Caso o checkout não seja encontrado, retorna Optional.empty()

@@ -5,6 +5,7 @@ import com.pablords.parking.core.entities.Checkin;
 import com.pablords.parking.core.ports.outbound.repositories.CheckinRepositoryPort;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.stereotype.Component;
 
@@ -32,7 +33,7 @@ public class CheckinRepositoryAdapter implements CheckinRepositoryPort {
     }
 
     @Override
-    public Optional<Checkin> findById(Long id) {
+    public Optional<Checkin> findById(UUID id) {
         return jpaRepositoryCheckin.findById(id).map(CheckinMapper::toEntity);
     }
 

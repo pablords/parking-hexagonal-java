@@ -4,7 +4,6 @@ import com.pablords.parking.core.entities.Slot;
 import com.pablords.parking.core.exceptions.ParkingFullException;
 import com.pablords.parking.core.exceptions.SlotOcupiedException;
 import com.pablords.parking.core.ports.outbound.repositories.SlotRepositoryPort;
-import com.pablords.parking.core.services.SlotService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -1,9 +1,11 @@
 package com.pablords.parking.core.entities;
 
+import java.util.UUID;
+
 import com.pablords.parking.core.valueObjects.Plate;
 
 public class Car {
-    Long id;
+    UUID id;
     Plate plate;
     String brand;
     String color;
@@ -19,11 +21,11 @@ public class Car {
         this.model = model;
     }
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
