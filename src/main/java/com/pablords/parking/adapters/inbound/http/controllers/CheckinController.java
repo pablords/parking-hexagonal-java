@@ -15,9 +15,11 @@ import com.pablords.parking.core.ports.inbound.services.CheckinServicePort;
 
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/checkins")
+@Slf4j
 public class CheckinController {
 
     private final CheckinServicePort chekinServicePort;
@@ -30,8 +32,10 @@ public class CheckinController {
     @ResponseStatus(HttpStatus.CREATED)
     @Transactional
     public CheckinResponseDTO checkIn(@RequestBody @Valid CheckinRequestDTO chekinRequestDTO) {
+        log.info("Iniciando processo de estacionamento para o carro com a placa: {}", chekinRequestDTO.getPlate());
         var chekin = CheckinMapper.toEntity(chekinRequestDTO);
         var chekinResponse = chekinServicePort.checkIn(chekin);
+        log.info("Carro estacionado com sucesso: {}", chekinResponse.getId());
         return CheckinMapper.toResponse(chekinResponse);
     }
 }

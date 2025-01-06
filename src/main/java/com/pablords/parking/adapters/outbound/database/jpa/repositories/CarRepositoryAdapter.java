@@ -9,10 +9,14 @@ import org.springframework.stereotype.Component;
 
 import com.pablords.parking.core.entities.Car;
 import com.pablords.parking.core.ports.outbound.repositories.CarRepositoryPort;
+
+import lombok.extern.slf4j.Slf4j;
+
 import com.pablords.parking.adapters.outbound.database.jpa.mappers.CarMapper;
 import com.pablords.parking.adapters.outbound.database.jpa.models.CarModel;
 
 @Component
+@Slf4j
 public class CarRepositoryAdapter implements CarRepositoryPort {
 
     private final JpaRepositoryCar jpaRepositoryCar;
@@ -23,6 +27,7 @@ public class CarRepositoryAdapter implements CarRepositoryPort {
 
     @Override
     public Optional<Car> findById(UUID id) {
+        log.debug("Buscando carro com ID: {}", id);
         return jpaRepositoryCar.findById(id).map(CarMapper::toEntity);
     }
 

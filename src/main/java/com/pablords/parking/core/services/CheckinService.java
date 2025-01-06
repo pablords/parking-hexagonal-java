@@ -11,6 +11,9 @@ import com.pablords.parking.core.ports.outbound.repositories.CheckinRepositoryPo
 import com.pablords.parking.core.ports.outbound.repositories.CheckoutRepositoryPort;
 import com.pablords.parking.core.ports.outbound.repositories.SlotRepositoryPort;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class CheckinService implements CheckinServicePort {
     private final CheckinRepositoryPort checkinRepository;
     private final SlotRepositoryPort slotRepository;
@@ -27,11 +30,15 @@ public class CheckinService implements CheckinServicePort {
         this.checkoutRepository = checkoutRepository;
     }
 
-   
     @Override
     public Checkin checkIn(Car car) {
+        log.debug("Iniciando validação do estacionamento para o carro com a placa: {}", car.getPlate().getValue());
+
         var availableSlot = slotRepository.findAvailableSlot()
-                .orElseThrow(() -> new ParkingFullException());
+                .orElseThrow(() -> {
+                    log.warn("Estacionamento está cheio. Não é possível estacionar o carro com a placa: {}", car.getPlate());
+                    return new ParkingFullException();
+                });
 
         var checkinByPlate = checkinRepository.findByPlate(car.getPlate().getValue()).orElse(null); 
 
@@ -50,6 +57,8 @@ public class CheckinService implements CheckinServicePort {
         Checkin checkin = new Checkin(availableSlot, car);
         availableSlot.occupy(); // Marca a vaga como ocupada
         slotRepository.save(availableSlot); // Atualiza a vaga
+        log.info("Carro com a placa: {} estacionado com sucesso", car.getPlate());
+
         return checkinRepository.save(checkin); // Salva o checkin
     }
 }

@@ -4,12 +4,15 @@ import com.pablords.parking.adapters.outbound.database.jpa.mappers.CheckinMapper
 import com.pablords.parking.core.entities.Checkin;
 import com.pablords.parking.core.ports.outbound.repositories.CheckinRepositoryPort;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.stereotype.Component;
 
 @Component
+@Slf4j
 public class CheckinRepositoryAdapter implements CheckinRepositoryPort {
 
     private final JpaRepositoryCheckin jpaRepositoryCheckin;
@@ -27,6 +30,8 @@ public class CheckinRepositoryAdapter implements CheckinRepositoryPort {
 
     @Override
     public Optional<Checkin> findByPlate(String plate) {
+        log.debug("Buscando checkin por placa com Placa: {}", plate);
+
         plate = plate.trim().toUpperCase();
         return jpaRepositoryCheckin.findLatestByCarPlate(plate)
                 .map(CheckinMapper::toEntity);

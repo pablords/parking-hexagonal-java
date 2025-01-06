@@ -91,7 +91,7 @@ public class CheckoutService implements CheckoutServicePort {
         // Calcula a taxa total
         long totalFee = Math.round(minutes * ratePerMinute);
 
-        log.info(String.format("Check-in time: %s, Total seconds: %d, Total minutes: %d, Rate per minute: %.2f, Total fee in cents: %d%n",
+        log.info(String.format("Check-in: %s, Total segundos: %d, Total minutos: %d, Média por minuto: %.2f, Taxa total em centavos: %d%n",
                 checkInTime, seconds, minutes, ratePerMinute, totalFee));
 
         return totalFee;
