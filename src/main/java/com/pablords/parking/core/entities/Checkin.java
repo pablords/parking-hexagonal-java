@@ -55,4 +55,14 @@ public class Checkin {
     public void setCar(Car car) {
         this.car = car;
     }
+
+    public void setSlot(Slot slot) {
+        this.slot = slot;
+    }
+
+    @Override
+    public String toString() {
+        return "Checkin [car=" + car + ", checkInTime=" + checkInTime + ", checkOutTime=" + checkOutTime + ", id=" + id
+                + ", slot=" + slot.toString() + "]";
+    }
 }

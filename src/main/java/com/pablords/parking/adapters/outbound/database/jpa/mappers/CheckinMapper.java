@@ -15,6 +15,7 @@ public class CheckinMapper {
         model.setCarPlate(checkin.getCar().getPlate().getValue().trim().toUpperCase());
         model.setCheckInTime(checkin.getCheckInTime());
         model.setCheckOutTime(checkin.getCheckOutTime());
+        model.setCar(CarMapper.toModel(checkin.getCar()));
         return model;
     }
 

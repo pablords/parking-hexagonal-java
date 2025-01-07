@@ -24,7 +24,6 @@ public class CheckinMapper {
     }
 
     public static CheckinResponseDTO toResponse(Checkin checkin) {
-
         return modelMapper.map(checkin, CheckinResponseDTO.class);
     }
 }

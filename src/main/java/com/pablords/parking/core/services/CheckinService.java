@@ -17,23 +17,19 @@ import lombok.extern.slf4j.Slf4j;
 public class CheckinService implements CheckinServicePort {
     private final CheckinRepositoryPort checkinRepository;
     private final SlotRepositoryPort slotRepository;
-    private final CarRepositoryPort carRepository;
     private final CheckoutRepositoryPort checkoutRepository;
 
     public CheckinService(CheckinRepositoryPort checkinRepository,
             SlotRepositoryPort slotRepository,
-            CarRepositoryPort carRepository,
             CheckoutRepositoryPort checkoutRepository) {
         this.checkinRepository = checkinRepository;
         this.slotRepository = slotRepository;
-        this.carRepository = carRepository;
         this.checkoutRepository = checkoutRepository;
     }
 
     @Override
     public Checkin checkIn(Car car) {
         log.debug("Iniciando validação do estacionamento para o carro com a placa: {}", car.getPlate().getValue());
-
         var availableSlot = slotRepository.findAvailableSlot()
                 .orElseThrow(() -> {
                     log.warn("Estacionamento está cheio. Não é possível estacionar o carro com a placa: {}", car.getPlate());
@@ -41,23 +37,16 @@ public class CheckinService implements CheckinServicePort {
                 });
 
         var checkinByPlate = checkinRepository.findByPlate(car.getPlate().getValue()).orElse(null); 
-
         if (checkinByPlate != null) {
             var checkout = checkoutRepository.findByCheckinId(checkinByPlate.getId());
             if (!checkout.isPresent()) {
                 throw new InvalidCheckinException(ErrorMessages.INVALID_CHECKIN_CHECKOUT_NOT_FOUND);
             }
         }
-
-        var carByPlate = carRepository.existsByPlate(car.getPlate().getValue());
-        if (!carByPlate) {
-            carRepository.save(car);
-        }
-
         Checkin checkin = new Checkin(availableSlot, car);
         availableSlot.occupy(); // Marca a vaga como ocupada
         slotRepository.save(availableSlot); // Atualiza a vaga
-        log.info("Carro com a placa: {} estacionado com sucesso", car.getPlate());
+        log.info("Carro com a placa: {} estacionado com sucesso", car.getPlate().getValue());
 
         return checkinRepository.save(checkin); // Salva o checkin
     }

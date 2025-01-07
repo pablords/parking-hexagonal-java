@@ -25,4 +25,9 @@ public class Slot {
     public boolean isOccupied() {
         return occupied;
     }
+
+    @Override
+    public String toString() {
+        return "Slot [id=" + id + ", occupied=" + occupied + "]";
+    }
 }

@@ -29,9 +29,7 @@ public class CheckoutRepositoryAdapter implements CheckoutRepositoryPort {
     public Optional<Checkout> findByCheckinId(UUID checkinId) {
         var optionalCheckoutModel = jpaRepositoryCheckout.findByCheckinId(checkinId);
         
-        // Caso o checkout não seja encontrado, retorna Optional.empty()
         if (optionalCheckoutModel.isEmpty()) {
-            System.out.println("Checkout não encontrado para o checkinId: " + checkinId);
             return Optional.empty();
         }
 

@@ -15,7 +15,7 @@ public class Checkout {
     }
 
     public void freeSlot() {
-        checkin.getSlot().free();  // Libera a vaga
+        checkin.getSlot().free(); // Libera a vaga
     }
 
     public long getParkingFee() {
@@ -26,7 +26,7 @@ public class Checkout {
         return checkOutTime;
     }
 
-    public void setParkingFee(long parkingFee){
+    public void setParkingFee(long parkingFee) {
         this.parkingFee = parkingFee;
     }
 
@@ -44,5 +44,15 @@ public class Checkout {
 
     public void setCheckin(Checkin checkin) {
         this.checkin = checkin;
+    }
+
+    @Override
+    public String toString() {
+        return "Checkout{" +
+                "id=" + id +
+                ", checkin=" + checkin +
+                ", checkOutTime=" + checkOutTime +
+                ", parkingFee=" + parkingFee +
+                '}';
     }
 }

@@ -29,7 +29,7 @@ public class ParkingApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) {
-		log.info("App is running {}", appName);
+		log.info("{} app is running", appName);
 	}
 
 	public static void main(String[] args) {

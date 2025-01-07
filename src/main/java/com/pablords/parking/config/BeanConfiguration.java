@@ -30,7 +30,6 @@ public class BeanConfiguration {
         return new CheckinService(
                 checkinRepositoryPort,
                 slotRepository,
-                carRepository,
                 checkoutRepository);
     }
 
