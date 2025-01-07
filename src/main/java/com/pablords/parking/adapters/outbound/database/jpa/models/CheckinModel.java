@@ -30,9 +30,6 @@ public class CheckinModel {
     @Column(name = "slotId")
     private UUID slotId;
 
-    @Column(name = "carPlate")
-    private String carPlate;
-
     @Column(name = "checkInTime")
     private LocalDateTime checkInTime;
 

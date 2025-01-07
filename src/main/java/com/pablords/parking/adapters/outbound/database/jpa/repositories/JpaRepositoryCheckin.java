@@ -12,7 +12,7 @@ import com.pablords.parking.adapters.outbound.database.jpa.models.CheckinModel;
 
 @Repository
 public interface JpaRepositoryCheckin extends JpaRepository<CheckinModel, UUID> {
-    @Query("SELECT c FROM CheckinModel c WHERE c.carPlate = :plate AND c.checkOutTime = null ORDER BY c.checkInTime DESC")
+    @Query("SELECT c FROM CheckinModel c WHERE c.car.plate = :plate AND c.checkOutTime = null ORDER BY c.checkInTime DESC")
     Optional<CheckinModel> findLatestByCarPlate(@Param("plate") String plate);
     Optional<CheckinModel> findByCarPlate(String plate);
 }

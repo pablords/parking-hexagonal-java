@@ -12,7 +12,6 @@ public class CheckinMapper {
         var model = new CheckinModel();
         model.setId(checkin.getId());
         model.setSlotId(checkin.getSlot().getId());
-        model.setCarPlate(checkin.getCar().getPlate().getValue().trim().toUpperCase());
         model.setCheckInTime(checkin.getCheckInTime());
         model.setCheckOutTime(checkin.getCheckOutTime());
         model.setCar(CarMapper.toModel(checkin.getCar()));
@@ -23,7 +22,7 @@ public class CheckinMapper {
         var slot = new Slot();
         slot.setId(checkinModel.getId());
         var car = new Car();
-        var parsedPlate = new Plate(checkinModel.getCarPlate());
+        var parsedPlate = new Plate(checkinModel.getCar().getPlate());
         car.setPlate(parsedPlate);
         var checkin = new Checkin(slot, car);
         checkin.setId(checkinModel.getId());
