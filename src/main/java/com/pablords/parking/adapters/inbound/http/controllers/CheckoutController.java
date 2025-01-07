@@ -14,9 +14,11 @@ import com.pablords.parking.core.ports.inbound.services.CheckoutServicePort;
 
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/checkouts")
+@Slf4j
 public class CheckoutController {
 
     private final ModelMapper modelMapper = new ModelMapper();
@@ -31,7 +33,11 @@ public class CheckoutController {
     @ResponseStatus(HttpStatus.CREATED)
     @Transactional
     public CheckoutResponseDTO checkOut(@RequestBody @Valid CheckoutRequestDTO checkoutRequestDTO) {
+        log.info("Recebendo requisição para checkout do carro com a placa: {} o payload={}",
+                checkoutRequestDTO.getPlate(), checkoutRequestDTO);
         var response = checkoutServicePort.checkout(checkoutRequestDTO.getPlate());
+        log.info("Respondendo com status={} para carro com a placa: {} response={}", HttpStatus.CREATED,
+                checkoutRequestDTO.getPlate(), response.toString());
         return modelMapper.map(response, CheckoutResponseDTO.class);
     }
 }

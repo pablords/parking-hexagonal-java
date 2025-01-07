@@ -6,9 +6,12 @@ import com.pablords.parking.core.entities.Checkin;
 import com.pablords.parking.core.entities.Slot;
 import com.pablords.parking.core.valueObjects.Plate;
 
+import lombok.extern.slf4j.Slf4j;
+@Slf4j
 public class CheckinMapper {
 
     public static CheckinModel toModel(Checkin checkin) {
+        log.debug("Mapendo o Checkin para CheckinModel: {}", checkin.toString());
         var model = new CheckinModel();
         model.setId(checkin.getId());
         model.setSlotId(checkin.getSlot().getId());
@@ -19,8 +22,9 @@ public class CheckinMapper {
     }
 
     public static Checkin toEntity(CheckinModel checkinModel) {
+        log.debug("Mapendo o CheckinModel para Checkin: {}", checkinModel.toString());
         var slot = new Slot();
-        slot.setId(checkinModel.getId());
+        slot.setId(checkinModel.getSlotId());
         var car = new Car();
         var parsedPlate = new Plate(checkinModel.getCar().getPlate());
         car.setPlate(parsedPlate);

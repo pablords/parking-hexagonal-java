@@ -1,7 +1,4 @@
 package com.pablords.parking.adapters.outbound.database.jpa.mappers;
-
-import java.util.Optional;
-
 import com.pablords.parking.adapters.outbound.database.jpa.models.SlotModel;
 import com.pablords.parking.core.entities.Slot;
 

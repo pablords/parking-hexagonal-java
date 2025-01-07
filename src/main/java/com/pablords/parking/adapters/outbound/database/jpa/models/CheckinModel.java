@@ -28,7 +28,7 @@ public class CheckinModel {
     private UUID id;
 
     @Column(name = "slotId")
-    private UUID slotId;
+    private Long slotId;
 
     @Column(name = "checkInTime")
     private LocalDateTime checkInTime;
@@ -39,4 +39,5 @@ public class CheckinModel {
     @ManyToOne(cascade = { CascadeType.REMOVE, CascadeType.PERSIST })
     @JoinColumn(name = "car_id", referencedColumnName = "id") // Mapeamento da chave estrangeira
     private CarModel car;
+    
 }

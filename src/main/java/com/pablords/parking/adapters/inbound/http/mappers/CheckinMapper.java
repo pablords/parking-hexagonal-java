@@ -5,13 +5,17 @@ import com.pablords.parking.adapters.inbound.http.dtos.CheckinResponseDTO;
 import com.pablords.parking.core.entities.Car;
 import com.pablords.parking.core.entities.Checkin;
 import com.pablords.parking.core.valueObjects.Plate;
-import org.modelmapper.ModelMapper;
 
+import lombok.extern.slf4j.Slf4j;
+
+import org.modelmapper.ModelMapper;
+@Slf4j
 public class CheckinMapper {
 
     private static final ModelMapper modelMapper = new ModelMapper();
 
     public static Car toEntity(CheckinRequestDTO checkinRequestDTO) {
+        log.debug("Mapeando CheckinRequestDTO para Car: {}", checkinRequestDTO);
         modelMapper.typeMap(CheckinRequestDTO.class, Car.class)
                 .addMappings(mapper -> mapper.skip(Car::setPlate)) // Skip default mapping for Plate
                 .setPostConverter(context -> {
@@ -24,6 +28,7 @@ public class CheckinMapper {
     }
 
     public static CheckinResponseDTO toResponse(Checkin checkin) {
+        log.debug("Mapeando Checkin para CheckinResponseDTO: {}", checkin);
         return modelMapper.map(checkin, CheckinResponseDTO.class);
     }
 }

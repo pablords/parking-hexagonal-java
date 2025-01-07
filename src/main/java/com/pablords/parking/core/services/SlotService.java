@@ -27,14 +27,6 @@ public class SlotService {
         slotRepository.save(slot);
     }
 
-    public List<Slot> findAvailableSlots() {
-        return slotRepository.findAvailableSlots();
-    }
-
-    public List<Slot> findOccupiedSlots() {
-        return slotRepository.findOccupiedSlots();
-    }
-
     public Slot findAvailableSlot() {
         return slotRepository.findAvailableSlot()
                 .orElseThrow(() -> new ParkingFullException());

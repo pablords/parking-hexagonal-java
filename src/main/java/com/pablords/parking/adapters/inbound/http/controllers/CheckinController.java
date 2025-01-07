@@ -31,10 +31,12 @@ public class CheckinController {
     @ResponseStatus(HttpStatus.CREATED)
     @Transactional
     public CheckinResponseDTO checkIn(@RequestBody @Valid CheckinRequestDTO chekinRequestDTO) {
-        log.info("Iniciando processo de estacionamento para o carro com a placa: {}", chekinRequestDTO.getPlate());
+        log.info("Recebendo requisição para estacionamento do carro com a placa: {} o payload={}",
+                chekinRequestDTO.getPlate(), chekinRequestDTO.toString());
         var chekin = CheckinMapper.toEntity(chekinRequestDTO);
         var chekinResponse = chekinServicePort.checkIn(chekin);
-        log.info("Carro estacionado com sucesso: {}", chekinResponse.getId());
+        log.info("Respondendo com status={} para carro com a placa: {} response={}", HttpStatus.CREATED,
+                chekinRequestDTO.getPlate(), chekinResponse.toString());
         return CheckinMapper.toResponse(chekinResponse);
     }
 }

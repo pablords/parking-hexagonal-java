@@ -65,9 +65,7 @@ public class CheckoutService implements CheckoutServicePort {
         slotRepository.save(slot); // Atualiza a vaga
         checkinRepository.save(chekinById); // Atualiza a checkin
 
-        var checkoutResponse = checkoutRepository.save(checkout); // Salva o checkout
-
-        return checkoutResponse;
+        return checkoutRepository.save(checkout); // Salva o checkout
 
     }
 

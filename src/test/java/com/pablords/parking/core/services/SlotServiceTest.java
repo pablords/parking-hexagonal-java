@@ -68,27 +68,6 @@ class SlotServiceTest {
         verify(slotRepository, times(1)).save(availableSlot);  // Verifica se o método save foi chamado
     }
 
-    @Test
-    void testFindAvailableSlots_Success() {
-        // Cenário: Deve retornar a lista de vagas disponíveis
-        when(slotRepository.findAvailableSlots()).thenReturn(List.of(availableSlot));
-
-        List<Slot> availableSlots = slotService.findAvailableSlots();
-
-        assertEquals(1, availableSlots.size());
-        assertTrue(availableSlots.contains(availableSlot));
-    }
-
-    @Test
-    void testFindOccupiedSlots_Success() {
-        // Cenário: Deve retornar a lista de vagas ocupadas
-        when(slotRepository.findOccupiedSlots()).thenReturn(List.of(occupiedSlot));
-
-        List<Slot> occupiedSlots = slotService.findOccupiedSlots();
-
-        assertEquals(1, occupiedSlots.size());
-        assertTrue(occupiedSlots.contains(occupiedSlot));
-    }
 
     @Test
     void testFindAvailableSlot_Success() {

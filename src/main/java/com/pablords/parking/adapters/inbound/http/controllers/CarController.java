@@ -32,8 +32,10 @@ public class CarController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CarResponseDTO create(@RequestBody @Valid CarRequestDTO createCarDto) {
+        log.info("Recebendo requisição para criação de carro com payload={}", createCarDto.toString());
         var car = CarMapper.toEntity(createCarDto);
         var createdCar = this.carServiceAdapter.create(car);
+        log.info("Respondendo com status={} para carro com response={}", HttpStatus.CREATED, createdCar.toString());
         return CarMapper.toResponse(createdCar);
     }
 
@@ -41,7 +43,6 @@ public class CarController {
     @ResponseStatus(HttpStatus.OK)
     public List<CarResponseDTO> find() {
         var cars = this.carServiceAdapter.find();
-        log.debug("CarController: cars = {}", cars);
         return cars.stream()
                 .map(car -> CarMapper.toResponse(car))
                 .collect(Collectors.toList());
