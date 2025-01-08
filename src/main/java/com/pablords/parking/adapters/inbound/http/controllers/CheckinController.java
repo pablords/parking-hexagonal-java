@@ -30,13 +30,14 @@ public class CheckinController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @Transactional
-    public CheckinResponseDTO checkIn(@RequestBody @Valid CheckinRequestDTO chekinRequestDTO) {
-        log.info("Recebendo requisição para estacionamento do carro com a placa: {} o payload={}",
-                chekinRequestDTO.getPlate(), chekinRequestDTO.toString());
-        var chekin = CheckinMapper.toEntity(chekinRequestDTO);
-        var chekinResponse = chekinServicePort.checkIn(chekin);
+    public CheckinResponseDTO checkIn(@RequestBody @Valid CheckinRequestDTO checkinRequestDTO) {
+        log.info("Recebendo requisição para estacionamento do carro com a placa: {}, payload={}",
+        checkinRequestDTO.getPlate(), checkinRequestDTO.toString());
+        var chekin = CheckinMapper.toEntity(checkinRequestDTO);
+        var persitedCheckin = chekinServicePort.checkIn(chekin);
+        var chekinResponse = CheckinMapper.toResponse(persitedCheckin);
         log.info("Respondendo com status={} para carro com a placa: {} response={}", HttpStatus.CREATED,
-                chekinRequestDTO.getPlate(), chekinResponse.toString());
-        return CheckinMapper.toResponse(chekinResponse);
+        checkinRequestDTO.getPlate(), chekinResponse.toString());
+        return chekinResponse;
     }
 }
