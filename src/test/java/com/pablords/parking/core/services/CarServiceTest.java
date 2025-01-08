@@ -27,7 +27,7 @@ class CarServiceTest {
     }
 
     @Test
-    void testCreateCarWithDuplicatePlateThrowsException() {
+    void test_create_car_with_duplicate_plate_throws_exception() {
 
         var plate1 = new Plate("ABC1234");
         var plate2 = new Plate("ABC1234");
@@ -45,7 +45,7 @@ class CarServiceTest {
     }
 
     @Test
-    void testCreateCarWithUniquePlate() {
+    void test_create_car_with_unique_plate() {
         var plate = new Plate("XYZ5678");
         Car newCar = new Car(plate, "Honda", "Civic", "Green");
 
@@ -62,7 +62,7 @@ class CarServiceTest {
     }
 
     @Test
-    void testFind() {
+    void test_find() {
         // Arrange
         List<Car> carList = new ArrayList<>();
 
