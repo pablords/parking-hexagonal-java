@@ -1,6 +1,6 @@
 # parking-hexagonal-java
 
-Serviço controle de entrada e Saida de veículos estacionamento
+Controle de entrada e Saida de veículos estacionamento
 
 ```tree
 parking
