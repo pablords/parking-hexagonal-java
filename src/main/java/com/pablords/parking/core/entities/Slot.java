@@ -3,14 +3,9 @@ package com.pablords.parking.core.entities;
 public class Slot {
     private Long id;
     private boolean occupied;
-    private Checkin checkin;
-    
-    public Checkin getCheckin() {
-        return checkin;
-    }
 
-    public void setCheckin(Checkin checkin) {
-        this.checkin = checkin;
+    public void setOccupied(boolean occupied) {
+        this.occupied = occupied;
     }
 
     public Long getId() {

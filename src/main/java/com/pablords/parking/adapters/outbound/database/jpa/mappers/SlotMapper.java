@@ -14,6 +14,7 @@ public class SlotMapper {
     public static Slot toEntity(SlotModel model) {
         var slot = new Slot();
         slot.setId(model.getId());
+        slot.setOccupied(model.isOccupied());
         return slot;
     }
 }
