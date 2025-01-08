@@ -7,9 +7,9 @@ parking
 ├── ParkingApplication.java
 ├── adapters
 │   ├── inbound
-│   │   ├── config
-│   │   │   └── SwaggerConfig.java
 │   │   └── http
+│   │       ├── config
+│   │       │   └── SwaggerConfig.java
 │   │       ├── controllers
 │   │       │   ├── CarController.java
 │   │       │   ├── CheckinController.java
@@ -89,6 +89,7 @@ parking
     │   └── StringUtils.java
     └── valueobjects
         └── Plate.java
+
 ```
 
 ## Referência
