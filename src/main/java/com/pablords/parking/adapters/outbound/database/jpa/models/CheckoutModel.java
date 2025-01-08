@@ -29,5 +29,5 @@ public class CheckoutModel {
     private LocalDateTime checkOutTime;
 
     @Column(name = "parkingFee")
-    private long parkingFee;
+    private Double parkingFee;
 }

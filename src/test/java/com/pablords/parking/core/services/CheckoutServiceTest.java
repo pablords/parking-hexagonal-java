@@ -62,7 +62,7 @@ class CheckoutServiceTest {
     void testCheckout_Success() {
         // Cenário: Realizando checkout com sucesso
         Checkout checkout = new Checkout(checkin);
-        checkout.setParkingFee(500);
+        checkout.calculateParkingFee();
         checkin.setId(uuid);
 
         when(checkinRepository.findByPlate("ABC1234")).thenReturn(Optional.of(checkin));
@@ -79,7 +79,7 @@ class CheckoutServiceTest {
         assertTrue(result.getCheckOutTime().isAfter(checkin.getCheckInTime()));
 
         // Verifica se a taxa de estacionamento foi calculada corretamente
-        long expectedFee = 2 * 250; // 2 horas * 2,50 (em centavos)
+        double expectedFee = 2 * 2.5; // 2 horas * 2,50 (em centavos)
         assertEquals(expectedFee, result.getParkingFee());
 
         // Verifica se o checkout foi salvo no repositório
@@ -93,7 +93,7 @@ class CheckoutServiceTest {
     @Test
     void testCheckout_EmptyCheckinTime() {
         Checkout checkout = new Checkout(checkin);
-        checkout.setParkingFee(500);
+        checkout.calculateParkingFee();
         checkin.setId(uuid);
 
         when(checkinRepository.findByPlate("ABC1234")).thenReturn(Optional.of(checkin));
@@ -111,7 +111,7 @@ class CheckoutServiceTest {
     @Test
     void testCheckout_UpdatesSlotAvailability() {
         Checkout checkout = new Checkout(checkin);
-        checkout.setParkingFee(500);
+        checkout.calculateParkingFee();
         checkin.setId(uuid);
 
         when(checkinRepository.findByPlate("ABC1234")).thenReturn(Optional.of(checkin));

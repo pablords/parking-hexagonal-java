@@ -20,7 +20,7 @@ public class CheckoutMapper {
     public static Checkout toEntity(CheckoutModel model, Checkin checkin){
         var checkout = new Checkout(checkin);
         checkout.setId(model.getId());
-        checkout.setParkingFee(model.getParkingFee());
+        checkout.calculateParkingFee();
         return checkout;
     }
 }
