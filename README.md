@@ -97,6 +97,9 @@ parking
 
 ```
 
-## Referência
+## Referências
+
+[Netflix Tech Blog](https://netflixtechblog.com/ready-for-changes-with-hexagonal-architecture-b315ec967749)
+
 ![Hexagonal Architecture](/.github/hexagonal.webp)
 
