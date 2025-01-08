@@ -26,11 +26,13 @@ public class BeanConfiguration {
             CheckinRepositoryPort checkinRepositoryPort,
             SlotRepositoryPort slotRepository,
             CarRepositoryPort carRepository,
-            CheckoutRepositoryPort checkoutRepository) {
+            CheckoutRepositoryPort checkoutRepository,
+            CarRepositoryPort carRepositoryPort) {
         return new CheckinService(
                 checkinRepositoryPort,
                 slotRepository,
-                checkoutRepository);
+                checkoutRepository,
+                carRepository);
     }
 
     @Bean

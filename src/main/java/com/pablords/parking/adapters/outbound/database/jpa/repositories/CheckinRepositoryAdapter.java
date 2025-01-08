@@ -16,21 +16,23 @@ import org.springframework.stereotype.Component;
 public class CheckinRepositoryAdapter implements CheckinRepositoryPort {
 
     private final JpaRepositoryCheckin jpaRepositoryCheckin;
+    private final CheckinMapper checkinMapper;
 
-    public CheckinRepositoryAdapter(JpaRepositoryCheckin jpaRepositoryCheckin) {
+    public CheckinRepositoryAdapter(JpaRepositoryCheckin jpaRepositoryCheckin, CheckinMapper checkinMapper) {
         this.jpaRepositoryCheckin = jpaRepositoryCheckin;
+        this.checkinMapper = checkinMapper;
     }
 
     @Override
     public Checkin save(Checkin checkin) {
-        var checkinModel = jpaRepositoryCheckin.save(CheckinMapper.toModel(checkin));
+        log.debug("Persistindo checkin: {} no slot: {}", checkin.toString(), checkin.getSlot().toString());
+        var checkinModel = jpaRepositoryCheckin.save(checkinMapper.toModel(checkin));
         return CheckinMapper.toEntity(checkinModel);
     }
 
     @Override
     public Optional<Checkin> findByPlate(String plate) {
         log.debug("Buscando checkin de carro com Placa: {}", plate);
-
         plate = plate.trim().toUpperCase();
         return jpaRepositoryCheckin.findLatestByCarPlate(plate)
                 .map(CheckinMapper::toEntity);

@@ -41,8 +41,13 @@ public class CarRepositoryAdapter implements CarRepositoryPort {
 
     @Override
     public Car save(Car car) {
-        log.debug("Salvando carro: {}", car.toString());
-        CarModel carModel = jpaRepositoryCar.save(CarMapper.toModel(car));
+        log.debug("Persisintindo carro: {}", car.toString());
+        CarModel carModel = CarMapper.toModel(car);
+
+        if (!this.existsByPlate(car.getPlate().getValue())) {
+            carModel = jpaRepositoryCar.save(carModel);
+        }
+
         return CarMapper.toEntity(carModel);
     }
 
@@ -53,8 +58,7 @@ public class CarRepositoryAdapter implements CarRepositoryPort {
 
     @Override
     public Optional<Car> findByPlate(String plate) {
-        var carModel = jpaRepositoryCar.findByPlate(plate);
-        return Optional.of(CarMapper.toEntity(carModel.get()));
+        return jpaRepositoryCar.findByPlate(plate).map(CarMapper::toEntity);
     }
 
 }
