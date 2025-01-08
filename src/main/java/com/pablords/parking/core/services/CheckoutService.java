@@ -1,5 +1,6 @@
 package com.pablords.parking.core.services;
 
+import com.pablords.parking.adapters.outbound.messaging.producers.CheckoutProducerAdapter;
 import com.pablords.parking.core.entities.Checkout;
 import com.pablords.parking.core.entities.Slot;
 import com.pablords.parking.core.exceptions.CarNotFoundException;
@@ -23,16 +24,20 @@ public class CheckoutService implements CheckoutServicePort {
     private final CheckoutRepositoryPort checkoutRepository;
     private final SlotRepositoryPort slotRepository;
     private final CarRepositoryPort carRepository;
+    private final CheckoutProducerAdapter checkoutProducerAdapter;
 
     public CheckoutService(
             CheckinRepositoryPort checkinRepository,
             CheckoutRepositoryPort checkoutRepository,
             SlotRepositoryPort slotRepository,
-            CarRepositoryPort carRepository) {
+            CarRepositoryPort carRepository,
+            CheckoutProducerAdapter checkoutProducerAdapter
+            ) {
         this.checkinRepository = checkinRepository;
         this.checkoutRepository = checkoutRepository;
         this.slotRepository = slotRepository;
         this.carRepository = carRepository;
+        this.checkoutProducerAdapter = checkoutProducerAdapter;
     }
 
     public Checkout checkout(String plate) {
@@ -52,7 +57,7 @@ public class CheckoutService implements CheckoutServicePort {
 
         checkinById.setCheckOutTime(LocalDateTime.now()); // Registra a hora de saída
         checkinById.setCar(carByPlate);
-    
+
         Checkout checkout = new Checkout(checkinById);
         checkout.calculateParkingFee();
 
@@ -61,8 +66,12 @@ public class CheckoutService implements CheckoutServicePort {
 
         slotRepository.save(slot); // Atualiza a vaga
         checkinRepository.save(checkinById); // Atualiza a checkin
-
+        this.sendCheckoutMessage(checkout); // Envia a mensagem
         return checkoutRepository.save(checkout); // Salva o checkout
 
+    }
+
+    public void sendCheckoutMessage(Checkout checkout) {
+        checkoutProducerAdapter.sendCheckoutMessage(checkout);
     }
 }

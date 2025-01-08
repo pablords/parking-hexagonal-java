@@ -28,27 +28,32 @@ parking
 │   │           ├── CarMapper.java
 │   │           └── CheckinMapper.java
 │   └── outbound
-│       └── database
-│           └── jpa
-│               ├── mappers
-│               │   ├── CarMapper.java
-│               │   ├── CheckinMapper.java
-│               │   ├── CheckoutMapper.java
-│               │   └── SlotMapper.java
-│               ├── models
-│               │   ├── CarModel.java
-│               │   ├── CheckinModel.java
-│               │   ├── CheckoutModel.java
-│               │   └── SlotModel.java
-│               └── repositories
-│                   ├── CarRepositoryAdapter.java
-│                   ├── CheckinRepositoryAdapter.java
-│                   ├── CheckoutRepositoryAdapter.java
-│                   ├── JpaRepositoryCar.java
-│                   ├── JpaRepositoryCheckin.java
-│                   ├── JpaRepositoryCheckout.java
-│                   ├── JpaRepositorySlot.java
-│                   └── SlotRepositoryAdapter.java
+│       ├── database
+│       │   └── jpa
+│       │       ├── mappers
+│       │       │   ├── CarMapper.java
+│       │       │   ├── CheckinMapper.java
+│       │       │   ├── CheckoutMapper.java
+│       │       │   └── SlotMapper.java
+│       │       ├── models
+│       │       │   ├── CarModel.java
+│       │       │   ├── CheckinModel.java
+│       │       │   ├── CheckoutModel.java
+│       │       │   └── SlotModel.java
+│       │       └── repositories
+│       │           ├── CarRepositoryAdapter.java
+│       │           ├── CheckinRepositoryAdapter.java
+│       │           ├── CheckoutRepositoryAdapter.java
+│       │           ├── JpaRepositoryCar.java
+│       │           ├── JpaRepositoryCheckin.java
+│       │           ├── JpaRepositoryCheckout.java
+│       │           ├── JpaRepositorySlot.java
+│       │           └── SlotRepositoryAdapter.java
+│       └── messaging
+│           ├── config
+│           │   └── RabbitMQConfig.java
+│           └── producers
+│               └── CheckoutProducerAdapter.java
 ├── config
 │   └── BeanConfiguration.java
 └── core

@@ -1,16 +1,26 @@
 services:
 
-  parking-db:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672" # Porta padrão do RabbitMQ para conexão de aplicações
+      - "15672:15672" # Porta para o painel de gerenciamento
+    environment:
+      RABBITMQ_DEFAULT_USER: admin # Usuário padrão
+      RABBITMQ_DEFAULT_PASS: admin # Senha padrão
+
+  mysql:
     platform: linux/x86_64
     image: mysql:8.0.33
     restart: always
-    container_name: parking-db
+    container_name: mysql
     networks:
       - services
     ports:
       - 3306:3306
     volumes:
-      - parking-db-volume:/var/lib/mysql
+      - mysql-volume:/var/lib/mysql
       - ./.docker/sql:/docker-entrypoint-initdb.d/
     environment:
       - MYSQL_USER=parking
@@ -35,7 +45,8 @@ services:
     container_name: parking-hexagonal-java
     image: pablords/parking-hexagonal-java:latest
     depends_on:
-      - parking-db
+      - mysql
+      - rabbitmq
     build: 
       args:
         JAR_FILE: target/parking-0.0.1-SNAPSHOT.jar
@@ -51,7 +62,7 @@ services:
     # command: sleep infinity
 
 volumes:
-  parking-db-volume:
+  mysql-volume:
 
 
 networks:

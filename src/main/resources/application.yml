@@ -9,6 +9,7 @@ spring:
     swagger-ui:
       path: /swagger-ui.html
 
+
 app:
   name: parking
 
