@@ -5,6 +5,6 @@ public class StringUtils {
         if (str1 == null || str2 == null) {
             return false; // Se uma das Strings for null, retorna false
         }
-        return str1.toLowerCase().equals(str2.toLowerCase());
+        return str1.equalsIgnoreCase(str2);
     }
 }

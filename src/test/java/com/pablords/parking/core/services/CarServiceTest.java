@@ -8,7 +8,7 @@ import com.pablords.parking.core.entities.Car;
 import com.pablords.parking.core.exceptions.ErrorMessages;
 import com.pablords.parking.core.exceptions.ExistPlateException;
 import com.pablords.parking.core.ports.outbound.repositories.CarRepositoryPort;
-import com.pablords.parking.core.valueObjects.Plate;
+import com.pablords.parking.core.valueobjects.Plate;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -66,22 +66,22 @@ class CarServiceTest {
         // Arrange
         List<Car> carList = new ArrayList<>();
 
-        var hondaCar = new Car();
+        var carHonda = new Car();
         var plateHondaCar = new Plate("XYZ5678");
-        hondaCar.setBrand("Honda");
-        hondaCar.setColor("Blue");
-        hondaCar.setModel("Civic");
-        hondaCar.setPlate(plateHondaCar);
+        carHonda.setBrand("Honda");
+        carHonda.setColor("Blue");
+        carHonda.setModel("Civic");
+        carHonda.setPlate(plateHondaCar);
 
-        var fordCar = new Car();
+        var carFord = new Car();
         var plateFordCar = new Plate("LMN3456");
-        fordCar.setBrand("Ford");
-        fordCar.setColor("Blue");
-        fordCar.setModel("Focus");
-        fordCar.setPlate(plateFordCar);
+        carFord.setBrand("Ford");
+        carFord.setColor("Blue");
+        carFord.setModel("Focus");
+        carFord.setPlate(plateFordCar);
 
-        carList.add(hondaCar);
-        carList.add(fordCar);
+        carList.add(carHonda);
+        carList.add(carFord);
 
         when(carRepositoryPortMock.find()).thenReturn(carList);
 

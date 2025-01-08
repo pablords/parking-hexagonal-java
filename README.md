@@ -1,12 +1,14 @@
 # parking-hexagonal-java
 
-Api controle de entrada e saida de veiculos estacionamento
+Serviço controle de entrada e Saida de veículos estacionamento
 
 ```tree
 parking
 ├── ParkingApplication.java
 ├── adapters
 │   ├── inbound
+│   │   ├── config
+│   │   │   └── SwaggerConfig.java
 │   │   └── http
 │   │       ├── controllers
 │   │       │   ├── CarController.java
@@ -48,8 +50,7 @@ parking
 │                   ├── JpaRepositorySlot.java
 │                   └── SlotRepositoryAdapter.java
 ├── config
-│   ├── BeanConfiguration.java
-│   └── SwaggerConfig.java
+│   └── BeanConfiguration.java
 └── core
     ├── entities
     │   ├── Car.java
@@ -65,7 +66,7 @@ parking
     │   ├── InvalidCheckinException.java
     │   ├── InvalidPlateException.java
     │   ├── ParkingFullException.java
-    │   └── SlotOcupiedException.java
+    │   └── SlotOccupiedException.java
     ├── ports
     │   ├── inbound
     │   │   └── services
@@ -86,9 +87,8 @@ parking
     │   └── SlotService.java
     ├── utils
     │   └── StringUtils.java
-    └── valueObjects
+    └── valueobjects
         └── Plate.java
-
 ```
 
 ## Referência

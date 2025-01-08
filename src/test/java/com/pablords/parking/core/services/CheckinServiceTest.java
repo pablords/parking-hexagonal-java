@@ -7,7 +7,7 @@ import com.pablords.parking.core.exceptions.ParkingFullException;
 import com.pablords.parking.core.ports.outbound.repositories.CarRepositoryPort;
 import com.pablords.parking.core.ports.outbound.repositories.CheckinRepositoryPort;
 import com.pablords.parking.core.ports.outbound.repositories.SlotRepositoryPort;
-import com.pablords.parking.core.valueObjects.Plate;
+import com.pablords.parking.core.valueobjects.Plate;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

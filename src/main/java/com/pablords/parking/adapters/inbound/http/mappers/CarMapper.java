@@ -1,13 +1,11 @@
 package com.pablords.parking.adapters.inbound.http.mappers;
 
-import javax.print.attribute.standard.Destination;
-
 import org.modelmapper.ModelMapper;
 
 import com.pablords.parking.adapters.inbound.http.dtos.CarRequestDTO;
 import com.pablords.parking.adapters.inbound.http.dtos.CarResponseDTO;
 import com.pablords.parking.core.entities.Car;
-import com.pablords.parking.core.valueObjects.Plate;
+import com.pablords.parking.core.valueobjects.Plate;
 
 import lombok.extern.slf4j.Slf4j;
 

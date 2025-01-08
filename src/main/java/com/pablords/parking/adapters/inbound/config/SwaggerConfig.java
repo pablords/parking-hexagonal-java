@@ -1,4 +1,4 @@
-package com.pablords.parking.config;
+package com.pablords.parking.adapters.inbound.config;
 
 import org.springframework.context.annotation.Configuration;
 

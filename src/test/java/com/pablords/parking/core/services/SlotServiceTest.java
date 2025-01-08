@@ -2,7 +2,7 @@ package com.pablords.parking.core.services;
 
 import com.pablords.parking.core.entities.Slot;
 import com.pablords.parking.core.exceptions.ParkingFullException;
-import com.pablords.parking.core.exceptions.SlotOcupiedException;
+import com.pablords.parking.core.exceptions.SlotOccupiedException;
 import com.pablords.parking.core.ports.outbound.repositories.SlotRepositoryPort;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -12,7 +12,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -53,7 +52,7 @@ class SlotServiceTest {
     @Test
     void testOccupySlot_ThrowsSlotOccupiedException() {
         // Cenário: A vaga já está ocupada e deve lançar uma exceção
-        SlotOcupiedException thrown = assertThrows(SlotOcupiedException.class, () -> slotService.occupySlot(occupiedSlot));
+        SlotOccupiedException thrown = assertThrows(SlotOccupiedException.class, () -> slotService.occupySlot(occupiedSlot));
         assertEquals("This slot is already occupied", thrown.getMessage());  // Verifica a mensagem da exceção
     }
 

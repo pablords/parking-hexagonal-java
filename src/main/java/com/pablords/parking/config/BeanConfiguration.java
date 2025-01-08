@@ -22,7 +22,7 @@ public class BeanConfiguration {
     }
 
     @Bean
-    CheckinServicePort chekinService(
+    CheckinServicePort checkinService(
             CheckinRepositoryPort checkinRepositoryPort,
             SlotRepositoryPort slotRepository,
             CarRepositoryPort carRepository,

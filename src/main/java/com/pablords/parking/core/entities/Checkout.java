@@ -2,7 +2,6 @@ package com.pablords.parking.core.entities;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.util.UUID;
 

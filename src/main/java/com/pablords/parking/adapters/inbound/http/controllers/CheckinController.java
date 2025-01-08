@@ -21,10 +21,10 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class CheckinController {
 
-    private final CheckinServicePort chekinServicePort;
+    private final CheckinServicePort checkinServicePort;
 
-    public CheckinController(CheckinServicePort chekinServicePort) {
-        this.chekinServicePort = chekinServicePort;
+    public CheckinController(CheckinServicePort checkinServicePort) {
+        this.checkinServicePort = checkinServicePort;
     }
 
     @PostMapping
@@ -33,11 +33,11 @@ public class CheckinController {
     public CheckinResponseDTO checkIn(@RequestBody @Valid CheckinRequestDTO checkinRequestDTO) {
         log.info("Recebendo requisição para estacionamento do carro com a placa: {}, payload={}",
         checkinRequestDTO.getPlate(), checkinRequestDTO.toString());
-        var chekin = CheckinMapper.toEntity(checkinRequestDTO);
-        var persitedCheckin = chekinServicePort.checkIn(chekin);
-        var chekinResponse = CheckinMapper.toResponse(persitedCheckin);
+        var checkin = CheckinMapper.toEntity(checkinRequestDTO);
+        var persistedCheckin = checkinServicePort.checkIn(checkin);
+        var checkinResponse = CheckinMapper.toResponse(persistedCheckin);
         log.info("Respondendo com status={} para carro com a placa: {} response={}", HttpStatus.CREATED,
-        checkinRequestDTO.getPlate(), chekinResponse.toString());
-        return chekinResponse;
+        checkinRequestDTO.getPlate(), checkinResponse.toString());
+        return checkinResponse;
     }
 }

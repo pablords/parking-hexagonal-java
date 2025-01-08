@@ -3,9 +3,8 @@ package com.pablords.parking.core.services;
 import com.pablords.parking.core.entities.Slot;
 import com.pablords.parking.core.ports.outbound.repositories.SlotRepositoryPort;
 import com.pablords.parking.core.exceptions.ParkingFullException;
-import com.pablords.parking.core.exceptions.SlotOcupiedException;
+import com.pablords.parking.core.exceptions.SlotOccupiedException;
 
-import java.util.List;
 
 public class SlotService {
     private final SlotRepositoryPort slotRepository;
@@ -16,7 +15,7 @@ public class SlotService {
 
     public Slot occupySlot(Slot slot) {
         if (slot.isOccupied()) {
-            throw new SlotOcupiedException();
+            throw new SlotOccupiedException();
         }
         slot.occupy();
         return slotRepository.save(slot);

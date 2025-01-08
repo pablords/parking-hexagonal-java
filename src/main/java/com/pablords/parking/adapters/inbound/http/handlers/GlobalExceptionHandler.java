@@ -16,7 +16,7 @@ import com.pablords.parking.core.exceptions.ExistPlateException;
 import com.pablords.parking.core.exceptions.InvalidCheckinException;
 import com.pablords.parking.core.exceptions.InvalidPlateException;
 import com.pablords.parking.core.exceptions.ParkingFullException;
-import com.pablords.parking.core.exceptions.SlotOcupiedException;
+import com.pablords.parking.core.exceptions.SlotOccupiedException;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +36,7 @@ public class GlobalExceptionHandler {
         EXCEPTION_STATUS_MAP.put(InvalidCheckinException.class, HttpStatus.BAD_REQUEST);
         EXCEPTION_STATUS_MAP.put(InvalidPlateException.class, HttpStatus.BAD_REQUEST);
         EXCEPTION_STATUS_MAP.put(ParkingFullException.class, HttpStatus.SERVICE_UNAVAILABLE);
-        EXCEPTION_STATUS_MAP.put(SlotOcupiedException.class, HttpStatus.CONFLICT);
+        EXCEPTION_STATUS_MAP.put(SlotOccupiedException.class, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler({ RuntimeException.class })

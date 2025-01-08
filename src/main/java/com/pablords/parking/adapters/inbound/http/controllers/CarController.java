@@ -44,7 +44,7 @@ public class CarController {
     public List<CarResponseDTO> find() {
         var cars = this.carServiceAdapter.find();
         return cars.stream()
-                .map(car -> CarMapper.toResponse(car))
+                .map(CarMapper::toResponse)
                 .collect(Collectors.toList());
     }
 }

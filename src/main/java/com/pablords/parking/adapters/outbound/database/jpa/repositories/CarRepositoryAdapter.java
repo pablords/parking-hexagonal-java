@@ -35,13 +35,13 @@ public class CarRepositoryAdapter implements CarRepositoryPort {
     public List<Car> find() {
         List<CarModel> carsModel = jpaRepositoryCar.findAll();
         return carsModel.stream()
-                .map(car -> CarMapper.toEntity(car))
+                .map(CarMapper::toEntity)
                 .collect(Collectors.toList());
     }
 
     @Override
     public Car save(Car car) {
-        log.debug("Persisintindo carro: {}", car.toString());
+        log.debug("Persistindo carro: {}", car.toString());
         CarModel carModel = CarMapper.toModel(car);
 
         if (!this.existsByPlate(car.getPlate().getValue())) {

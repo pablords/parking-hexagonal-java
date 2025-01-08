@@ -9,7 +9,7 @@ import com.pablords.parking.core.ports.outbound.repositories.CarRepositoryPort;
 import com.pablords.parking.core.ports.outbound.repositories.CheckinRepositoryPort;
 import com.pablords.parking.core.ports.outbound.repositories.CheckoutRepositoryPort;
 import com.pablords.parking.core.ports.outbound.repositories.SlotRepositoryPort;
-import com.pablords.parking.core.valueObjects.Plate;
+import com.pablords.parking.core.valueobjects.Plate;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -103,8 +103,9 @@ class CheckoutServiceTest {
         // ou não permitir o checkout)
         checkin.setCheckInTime(null);
 
+        String plateValue = checkin.getCar().getPlate().getValue();
         CheckinTimeMissingException thrown = assertThrows(CheckinTimeMissingException.class,
-                () -> checkoutService.checkout(checkin.getCar().getPlate().getValue()));
+                () -> checkoutService.checkout(plateValue));
         assertEquals("Checkin time is missing", thrown.getMessage());
     }
 

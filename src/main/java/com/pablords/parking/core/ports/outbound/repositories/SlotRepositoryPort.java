@@ -3,7 +3,6 @@ package com.pablords.parking.core.ports.outbound.repositories;
 import com.pablords.parking.core.entities.Slot;
 
 import java.util.Optional;
-import java.util.UUID;
 
 public interface SlotRepositoryPort {
     Optional<Slot> findAvailableSlot();

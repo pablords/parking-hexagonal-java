@@ -2,7 +2,7 @@ package com.pablords.parking.core.entities;
 
 import java.util.UUID;
 
-import com.pablords.parking.core.valueObjects.Plate;
+import com.pablords.parking.core.valueobjects.Plate;
 
 public class Car {
     UUID id;

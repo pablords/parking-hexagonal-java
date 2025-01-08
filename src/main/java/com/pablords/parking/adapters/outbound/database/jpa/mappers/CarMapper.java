@@ -4,7 +4,7 @@ import org.modelmapper.ModelMapper;
 
 import com.pablords.parking.adapters.outbound.database.jpa.models.CarModel;
 import com.pablords.parking.core.entities.Car;
-import com.pablords.parking.core.valueObjects.Plate;
+import com.pablords.parking.core.valueobjects.Plate;
 
 import lombok.extern.slf4j.Slf4j;
 
