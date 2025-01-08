@@ -14,5 +14,5 @@ public class CheckoutResponseDTO {
     @JsonProperty
     private LocalDateTime checkOutTime;
     @JsonProperty
-    private long parkingFee;
+    private Double parkingFee;
 }
