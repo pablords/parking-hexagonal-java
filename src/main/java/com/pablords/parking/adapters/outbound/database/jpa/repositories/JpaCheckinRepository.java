@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 import com.pablords.parking.adapters.outbound.database.jpa.models.CheckinModel;
 
 @Repository
-public interface JpaRepositoryCheckin extends JpaRepository<CheckinModel, UUID> {
+public interface JpaCheckinRepository extends JpaRepository<CheckinModel, UUID> {
     @Query("SELECT c FROM CheckinModel c WHERE c.car.plate = :plate AND c.checkOutTime = null ORDER BY c.checkInTime DESC")
     Optional<CheckinModel> findLatestByCarPlate(@Param("plate") String plate);
     Optional<CheckinModel> findByCarPlate(String plate);

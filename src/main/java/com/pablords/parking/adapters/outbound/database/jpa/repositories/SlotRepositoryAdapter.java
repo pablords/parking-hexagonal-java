@@ -10,9 +10,9 @@ import java.util.Optional;
 @Component
 public class SlotRepositoryAdapter implements SlotRepositoryPort {
 
-    private final JpaRepositorySlot jpaRepositorySlot;
+    private final JpaSlotRepository jpaRepositorySlot;
 
-    public SlotRepositoryAdapter(JpaRepositorySlot jpaRepositorySlot) {
+    public SlotRepositoryAdapter(JpaSlotRepository jpaRepositorySlot) {
         this.jpaRepositorySlot = jpaRepositorySlot;
     }
 

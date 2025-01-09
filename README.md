@@ -2,6 +2,15 @@
 
 Controle de entrada e Saida de veículos estacionamento
 
+
+## Swagger
+
+http://localhost:8080/api/v1/swagger-ui/index.html
+
+## h2-db
+
+http://localhost:8080/api/v1/h2-console
+
 ```tree
 parking
 ├── ParkingApplication.java

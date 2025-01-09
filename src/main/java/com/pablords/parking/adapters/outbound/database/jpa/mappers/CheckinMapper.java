@@ -2,7 +2,7 @@ package com.pablords.parking.adapters.outbound.database.jpa.mappers;
 
 import com.pablords.parking.adapters.outbound.database.jpa.models.CarModel;
 import com.pablords.parking.adapters.outbound.database.jpa.models.CheckinModel;
-import com.pablords.parking.adapters.outbound.database.jpa.repositories.JpaRepositoryCar;
+import com.pablords.parking.adapters.outbound.database.jpa.repositories.JpaCarRepository;
 import com.pablords.parking.core.entities.Car;
 import com.pablords.parking.core.entities.Checkin;
 import com.pablords.parking.core.valueobjects.Plate;
@@ -17,10 +17,10 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class CheckinMapper {
 
-    private JpaRepositoryCar jRepositoryCar;
+    private JpaCarRepository jRepositoryCar;
 
     @Autowired
-    public CheckinMapper(JpaRepositoryCar jRepositoryCar) {
+    public CheckinMapper(JpaCarRepository jRepositoryCar) {
         this.jRepositoryCar = jRepositoryCar;
     }
 

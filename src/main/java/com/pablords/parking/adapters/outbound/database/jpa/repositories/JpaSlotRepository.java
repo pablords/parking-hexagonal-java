@@ -10,7 +10,7 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 @Repository
-public interface JpaRepositorySlot extends JpaRepository<SlotModel, Long> {
+public interface JpaSlotRepository extends JpaRepository<SlotModel, Long> {
     Optional<SlotModel> findByOccupiedFalse(); // Vaga disponível
     Optional<SlotModel> findFirstByOccupiedFalse();
     List<SlotModel> findByOccupiedTrue(); // Vagas ocupadas

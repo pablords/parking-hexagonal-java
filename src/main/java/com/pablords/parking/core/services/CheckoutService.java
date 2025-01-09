@@ -59,7 +59,6 @@ public class CheckoutService implements CheckoutServicePort {
         checkinById.setCar(carByPlate);
 
         Checkout checkout = new Checkout(checkinById);
-        checkout.calculateParkingFee();
 
         Slot slot = checkinById.getSlot();
         slot.free(); // Libera a vaga

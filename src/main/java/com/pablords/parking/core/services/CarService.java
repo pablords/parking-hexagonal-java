@@ -18,7 +18,7 @@ public class CarService implements CarServicePort {
     @Override
     public Car create(Car car) {
 
-        var plateExists = carRepositoryPort.existsByPlate(car.getPlate().getValue());
+        Boolean plateExists = carRepositoryPort.existsByPlate(car.getPlate().getValue());
         if (plateExists) {
             throw new ExistPlateException(
                     String.format(ErrorMessages.CAR_WITH_PLATE_EXISTS, car.getPlate().getValue()));

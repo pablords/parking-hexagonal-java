@@ -19,9 +19,9 @@ import com.pablords.parking.adapters.outbound.database.jpa.models.CarModel;
 @Slf4j
 public class CarRepositoryAdapter implements CarRepositoryPort {
 
-    private final JpaRepositoryCar jpaRepositoryCar;
+    private final JpaCarRepository jpaRepositoryCar;
 
-    public CarRepositoryAdapter(JpaRepositoryCar jpaRepositoryCar) {
+    public CarRepositoryAdapter(JpaCarRepository jpaRepositoryCar) {
         this.jpaRepositoryCar = jpaRepositoryCar;
     }
 

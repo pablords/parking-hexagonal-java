@@ -9,6 +9,6 @@ import org.springframework.stereotype.Repository;
 import com.pablords.parking.adapters.outbound.database.jpa.models.CheckoutModel;
 
 @Repository
-public interface JpaRepositoryCheckout extends JpaRepository<CheckoutModel, UUID> {
+public interface JpaCheckoutRepository extends JpaRepository<CheckoutModel, UUID> {
     Optional<CheckoutModel> findByCheckinId(UUID checkinId);
 }

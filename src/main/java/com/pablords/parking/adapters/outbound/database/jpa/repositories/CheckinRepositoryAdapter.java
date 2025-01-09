@@ -15,10 +15,10 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class CheckinRepositoryAdapter implements CheckinRepositoryPort {
 
-    private final JpaRepositoryCheckin jpaRepositoryCheckin;
+    private final JpaCheckinRepository jpaRepositoryCheckin;
     private final CheckinMapper checkinMapper;
 
-    public CheckinRepositoryAdapter(JpaRepositoryCheckin jpaRepositoryCheckin, CheckinMapper checkinMapper) {
+    public CheckinRepositoryAdapter(JpaCheckinRepository jpaRepositoryCheckin, CheckinMapper checkinMapper) {
         this.jpaRepositoryCheckin = jpaRepositoryCheckin;
         this.checkinMapper = checkinMapper;
     }

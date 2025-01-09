@@ -13,9 +13,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class CheckoutRepositoryAdapter implements CheckoutRepositoryPort {
 
-    private final JpaRepositoryCheckout jpaRepositoryCheckout;
+    private final JpaCheckoutRepository jpaRepositoryCheckout;
 
-    public CheckoutRepositoryAdapter(JpaRepositoryCheckout jpaRepositoryCheckout) {
+    public CheckoutRepositoryAdapter(JpaCheckoutRepository jpaRepositoryCheckout) {
         this.jpaRepositoryCheckout = jpaRepositoryCheckout;
     }
 

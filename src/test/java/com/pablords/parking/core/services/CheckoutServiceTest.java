@@ -1,6 +1,7 @@
 package com.pablords.parking.core.services;
 
 import com.pablords.parking.core.entities.Checkout;
+import com.pablords.parking.adapters.outbound.messaging.producers.CheckoutProducerAdapter;
 import com.pablords.parking.core.entities.Car;
 import com.pablords.parking.core.entities.Checkin;
 import com.pablords.parking.core.entities.Slot;
@@ -28,7 +29,9 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class CheckoutServiceTest {
-
+    @Mock
+    private CheckoutProducerAdapter checkoutProducerAdapter;
+    
     @Mock
     private CheckinRepositoryPort checkinRepository;
 
