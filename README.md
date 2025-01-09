@@ -199,7 +199,7 @@ Certifique-se de ter os seguintes softwares instalados em sua máquina:
 
 - [Java 11+](https://www.oracle.com/java/technologies/javase-jdk11-downloads.html)
 - [Maven 3.6+](https://maven.apache.org/download.cgi)
-- [Docker](https://www.docker.com/products/docker-desktop) (opcional, para rodar o RabbitMQ)
+- [Docker](https://www.docker.com/products/docker-desktop) (para rodar o RabbitMQ e Mysql)
 
 ### Passos para Rodar o Projeto
 
