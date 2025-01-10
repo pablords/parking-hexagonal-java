@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -46,5 +47,12 @@ public class CarController {
         return cars.stream()
                 .map(CarMapper::toResponse)
                 .collect(Collectors.toList());
+    }
+
+    @GetMapping("/{plate}")
+    @ResponseStatus(HttpStatus.OK)
+    public CarResponseDTO findByPlate(@PathVariable String plate) {
+        var car = this.carServiceAdapter.findByPlate(plate);
+        return CarMapper.toResponse(car);
     }
 }

@@ -31,4 +31,10 @@ public class CarService implements CarServicePort {
         return carRepositoryPort.find();
     }
 
+    @Override  
+    public Car findByPlate(String plate) {
+        return carRepositoryPort.findByPlate(plate)
+                .orElseThrow(() -> new ExistPlateException(String.format(ErrorMessages.CAR_WITH_PLATE_EXISTS, plate)));
+    }
+
 }

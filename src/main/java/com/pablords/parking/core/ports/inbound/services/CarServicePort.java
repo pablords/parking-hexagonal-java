@@ -8,4 +8,5 @@ import com.pablords.parking.core.entities.Car;
 public interface CarServicePort {
     Car create(Car car); 
     List<Car> find();
+    Car findByPlate(String plate);
 }
