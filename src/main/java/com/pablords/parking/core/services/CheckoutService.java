@@ -13,6 +13,7 @@ import com.pablords.parking.core.ports.outbound.repositories.CheckinRepositoryPo
 import com.pablords.parking.core.ports.outbound.repositories.CheckoutRepositoryPort;
 import com.pablords.parking.core.ports.outbound.repositories.SlotRepositoryPort;
 
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDateTime;
@@ -59,6 +60,7 @@ public class CheckoutService implements CheckoutServicePort {
         checkinById.setCar(carByPlate);
 
         Checkout checkout = new Checkout(checkinById);
+        checkout.calculateParkingFee();
 
         Slot slot = checkinById.getSlot();
         slot.free(); // Libera a vaga
@@ -71,6 +73,10 @@ public class CheckoutService implements CheckoutServicePort {
     }
 
     public void sendCheckoutMessage(Checkout checkout) {
-        checkoutProducerAdapter.sendCheckoutMessage(checkout);
+        try {
+            checkoutProducerAdapter.sendCheckoutMessage(checkout);
+        } catch (Exception e) {
+            log.error("Erro ao publicar mensagem: {}", e.getMessage());
+        }
     }
 }

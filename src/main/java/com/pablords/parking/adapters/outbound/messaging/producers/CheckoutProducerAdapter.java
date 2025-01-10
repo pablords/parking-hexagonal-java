@@ -43,7 +43,7 @@ public class CheckoutProducerAdapter {
             rabbitTemplate.convertAndSend(EXCHANGE_NAME, "checkoutRoutingKey", jsonMessage);
             log.debug("Mensagem publicada: {}, {}", QUEUE_NAME, jsonMessage);
         } catch (JsonProcessingException e) {
-            log.error("Error serializing message: {}", e.getMessage());
+            log.error("Erro ao publicar mensagem serializada: {}", e.getMessage());
         }
     }
 }

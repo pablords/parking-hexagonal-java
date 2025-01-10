@@ -5,12 +5,15 @@ import com.pablords.parking.core.entities.Checkin;
 import com.pablords.parking.core.entities.Checkout;
 import com.pablords.parking.core.ports.outbound.repositories.CheckoutRepositoryPort;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.stereotype.Component;
 
 @Component
+@Slf4j
 public class CheckoutRepositoryAdapter implements CheckoutRepositoryPort {
 
     private final JpaCheckoutRepository jpaRepositoryCheckout;
@@ -21,6 +24,7 @@ public class CheckoutRepositoryAdapter implements CheckoutRepositoryPort {
 
     @Override
     public Checkout save(Checkout checkout) {
+        log.debug("Persistindo checkout: {}", checkout.toString());
         var createdCheckout = jpaRepositoryCheckout.save(CheckoutMapper.toModel(checkout));
         return CheckoutMapper.toEntity(createdCheckout, checkout.getCheckin());
     }
