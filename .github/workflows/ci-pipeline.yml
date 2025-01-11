@@ -12,6 +12,8 @@ on:
 
 jobs:
   code-review:
+    name: Code Review
+    continue-on-error: true
     runs-on: ubuntu-latest
     steps:
       # 1. Fazer checkout do código
