@@ -1,8 +1,8 @@
 // .github/scripts/code_review.js
 // Script que lê o diff.txt, chama a OpenAI API e salva a resposta em review_comments.txt
 
-import fs from "fs";
-import process from "process";
+const fs = require("fs")
+const process = require("process")
 
 // Se Node estiver < 18, você precisaria de 'node-fetch':
 // import fetch from 'node-fetch';
