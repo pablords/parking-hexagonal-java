@@ -33,7 +33,8 @@ services:
     container_name: parking-hexagonal-java-dev
     image: pablords/parking-hexagonal-java-dev:latest
     build:
-      context: Dockerfile.dev
+      context: .
+      dockerfile: Dockerfile.dev
     volumes:
       - ./:/app
     ports:
