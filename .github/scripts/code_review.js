@@ -25,8 +25,11 @@ async function main() {
     const userPrompt = `Please review the following diff. Mention possible improvements, bugs, or best practices:\n\n${diffContent}`;
 
     // 3) Configurar corpo da requisição
+    // o1-mini	OpenAI's smallest model, fine-tuned on a mix of data sources.
+    // gpt-3.5-turbo	OpenAI's largest model, fine-tuned on a mix of data sources.
+    const model = "o1-mini";
     const body = {
-      model: "gpt-3.5-turbo",
+      model: model,
       messages: [
         { role: "system", content: systemPrompt },
         { role: "user", content: userPrompt },
