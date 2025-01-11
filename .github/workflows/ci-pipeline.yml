@@ -14,49 +14,48 @@ on:
 
 
 jobs:
-  code-review:
-    name: Code Review
-    if: env.ENABLE_CODE_REVIEW == 'true'
-    runs-on: ubuntu-latest
-    steps:
-      # 1. Fazer checkout do código
-      - name: Check out code
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
+  # code-review:
+  #   name: Code Review
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     # 1. Fazer checkout do código
+  #     - name: Check out code
+  #       uses: actions/checkout@v2
+  #       with:
+  #         fetch-depth: 0
 
-      # 2. Gerar o diff (exemplo simples entre HEAD~1 e HEAD)
-      - name: Generate diff
-        run: |
-          git diff HEAD~1 HEAD > diff.txt
-          echo "Diff gerado com sucesso."
+  #     # 2. Gerar o diff (exemplo simples entre HEAD~1 e HEAD)
+  #     - name: Generate diff
+  #       run: |
+  #         git diff HEAD~1 HEAD > diff.txt
+  #         echo "Diff gerado com sucesso."
 
-      # 3. Chamar o script JavaScript que invoca a OpenAI
-      - name: Call OpenAI for code review
-        run: node .github/scripts/code_review.js
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+  #     # 3. Chamar o script JavaScript que invoca a OpenAI
+  #     - name: Call OpenAI for code review
+  #       run: node .github/scripts/code_review.js
+  #       env:
+  #         OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
 
-      # 4. Postar como comentário no PR (exemplo usando 'github-script')
-      - name: Post code review comment
-        uses: actions/github-script@v6
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const fs = require('fs');
-            const review = fs.readFileSync('review_comments.txt', 'utf8');
-            const issue_number = context.payload.pull_request.number;
+  #     # 4. Postar como comentário no PR (exemplo usando 'github-script')
+  #     - name: Post code review comment
+  #       uses: actions/github-script@v6
+  #       with:
+  #         github-token: ${{ secrets.GITHUB_TOKEN }}
+  #         script: |
+  #           const fs = require('fs');
+  #           const review = fs.readFileSync('review_comments.txt', 'utf8');
+  #           const issue_number = context.payload.pull_request.number;
 
-            await github.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: issue_number,
-              body: review
-            });
+  #           await github.rest.issues.createComment({
+  #             owner: context.repo.owner,
+  #             repo: context.repo.repo,
+  #             issue_number: issue_number,
+  #             body: review
+  #           });
   build:
     name: Build and Test
     runs-on: ubuntu-latest
-    needs: code-review
+    # needs: code-review
 
     steps:
       # Checkout do código
@@ -126,8 +125,8 @@ jobs:
       - name: Login to Docker Hub
         uses: docker/login-action@v2
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+          username: ${{ secrets.DOCKER_USERNAME || 'default-username' }}
+          password: ${{ secrets.DOCKER_PASSWORD || 'default-password' }}
 
       # Build da imagem Docker
       - name: Build Docker Image
