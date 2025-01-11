@@ -17,6 +17,8 @@ public class Checkout {
     public Checkout(Checkin checkin) {
         this.checkin = checkin;
         this.checkOutTime = LocalDateTime.now();
+        this.checkin.setCheckOutTime(this.getCheckOutTime());
+        this.calculateParkingFee();
     }
 
     public void freeSlot() {
@@ -31,7 +33,7 @@ public class Checkout {
         return checkOutTime;
     }
 
-    private void setParkingFee(Double parkingFee) {
+    public void setParkingFee(Double parkingFee) {
         this.parkingFee = parkingFee;
     }
 
@@ -61,7 +63,7 @@ public class Checkout {
                 '}';
     }
 
-    public void calculateParkingFee() {
+    private void calculateParkingFee() {
         final double HOURLY_RATE_IN_CENTS = 2.50;
         final double MINUTES_IN_HOUR = 60;
         final double MINUTE_RATE_IN_CENTS = HOURLY_RATE_IN_CENTS / MINUTES_IN_HOUR;
@@ -71,7 +73,7 @@ public class Checkout {
             throw new CheckinTimeMissingException(ErrorMessages.CHECKIN_TIME_IS_MISSING);
         }
 
-        long seconds = java.time.Duration.between(checkInTime, LocalDateTime.now()).getSeconds();
+        long seconds = java.time.Duration.between(checkInTime, this.getCheckOutTime()).getSeconds();
         long minutes = (long) Math.ceil(seconds / MINUTES_IN_HOUR);
         double ratePerMinute = MINUTE_RATE_IN_CENTS;
         Double totalFee = minutes * ratePerMinute;

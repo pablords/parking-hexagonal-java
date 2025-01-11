@@ -65,7 +65,6 @@ class CheckoutServiceTest {
     void testCheckout_Success() {
         // Cenário: Realizando checkout com sucesso
         Checkout checkout = new Checkout(checkin);
-        checkout.calculateParkingFee();
         checkin.setId(uuid);
 
         when(checkinRepository.findByPlate("ABC1234")).thenReturn(Optional.of(checkin));
@@ -96,7 +95,6 @@ class CheckoutServiceTest {
     @Test
     void testCheckout_EmptyCheckinTime() {
         Checkout checkout = new Checkout(checkin);
-        checkout.calculateParkingFee();
         checkin.setId(uuid);
 
         when(checkinRepository.findByPlate("ABC1234")).thenReturn(Optional.of(checkin));
@@ -115,7 +113,6 @@ class CheckoutServiceTest {
     @Test
     void testCheckout_UpdatesSlotAvailability() {
         Checkout checkout = new Checkout(checkin);
-        checkout.calculateParkingFee();
         checkin.setId(uuid);
 
         when(checkinRepository.findByPlate("ABC1234")).thenReturn(Optional.of(checkin));
@@ -123,7 +120,7 @@ class CheckoutServiceTest {
         when(carRepository.findByPlate("ABC1234")).thenReturn(Optional.of(car));
 
         // Cenário: Verifica se a vaga é liberada corretamente
-        when(checkoutRepository.save(any(Checkout.class))).thenReturn(new Checkout(checkin));
+        when(checkoutRepository.save(any(Checkout.class))).thenReturn(checkout);
 
         checkoutService.checkout(checkin.getCar().getPlate().getValue());
 

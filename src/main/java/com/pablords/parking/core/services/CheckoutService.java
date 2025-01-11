@@ -13,10 +13,8 @@ import com.pablords.parking.core.ports.outbound.repositories.CheckinRepositoryPo
 import com.pablords.parking.core.ports.outbound.repositories.CheckoutRepositoryPort;
 import com.pablords.parking.core.ports.outbound.repositories.SlotRepositoryPort;
 
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
-import java.time.LocalDateTime;
 
 @Slf4j
 public class CheckoutService implements CheckoutServicePort {
@@ -56,11 +54,9 @@ public class CheckoutService implements CheckoutServicePort {
             throw new CheckinTimeMissingException(ErrorMessages.CHECKIN_TIME_IS_MISSING);
         }
 
-        checkinById.setCheckOutTime(LocalDateTime.now()); // Registra a hora de saída
         checkinById.setCar(carByPlate);
 
         Checkout checkout = new Checkout(checkinById);
-        checkout.calculateParkingFee();
 
         Slot slot = checkinById.getSlot();
         slot.free(); // Libera a vaga
