@@ -11,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class CheckoutMapper {
     public static CheckoutModel toModel(Checkout checkout) {
-        log.debug("ENTITY: {}", checkout.toString());
+        log.debug("Mapeando Checkout para CheckoutModel: {}", checkout.toString());
         var model = new CheckoutModel();
         model.setId(checkout.getId());
         model.setCheckOutTime(checkout.getCheckOutTime());
@@ -21,7 +21,7 @@ public class CheckoutMapper {
     }
 
     public static Checkout toEntity(CheckoutModel model, Checkin checkin){
-        log.debug("MODEL: {}", model.toString());
+        log.debug("Mapeando CheckoutModel para Checkout: {}", model.toString());
         var checkout = new Checkout(checkin);
         checkout.setId(model.getId());
         checkout.setParkingFee(model.getParkingFee());
