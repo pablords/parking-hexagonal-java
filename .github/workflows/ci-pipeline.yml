@@ -17,6 +17,8 @@ jobs:
       # 1. Fazer checkout do código
       - name: Check out code
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
 
       # 2. Gerar o diff (exemplo simples entre HEAD~1 e HEAD)
       - name: Generate diff
