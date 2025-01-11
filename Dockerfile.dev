@@ -16,9 +16,7 @@ RUN chmod +x ./mvnw
 RUN export MAVEN_OPTS='-Xmx512m -XX:MaxPermSize=128m'
 
 COPY src ./src
-COPY docker_run_hot_reload.sh ./docker_run_hot_reload.sh
-RUN chmod +x docker_run_hot_reload.sh
 
 EXPOSE 8080
 
-ENTRYPOINT [ "./docker_run_hot_reload.sh" ]
+ENTRYPOINT [ ".docker/docker_run_hot_reload.sh" ]
