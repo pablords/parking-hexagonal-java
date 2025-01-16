@@ -8,7 +8,7 @@ import io.cucumber.junit.CucumberOptions;
 @CucumberOptions(
     features = "src/test/java/com/pablords/parking/contract/CT002/features",
     glue = {"com.pablords.parking.contract"},
-    plugin = {"pretty", "json:target/cucumber-report-CT002.json", "html:target/cucumber-html-report-CT002.html"},
+    plugin = {"pretty", "json:target/cucumber-reports/report-CT002.json", "html:target/cucumber-reports/report-CT002.html"},
     monochrome = true
 )
 public class CheckinContractTest {

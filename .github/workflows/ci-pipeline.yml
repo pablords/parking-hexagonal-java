@@ -14,48 +14,9 @@ on:
 
 
 jobs:
-  # code-review:
-  #   name: Code Review
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     # 1. Fazer checkout do código
-  #     - name: Check out code
-  #       uses: actions/checkout@v2
-  #       with:
-  #         fetch-depth: 0
-
-  #     # 2. Gerar o diff (exemplo simples entre HEAD~1 e HEAD)
-  #     - name: Generate diff
-  #       run: |
-  #         git diff HEAD~1 HEAD > diff.txt
-  #         echo "Diff gerado com sucesso."
-
-  #     # 3. Chamar o script JavaScript que invoca a OpenAI
-  #     - name: Call OpenAI for code review
-  #       run: node .github/scripts/code_review.js
-  #       env:
-  #         OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-
-  #     # 4. Postar como comentário no PR (exemplo usando 'github-script')
-  #     - name: Post code review comment
-  #       uses: actions/github-script@v6
-  #       with:
-  #         github-token: ${{ secrets.GITHUB_TOKEN }}
-  #         script: |
-  #           const fs = require('fs');
-  #           const review = fs.readFileSync('review_comments.txt', 'utf8');
-  #           const issue_number = context.payload.pull_request.number;
-
-  #           await github.rest.issues.createComment({
-  #             owner: context.repo.owner,
-  #             repo: context.repo.repo,
-  #             issue_number: issue_number,
-  #             body: review
-  #           });
   build:
     name: Build and Test
     runs-on: ubuntu-latest
-    # needs: code-review
 
     steps:
       # Checkout do código
@@ -87,9 +48,13 @@ jobs:
       - name: Build Application
         run: mvn clean package
 
-      # Executa os testes
-      - name: Run Tests
-        run: mvn test
+      # Executa os testes unitários
+      - name: Run Unit Tests
+        run: mvn test -Punit-tests
+
+      # Executa os testes de contratos
+      - name: Run Contract Tests
+        run: mvn test -Pcontract-tests
 
       # Armazena o artefato gerado
       - name: Upload Artifact

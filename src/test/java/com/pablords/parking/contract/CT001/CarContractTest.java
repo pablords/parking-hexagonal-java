@@ -10,7 +10,7 @@ import org.junit.runner.RunWith;
 @CucumberOptions(
     features = "src/test/java/com/pablords/parking/contract/CT001/features",
     glue = {"com.pablords.parking.contract"},
-    plugin = {"pretty", "json:target/cucumber-report-CT001.json", "html:target/cucumber-html-report-CT001.html"},
+    plugin = {"pretty", "json:target/cucumber-reports/report-CT001.json", "html:target/cucumber-reports/report-CT001.html"},
     monochrome = true
 )
 public class CarContractTest {
