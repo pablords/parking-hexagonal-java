@@ -1,5 +1,6 @@
 package com.pablords.parking.contract.CT002.steps;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
@@ -20,6 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pablords.parking.adapters.inbound.http.dtos.CheckinResponseDTO;
 
 import io.cucumber.java.Before;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -36,12 +38,15 @@ public class CheckinSteps {
 
     @Before
     public void setUp() {
-        // Limpando a tabela de slots (caso necessário)
+        // Limpando a tabelas do banco H2
+        jdbcTemplate.execute("DELETE FROM checkins");
         jdbcTemplate.execute("DELETE FROM slots");
 
         // Inserindo um slot disponível
         jdbcTemplate.execute("INSERT INTO slots (id, occupied) VALUES (1, false)");
         jdbcTemplate.execute("INSERT INTO slots (id,occupied) VALUES (2, false)");
+        jdbcTemplate.execute("INSERT INTO slots (id,occupied) VALUES (3, false)");
+        jdbcTemplate.execute("INSERT INTO slots (id,occupied) VALUES (4, false)");
 
         System.out.println("Slots criados no banco H2 para teste.");
 
@@ -54,9 +59,8 @@ public class CheckinSteps {
     }
 
     @When("the client sends a check-in request with {string}")
-    public void a_car_with_plate(String jsonPath) throws Exception {
+    public void a_car_with_payload(String jsonPath) throws Exception {
         var jsonFileContent = new String(Files.readAllBytes(Paths.get(jsonPath)));
-
         try {
             mockMvc.perform(post(PARKING_API_URL_CHECKINS)
                     .contentType(MediaType.APPLICATION_JSON)
@@ -71,16 +75,40 @@ public class CheckinSteps {
         }
     }
 
-    @Then("the response status should be {int}")
+    @Then("the slot with id {int} should be occupied")
+    public void theSlotWithIdShouldBeOccupied(int slotId) {
+        var isOccupied = jdbcTemplate.queryForObject("SELECT occupied FROM slots WHERE id = ?", new Object[] { slotId },
+                Boolean.class);
+        assertEquals(true, isOccupied);
+    }
+
+    @And("the response status should be {int}")
     public void theResponseStatusShouldBe(int status) throws Exception {
         var objectMapper = new ObjectMapper();
         try {
             CheckinResponseDTO checkinResponseDTO = objectMapper.readValue(responseContent, CheckinResponseDTO.class);
-            System.out.println("Response: " + responseContent);
-            // assertNotNull(checkinResponseDTO.getId());
-            // assertEquals(responseStatus.value(), status);
+            assertNotNull(checkinResponseDTO.getId());
+            assertEquals(responseStatus.value(), status);
         } catch (JsonProcessingException e) {
-            // assertEquals(responseStatus.value(), status);
+            System.out.println(e.getMessage());
         }
     }
+
+    @Then("the response should contain a check-in timestamp")
+    public void the_response_should_contain_a_check_in_timestamp() throws Exception {
+        var objectMapper = new ObjectMapper();
+        try {
+            CheckinResponseDTO checkinResponseDTO = objectMapper.readValue(responseContent, CheckinResponseDTO.class);
+            assertNotNull(checkinResponseDTO.getCheckInTime());
+        } catch (JsonProcessingException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    @Given("the car with plate {string} is checked in")
+    public void the_car_with_plate_is_checked_in(String plate) {
+        assertEquals("ABC1234", plate);
+    }
+    
+
 }
