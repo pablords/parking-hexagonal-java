@@ -1,9 +1,10 @@
-package com.pablords.parking.core.services;
+package com.pablords.parking.unit.core.services;
 
 import com.pablords.parking.core.entities.Slot;
 import com.pablords.parking.core.exceptions.ParkingFullException;
 import com.pablords.parking.core.exceptions.SlotOccupiedException;
 import com.pablords.parking.core.ports.outbound.repositories.SlotRepositoryPort;
+import com.pablords.parking.core.services.SlotService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class SlotServiceTest {
+class SlotServiceUnitTest {
 
     @Mock
     private SlotRepositoryPort slotRepository;

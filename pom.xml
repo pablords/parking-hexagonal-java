@@ -16,6 +16,9 @@
 	<description>ParkingCar</description>
 	<properties>
 		<java.version>17</java.version>
+		<skipTests>false</skipTests>
+		<skipITs>${skipTests}</skipITs>
+		<skipUTs>${skipTests}</skipUTs>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -85,7 +88,92 @@
 			<artifactId>spring-boot-starter-amqp</artifactId>
 		</dependency>
 
+
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-java</artifactId>
+			<version>7.14.0</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-junit</artifactId>
+			<version>7.14.0</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-junit-platform-engine</artifactId>
+			<version>7.14.0</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-spring</artifactId>
+			<version>7.14.0</version>
+			<scope>test</scope>
+		</dependency>
+
 	</dependencies>
+
+	<profiles>
+		<!-- Perfil para Testes Unitários -->
+		<profile>
+			<id>unit-tests</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<version>3.0.0</version>
+						<configuration>
+							<includes>
+								<include>**/*UnitTest.java</include>
+								<exclude>**/*ContractTest.java</exclude>
+							</includes>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+		<!-- Perfil para Testes de Componentes -->
+		<profile>
+			<id>contract-tests</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<version>3.0.0</version>
+						<configuration>
+							<includes>
+								<include>**/*ContractTest.java</include>
+								<include>**/*Runner.java</include>
+							</includes>
+							<skipTests>${skipITs}</skipTests>
+							<systemPropertyVariables>
+								<cucumber.publish.enables>false</cucumber.publish.enables>
+								<cucumber.publish.quiet>
+									true</cucumber.publish.quiet>
+								<cucumber.plugin>
+									pretty, summary,json:target/cucumber-reports/report.json,
+									html:target/cucumber-reports/report.html
+								</cucumber.plugin>
+								<cucumber.features>
+									src/test/java/com/pablords/parking/contract/CT001/features,
+									src/test/java/com/pablords/parking/contract/CT002/features
+								</cucumber.features>
+								<cucumber.glue>
+									com.pablords.parking.contract
+								</cucumber.glue>
+							</systemPropertyVariables>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 
 	<build>
 		<plugins>
@@ -99,6 +187,15 @@
 							<artifactId>lombok</artifactId>
 						</exclude>
 					</excludes>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>3.1.2</version>
+				<configuration>
+					<skipTests>${skipUTs}</skipTests>
 				</configuration>
 			</plugin>
 		</plugins>

@@ -1,4 +1,4 @@
-package com.pablords.parking.core.services;
+package com.pablords.parking.unit.core.services;
 
 import com.pablords.parking.core.entities.Checkout;
 import com.pablords.parking.adapters.outbound.messaging.producers.CheckoutProducerAdapter;
@@ -10,6 +10,7 @@ import com.pablords.parking.core.ports.outbound.repositories.CarRepositoryPort;
 import com.pablords.parking.core.ports.outbound.repositories.CheckinRepositoryPort;
 import com.pablords.parking.core.ports.outbound.repositories.CheckoutRepositoryPort;
 import com.pablords.parking.core.ports.outbound.repositories.SlotRepositoryPort;
+import com.pablords.parking.core.services.CheckoutService;
 import com.pablords.parking.core.valueobjects.Plate;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -28,7 +29,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class CheckoutServiceTest {
+class CheckoutServiceUnitTest {
     @Mock
     private CheckoutProducerAdapter checkoutProducerAdapter;
     

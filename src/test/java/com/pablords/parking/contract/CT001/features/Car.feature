@@ -1,0 +1,13 @@
+Feature: Car Management
+  As a user
+  I want to manage cars in the parking lot
+  So that I can validate the API behavior
+
+  Scenario: Successfully create a car
+    Given That I am in the api endpoint "/cars"
+    When I create a car with the following details: "src/test/java/com/pablords/parking/contract/CT001/features/request/createCarSuccess.json"
+    Then The response status should be 201
+
+  Scenario: Fail to create a car with invalid details
+    When I create a car with the following details: "src/test/java/com/pablords/parking/contract/CT001/features/request/createCarInvalid.json"
+    Then The response status should be 500

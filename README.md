@@ -197,7 +197,7 @@ A arquitetura hexagonal utilizada neste projeto promove a separação de preocup
 
 Certifique-se de ter os seguintes softwares instalados em sua máquina:
 
-- [Java 11+](https://www.oracle.com/java/technologies/javase-jdk11-downloads.html)
+- [Java 17+](https://www.oracle.com/java/technologies/javase-jdk11-downloads.html)
 - [Maven 3.6+](https://maven.apache.org/download.cgi)
 - [Docker](https://www.docker.com/products/docker-desktop) (para rodar o RabbitMQ e Mysql)
 
@@ -239,6 +239,26 @@ Variáveis de Ambiente
 - Você pode configurar variáveis de ambiente específicas no arquivo application.properties ou application.yml localizado em resources.
 
 6. **Testes**
+
+Rodando testes unitários:
+
+- Testamos nossos serviços, onde o núcleo da nossa lógica de negócios vive, mas é independente de qualquer tipo de persistência ou transporte
+
 ```bash
-  mvn test
+  mvn test -Punit-tests
 ```
+
+![unit-tests](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*HNRyZ_2qLppKnDZn9UtcEA.png)
+
+
+Rodando testes de contratos:
+
+- Testamos toda a pilha da nossa camada de Http/API, pelos serviços, repositórios, fontes de dados e serviços externos atingidos. Essas especificações testam se "conectamos" tudo corretamente.
+
+```bash
+  mvn test -Pcontract-tests
+```
+
+
+![contract-tests](https://miro.medium.com/v2/resize:fit:4800/format:webp/1*QSXoTX09D2OlkLEd44TTSg.png)
+

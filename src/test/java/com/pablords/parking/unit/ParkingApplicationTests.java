@@ -1,4 +1,4 @@
-package com.pablords.parking;
+package com.pablords.parking.unit;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

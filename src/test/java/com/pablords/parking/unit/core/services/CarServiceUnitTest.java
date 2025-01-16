@@ -1,4 +1,4 @@
-package com.pablords.parking.core.services;
+package com.pablords.parking.unit.core.services;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -8,6 +8,7 @@ import com.pablords.parking.core.entities.Car;
 import com.pablords.parking.core.exceptions.ErrorMessages;
 import com.pablords.parking.core.exceptions.ExistPlateException;
 import com.pablords.parking.core.ports.outbound.repositories.CarRepositoryPort;
+import com.pablords.parking.core.services.CarService;
 import com.pablords.parking.core.valueobjects.Plate;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -16,7 +17,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.ArrayList;
 
-class CarServiceTest {
+class CarServiceUnitTest {
     private CarRepositoryPort carRepositoryPortMock;
     private CarService carService;
 
