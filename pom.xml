@@ -124,21 +124,23 @@
 								<include>**/*UnitTest.java</include>
 								<exclude>**/*ContractTest.java</exclude>
 							</includes>
+							<useFile>true</useFile>
+							<reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory>
 						</configuration>
 					</plugin>
 				</plugins>
 			</build>
 		</profile>
 
-		<!-- Perfil para Testes de Componentes -->
+		<!-- Perfil para Testes de Contratos -->
 		<profile>
 			<id>contract-tests</id>
 			<build>
 				<plugins>
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-surefire-plugin</artifactId>
-						<version>3.0.0</version>
+						<artifactId>maven-failsafe-plugin</artifactId>
+						<version>3.0.0-M7</version>
 						<configuration>
 							<includes>
 								<include>**/*ContractTest.java</include>
@@ -162,6 +164,16 @@
 								</cucumber.glue>
 							</systemPropertyVariables>
 						</configuration>
+						<executions>
+							<execution>
+								<id>contract-test</id>
+								<phase>test</phase> <!-- ⚠️ Alterado de 'integration-test' para 'test' -->
+								<goals>
+									<goal>integration-test</goal>
+									<goal>verify</goal> <!-- ⚠️ Rodando 'verify' na fase 'test' -->
+								</goals>
+							</execution>
+						</executions>
 					</plugin>
 				</plugins>
 			</build>
@@ -190,6 +202,27 @@
 				<configuration>
 					<skipTests>${skipUTs}</skipTests>
 				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-report-plugin</artifactId>
+				<version>3.0.0-M7</version> <!-- Verifique a versão mais recente -->
+				<executions>
+					<execution>
+						<phase>test</phase>
+						<goals>
+							<goal>report-only</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- Failsafe para testes de contrato e integração -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>3.0.0-M7</version>
 			</plugin>
 		</plugins>
 	</build>
