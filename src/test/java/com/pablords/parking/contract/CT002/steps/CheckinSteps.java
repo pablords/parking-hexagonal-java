@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
@@ -54,7 +53,12 @@ public class CheckinSteps {
     }
 
     @Given("the car with plate {string} is not checked in")
-    public void thatIAmInTheApiEndpoint(String plate) {
+    public void the_car_with_plate_is_not_checked_in(String plate) {
+        assertEquals("ABC1234", plate);
+    }
+
+    @Given("the car with plate {string} is checked in")
+    public void the_car_with_plate_is_checked_in(String plate) {
         assertEquals("ABC1234", plate);
     }
 
@@ -76,14 +80,14 @@ public class CheckinSteps {
     }
 
     @Then("the slot with id {int} should be occupied")
-    public void theSlotWithIdShouldBeOccupied(int slotId) {
+    public void the_slot_with_id_should_be_occupied(int slotId) {
         var isOccupied = jdbcTemplate.queryForObject("SELECT occupied FROM slots WHERE id = ?", new Object[] { slotId },
                 Boolean.class);
         assertEquals(true, isOccupied);
     }
 
     @And("the response status should be {int}")
-    public void theResponseStatusShouldBe(int status) throws Exception {
+    public void the_response_status_should_be(int status) throws Exception {
         var objectMapper = new ObjectMapper();
         try {
             CheckinResponseDTO checkinResponseDTO = objectMapper.readValue(responseContent, CheckinResponseDTO.class);
@@ -103,11 +107,6 @@ public class CheckinSteps {
         } catch (JsonProcessingException e) {
             System.out.println(e.getMessage());
         }
-    }
-
-    @Given("the car with plate {string} is checked in")
-    public void the_car_with_plate_is_checked_in(String plate) {
-        assertEquals("ABC1234", plate);
     }
     
 

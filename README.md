@@ -260,11 +260,3 @@ Rodando testes de contratos:
 ```
 
 ![contract-tests](https://miro.medium.com/v2/resize:fit:4800/format:webp/1*QSXoTX09D2OlkLEd44TTSg.png)
-
-
-- Para rodar cenários específicos 
-
- ```bash
-   mvn test -Pcontract-tests -Dcucumber.filter.tags="@car and @fail"
-```
-

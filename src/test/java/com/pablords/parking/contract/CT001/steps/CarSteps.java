@@ -10,7 +10,6 @@ import java.nio.file.Paths;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
@@ -39,12 +38,12 @@ public class CarSteps {
     }
 
     @Given("That I am in the api endpoint {string}")
-    public void thatIAmInTheApiEndpoint(String endpoint) {
+    public void that_i_am_in_the_api_endpoint(String endpoint) {
         assertEquals(endpoint, PARKING_API_URL_CARS);
     }
 
     @When("I create a car with the following details: {string}")
-    public void iCreateACarWithTheFollowingDetails(String jsonPath) throws Exception {
+    public void i_create_a_car_with_the_following_details(String jsonPath) throws Exception {
         var jsonFileContent = new String(Files.readAllBytes(Paths.get(jsonPath)));
 
         try {
@@ -62,7 +61,7 @@ public class CarSteps {
     }
 
     @Then("The response status should be {int}")
-    public void theResponseStatusShouldBe(int status) throws Exception {
+    public void the_response_status_should_be(int status) throws Exception {
         var objectMapper = new ObjectMapper();
         try {
             CarResponseDTO carResponseDTO = objectMapper.readValue(responseContent, CarResponseDTO.class);
