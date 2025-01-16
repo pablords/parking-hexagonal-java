@@ -46,7 +46,7 @@ jobs:
 
       # Build da aplicação
       - name: Build Application
-        run: mvn clean package
+        run: mvn clean package -DskipTests
 
       # Executa os testes unitários
       - name: Run Unit Tests
