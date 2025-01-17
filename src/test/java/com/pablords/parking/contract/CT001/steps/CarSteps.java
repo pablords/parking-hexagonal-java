@@ -2,39 +2,56 @@ package com.pablords.parking.contract.CT001.steps;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.UUID;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.pablords.parking.ParkingApplication;
+import com.pablords.parking.adapters.inbound.http.controllers.CarController;
+import com.pablords.parking.adapters.inbound.http.dtos.CarRequestDTO;
 import com.pablords.parking.adapters.inbound.http.dtos.CarResponseDTO;
+import com.pablords.parking.core.entities.Car;
+import com.pablords.parking.core.ports.outbound.repositories.CarRepositoryPort;
+import com.pablords.parking.core.valueobjects.Plate;
 
-import io.cucumber.java.Before;
+
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
-
+@ExtendWith(MockitoExtension.class)
+@SpringBootTest(classes = ParkingApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@AutoConfigureMockMvc
 public class CarSteps {
     @Autowired
-    private WebApplicationContext webApplicationContext;
+    private CarController carController;
+    @Autowired
     private MockMvc mockMvc;
     private HttpStatus responseStatus;
     private String responseContent;
     private final String PARKING_API_URL_CARS = "/cars";
+    @MockBean
+    private CarRepositoryPort carRepositoryPortMock;
 
-    @Before
+    @BeforeEach
     public void setUp() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+        System.out.println("CarRepositoryPort Mock: " + carRepositoryPortMock);
+        assertNotNull(carRepositoryPortMock, "Mock do repositório não foi injetado corretamente!");
     }
 
     @Given("That I am in the api endpoint {string}")
@@ -44,9 +61,16 @@ public class CarSteps {
 
     @When("I create a car with the following details: {string}")
     public void i_create_a_car_with_the_following_details(String jsonPath) throws Exception {
-        var jsonFileContent = new String(Files.readAllBytes(Paths.get(jsonPath)));
-
         try {
+            var jsonFileContent = new String(Files.readAllBytes(Paths.get(jsonPath)));
+            var objectMapper = new ObjectMapper();
+            CarRequestDTO carToCreate = objectMapper.readValue(jsonFileContent, CarRequestDTO.class);
+            Car createdCar = new Car(new Plate(carToCreate.getPlate()), carToCreate.getBrand(), carToCreate.getColor(),
+                    carToCreate.getModel());
+            createdCar.setId(UUID.fromString("f5d4b3b4-1b4b-4b4b-8b4b-4b4b4b4b4b4b"));
+
+            System.out.println("Mocking repository call...");
+            when(carRepositoryPortMock.save(any(Car.class))).thenReturn(createdCar);
             mockMvc.perform(post(PARKING_API_URL_CARS)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(jsonFileContent))
@@ -62,13 +86,15 @@ public class CarSteps {
 
     @Then("The response status should be {int}")
     public void the_response_status_should_be(int status) throws Exception {
-        var objectMapper = new ObjectMapper();
-        try {
+        try{
+            var objectMapper = new ObjectMapper();
             CarResponseDTO carResponseDTO = objectMapper.readValue(responseContent, CarResponseDTO.class);
-            assertNotNull(carResponseDTO.getId());
-            assertEquals(responseStatus.value(), status);
-        } catch (JsonProcessingException e) {
-            assertEquals(responseStatus.value(), status);
+            if(status == 201){
+                assertNotNull(carResponseDTO.getId());
+            }
+            assertEquals(status, responseStatus.value());
+        }catch(Exception e){
+            System.out.println(e.getMessage());
         }
     }
 

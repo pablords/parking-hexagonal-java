@@ -13,4 +13,4 @@ Feature: Car Management
   @fail
   Scenario: Fail to create a car with invalid details
     When I create a car with the following details: "src/test/java/com/pablords/parking/contract/CT001/features/request/createCarInvalid.json"
-    Then The response status should be 500
+    Then The response status should be 400

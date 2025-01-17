@@ -248,9 +248,6 @@ Rodando testes unitários:
   mvn test -Punit-tests
 ```
 
-![unit-tests](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*HNRyZ_2qLppKnDZn9UtcEA.png)
-
-
 Rodando testes de contratos:
 
 - Testamos toda a pilha da nossa camada de Http/API, pelos serviços, repositórios, fontes de dados e serviços externos atingidos. Essas especificações testam se "conectamos" tudo corretamente.
@@ -258,5 +255,3 @@ Rodando testes de contratos:
 ```bash
   mvn test -Pcontract-tests
 ```
-
-![contract-tests](https://miro.medium.com/v2/resize:fit:4800/format:webp/1*QSXoTX09D2OlkLEd44TTSg.png)

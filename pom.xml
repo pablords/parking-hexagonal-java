@@ -118,12 +118,14 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-surefire-plugin</artifactId>
-						<version>3.0.0</version>
 						<configuration>
 							<includes>
 								<include>**/*UnitTest.java</include>
-								<exclude>**/*ContractTest.java</exclude>
 							</includes>
+							<excludes>
+								<exclude>**/*ContractTest.java</exclude>
+								<exclude>**/*IntegrationTest.java</exclude>
+							</excludes>
 							<useFile>true</useFile>
 							<reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory>
 						</configuration>
@@ -139,18 +141,20 @@
 				<plugins>
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-failsafe-plugin</artifactId>
-						<version>3.0.0-M7</version>
+						<artifactId>maven-surefire-plugin</artifactId>
 						<configuration>
 							<includes>
 								<include>**/*ContractTest.java</include>
 								<include>**/*Runner.java</include>
 							</includes>
+							<excludes>
+								<exclude>**/*UnitTest.java</exclude>
+								<exclude>**/*IntegrationTest.java</exclude>
+							</excludes>
 							<skipTests>${skipITs}</skipTests>
 							<systemPropertyVariables>
 								<cucumber.publish.enables>false</cucumber.publish.enables>
-								<cucumber.publish.quiet>
-									true</cucumber.publish.quiet>
+								<cucumber.publish.quiet>true</cucumber.publish.quiet>
 								<cucumber.plugin>
 									pretty, summary,json:target/cucumber-reports/report.json,
 									html:target/cucumber-reports/report.html
@@ -164,16 +168,6 @@
 								</cucumber.glue>
 							</systemPropertyVariables>
 						</configuration>
-						<executions>
-							<execution>
-								<id>contract-test</id>
-								<phase>test</phase> <!-- ⚠️ Alterado de 'integration-test' para 'test' -->
-								<goals>
-									<goal>integration-test</goal>
-									<goal>verify</goal> <!-- ⚠️ Rodando 'verify' na fase 'test' -->
-								</goals>
-							</execution>
-						</executions>
 					</plugin>
 				</plugins>
 			</build>
