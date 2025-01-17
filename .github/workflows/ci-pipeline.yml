@@ -50,11 +50,15 @@ jobs:
 
       # Executa os testes unitários
       - name: Run Unit Tests
-        run: mvn test -Punit-tests
+        run: mvn test -Punit-test
 
       # Executa os testes de contratos
       - name: Run Contract Tests
-        run: mvn test -Pcontract-tests
+        run: mvn test -Pcontract-test
+      
+      # Executa os testes de contratos
+      - name: Run Integration Tests
+        run: mvn test -Pintegration-test
 
       # Armazena o artefato gerado
       - name: Upload Artifact

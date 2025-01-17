@@ -250,8 +250,16 @@ Rodando testes unitários:
 
 Rodando testes de contratos:
 
-- Testamos toda a pilha da nossa camada de Http/API, pelos serviços, repositórios, fontes de dados e serviços externos atingidos. Essas especificações testam se "conectamos" tudo corretamente.
+- Testamos toda a pilha da nossa camada de Http/API, pelos serviços e repositórios, validando nosso sistema mockando todos detalhes de infra e sistemas externos.
 
 ```bash
   mvn test -Pcontract-test
+```
+
+Rodando testes de integração:
+
+- Testamos toda a pilha da nossa camada de Http/API, pelos serviços, repositórios, fontes de dados e serviços externos atingidos. Essas especificações testam se "conectamos" tudo corretamente.
+
+```bash
+  mvn test -Pintegration-test
 ```
