@@ -6,7 +6,9 @@ import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.pablords.parking.core.exceptions.CarNotFoundException;
@@ -40,18 +42,32 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler({ RuntimeException.class })
-    public ResponseEntity<ApiError> handleRuntimeException(RuntimeException ex, HttpServletRequest request) {
+    public ResponseEntity<ApiError> handleRuntimeException(RuntimeException ex,
+            HttpServletRequest request) {
         log.error(ex.getMessage(), ex);
 
-        HttpStatus status = EXCEPTION_STATUS_MAP.getOrDefault(ex.getClass(), HttpStatus.INTERNAL_SERVER_ERROR);
+        HttpStatus status = EXCEPTION_STATUS_MAP.getOrDefault(ex.getClass(),
+                HttpStatus.INTERNAL_SERVER_ERROR);
 
         var error = ApiError.builder()
                 .timestamp(LocalDateTime.now())
                 .status(status.value())
                 .error(status.getReasonPhrase())
-                .message(HttpStatus.valueOf(status.value()).value() == 500 ? DEFAULT_MESSAGE_SERVER_ERROR : ex.getMessage())
+                .message(HttpStatus.valueOf(status.value()).value() == 500 ? DEFAULT_MESSAGE_SERVER_ERROR
+                        : ex.getMessage())
                 .path(request.getRequestURI())
                 .build();
         return ResponseEntity.status(status.value()).body(error);
     }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getFieldErrors().forEach(error -> {
+            errors.put(error.getField(), error.getDefaultMessage());
+        });
+        return errors;
+    }
+
 }

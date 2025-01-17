@@ -27,7 +27,6 @@ import com.pablords.parking.adapters.inbound.http.controllers.CarController;
 import com.pablords.parking.adapters.inbound.http.dtos.CarRequestDTO;
 import com.pablords.parking.adapters.inbound.http.dtos.CarResponseDTO;
 import com.pablords.parking.core.entities.Car;
-import com.pablords.parking.core.entities.Checkin;
 import com.pablords.parking.core.ports.outbound.repositories.CarRepositoryPort;
 import com.pablords.parking.core.valueobjects.Plate;
 
@@ -46,6 +45,8 @@ public class CarSteps {
     private HttpStatus responseStatus;
     private String responseContent;
     private final String PARKING_API_URL_CARS = "/cars";
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
     @MockBean
     private CarRepositoryPort carRepositoryPortMock;
 
@@ -64,7 +65,6 @@ public class CarSteps {
     public void i_create_a_car_with_the_following_details(String jsonPath) throws Exception {
         try {
             var jsonFileContent = new String(Files.readAllBytes(Paths.get(jsonPath)));
-            var objectMapper = new ObjectMapper();
             CarRequestDTO carToCreate = objectMapper.readValue(jsonFileContent, CarRequestDTO.class);
             Car createdCar = new Car(new Plate(carToCreate.getPlate()), carToCreate.getBrand(), carToCreate.getColor(),
                     carToCreate.getModel());
@@ -89,7 +89,6 @@ public class CarSteps {
     @Then("The response status should be {int}")
     public void the_response_status_should_be(int status) throws Exception {
         try {
-            var objectMapper = new ObjectMapper();
             CarResponseDTO carResponseDTO = objectMapper.readValue(responseContent, CarResponseDTO.class);
             if (status == 201) {
                 assertNotNull(carResponseDTO.getId());

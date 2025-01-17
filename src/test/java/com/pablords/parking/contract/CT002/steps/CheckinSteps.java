@@ -50,6 +50,7 @@ public class CheckinSteps {
     private CheckinRepositoryPort checkinRepositoryPortMock;
     @MockBean
     private SlotRepositoryPort slotRepositoryPortMock;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @BeforeEach
     public void setUp() {
@@ -71,7 +72,6 @@ public class CheckinSteps {
     public void a_car_with_payload(String jsonPath) throws Exception {
         try {
             var jsonFileContent = new String(Files.readAllBytes(Paths.get(jsonPath)));
-            var objectMapper = new ObjectMapper();
             var checkinToCreate = objectMapper.readValue(jsonFileContent, CheckinRequestDTO.class);
             var createdCheckin = new Checkin();
             var car = new Car(new Plate(checkinToCreate.getPlate()), checkinToCreate.getBrand(),
@@ -103,7 +103,6 @@ public class CheckinSteps {
 
     @And("the response status should be {int}")
     public void the_response_status_should_be(int status) throws Exception {
-        var objectMapper = new ObjectMapper();
         try {
             CheckinResponseDTO checkinResponseDTO = objectMapper.readValue(responseContent, CheckinResponseDTO.class);
             assertNotNull(checkinResponseDTO.getId(), "Checkin ID não foi retornado na resposta.");
@@ -115,7 +114,6 @@ public class CheckinSteps {
 
     @Then("the response should contain a check-in timestamp")
     public void the_response_should_contain_a_check_in_timestamp() throws Exception {
-        var objectMapper = new ObjectMapper();
         try {
             CheckinResponseDTO checkinResponseDTO = objectMapper.readValue(responseContent, CheckinResponseDTO.class);
             assertNotNull(checkinResponseDTO.getCheckInTime(), "Checkin timestamp não foi retornado na resposta.");

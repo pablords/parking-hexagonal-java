@@ -245,7 +245,7 @@ Rodando testes unitários:
 - Testamos nossos serviços, onde o núcleo da nossa lógica de negócios vive, mas é independente de qualquer tipo de persistência ou transporte
 
 ```bash
-  mvn test -Punit-tests
+  mvn test -Punit-test
 ```
 
 Rodando testes de contratos:
@@ -253,5 +253,5 @@ Rodando testes de contratos:
 - Testamos toda a pilha da nossa camada de Http/API, pelos serviços, repositórios, fontes de dados e serviços externos atingidos. Essas especificações testam se "conectamos" tudo corretamente.
 
 ```bash
-  mvn test -Pcontract-tests
+  mvn test -Pcontract-test
 ```

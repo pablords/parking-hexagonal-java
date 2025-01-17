@@ -1,6 +1,7 @@
 package com.pablords.parking.adapters.inbound.http.handlers;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,4 +18,5 @@ public class ApiError {
     private String message;
     private String path;
     private LocalDateTime timestamp;
+    private List<String> errors;
 }

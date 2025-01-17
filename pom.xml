@@ -81,6 +81,11 @@
 			<artifactId>spring-boot-starter-amqp</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-validation</artifactId>
+		</dependency>
+
 
 		<dependency>
 			<groupId>io.cucumber</groupId>
@@ -112,7 +117,7 @@
 	<profiles>
 		<!-- Perfil para Testes Unitários -->
 		<profile>
-			<id>unit-tests</id>
+			<id>unit-test</id>
 			<build>
 				<plugins>
 					<plugin>
@@ -136,7 +141,7 @@
 
 		<!-- Perfil para Testes de Contratos -->
 		<profile>
-			<id>contract-tests</id>
+			<id>contract-test</id>
 			<build>
 				<plugins>
 					<plugin>
@@ -145,7 +150,6 @@
 						<configuration>
 							<includes>
 								<include>**/*ContractTest.java</include>
-								<include>**/*Runner.java</include>
 							</includes>
 							<excludes>
 								<exclude>**/*UnitTest.java</exclude>
@@ -156,8 +160,9 @@
 								<cucumber.publish.enables>false</cucumber.publish.enables>
 								<cucumber.publish.quiet>true</cucumber.publish.quiet>
 								<cucumber.plugin>
-									pretty, summary,json:target/cucumber-reports/report.json,
-									html:target/cucumber-reports/report.html
+									pretty,
+									summary,json:target/cucumber-reports/contract/report.json,
+									html:target/cucumber-reports/contract/report.html
 								</cucumber.plugin>
 								<cucumber.features>
 									src/test/java/com/pablords/parking/contract/CT001/features,
@@ -172,7 +177,58 @@
 				</plugins>
 			</build>
 		</profile>
+
+		<!-- Perfil de Integração -->
+		<profile>
+			<id>integration-test</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-failsafe-plugin</artifactId>
+						<configuration>
+							<includes>
+								<include>**/*IntegrationTest.java</include>
+							</includes>
+							<excludes>
+								<exclude>**/*UnitTest.java</exclude>
+								<include>**/*ContractTest.java</include>
+							</excludes>
+							<skipTests>${skipITs}</skipTests>
+							<systemPropertyVariables>
+								<cucumber.publish.enables>false</cucumber.publish.enables>
+								<cucumber.publish.quiet>true</cucumber.publish.quiet>
+								<cucumber.plugin>
+									pretty,
+									summary,json:target/cucumber-reports/integration/report.json,
+									html:target/cucumber-reports/integration/report.html
+								</cucumber.plugin>
+								<cucumber.features>
+									src/test/java/com/pablords/parking/integration/CT001/features,
+									src/test/java/com/pablords/parking/integration/CT002/features
+								</cucumber.features>
+								<cucumber.glue>
+									com.pablords.parking.integration
+								</cucumber.glue>
+							</systemPropertyVariables>
+						</configuration>
+						<executions>
+							<execution>
+								<id>integration-test</id>
+								<phase>test</phase> <!-- ⚠️ Alterado de 'integration-test' para 'test' -->
+								<goals>
+									<goal>integration-test</goal>
+									<goal>verify</goal> <!-- ⚠️ Rodando 'verify' na fase 'test' -->
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
 	</profiles>
+
 
 	<build>
 		<plugins>
