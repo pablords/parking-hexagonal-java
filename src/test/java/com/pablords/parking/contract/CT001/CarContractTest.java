@@ -4,6 +4,7 @@ import io.cucumber.junit.Cucumber;
 import io.cucumber.junit.CucumberOptions;
 
 import org.junit.runner.RunWith;
+import org.springframework.test.context.ActiveProfiles;
 
 
 @RunWith(Cucumber.class)
@@ -13,6 +14,7 @@ import org.junit.runner.RunWith;
     plugin = {"pretty", "json:target/cucumber-reports/report-CT001.json", "html:target/cucumber-reports/report-CT001.html"},
     monochrome = true
 )
+@ActiveProfiles("test")
 public class CarContractTest {
    
 }

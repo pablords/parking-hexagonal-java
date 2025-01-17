@@ -1,6 +1,8 @@
 package com.pablords.parking.contract.CT002;
 
 import org.junit.runner.RunWith;
+import org.springframework.test.context.ActiveProfiles;
+
 import io.cucumber.junit.Cucumber;
 import io.cucumber.junit.CucumberOptions;
 
@@ -11,6 +13,7 @@ import io.cucumber.junit.CucumberOptions;
     plugin = {"pretty", "json:target/cucumber-reports/report-CT002.json", "html:target/cucumber-reports/report-CT002.html"},
     monochrome = true
 )
+@ActiveProfiles("test")
 public class CheckinContractTest {
 
 }

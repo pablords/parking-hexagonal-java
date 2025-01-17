@@ -3,6 +3,7 @@ package com.pablords.parking.contract.CT001.steps;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
@@ -26,9 +27,9 @@ import com.pablords.parking.adapters.inbound.http.controllers.CarController;
 import com.pablords.parking.adapters.inbound.http.dtos.CarRequestDTO;
 import com.pablords.parking.adapters.inbound.http.dtos.CarResponseDTO;
 import com.pablords.parking.core.entities.Car;
+import com.pablords.parking.core.entities.Checkin;
 import com.pablords.parking.core.ports.outbound.repositories.CarRepositoryPort;
 import com.pablords.parking.core.valueobjects.Plate;
-
 
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -71,6 +72,7 @@ public class CarSteps {
 
             System.out.println("Mocking repository call...");
             when(carRepositoryPortMock.save(any(Car.class))).thenReturn(createdCar);
+            verify(carRepositoryPortMock).save(any(Car.class));
             mockMvc.perform(post(PARKING_API_URL_CARS)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(jsonFileContent))
@@ -86,14 +88,14 @@ public class CarSteps {
 
     @Then("The response status should be {int}")
     public void the_response_status_should_be(int status) throws Exception {
-        try{
+        try {
             var objectMapper = new ObjectMapper();
             CarResponseDTO carResponseDTO = objectMapper.readValue(responseContent, CarResponseDTO.class);
-            if(status == 201){
+            if (status == 201) {
                 assertNotNull(carResponseDTO.getId());
             }
             assertEquals(status, responseStatus.value());
-        }catch(Exception e){
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }

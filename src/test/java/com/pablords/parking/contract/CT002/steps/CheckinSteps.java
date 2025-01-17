@@ -3,6 +3,7 @@ package com.pablords.parking.contract.CT002.steps;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
@@ -81,8 +82,11 @@ public class CheckinSteps {
 
 
             when(checkinRepositoryPortMock.save(any(Checkin.class))).thenReturn(createdCheckin);
+            verify(checkinRepositoryPortMock).save(any(Checkin.class));
+            
             when(checkinRepositoryPortMock.findByPlate(any())).thenReturn(Optional.of(createdCheckin));
             when(checkinRepositoryPortMock.findById(any())).thenReturn(Optional.of(createdCheckin));
+
 
             mockMvc.perform(post(PARKING_API_URL_CHECKINS)
                     .contentType(MediaType.APPLICATION_JSON)
