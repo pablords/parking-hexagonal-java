@@ -1,0 +1,13 @@
+
+
+
+
+spring:
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: none  # ⚠️ Evita a criação automática das tabelas
+
+config:
+  activate:
+    on-profile: contract-test

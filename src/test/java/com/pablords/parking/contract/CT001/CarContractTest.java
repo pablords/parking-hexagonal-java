@@ -9,12 +9,12 @@ import org.springframework.test.context.ActiveProfiles;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(
-    features = "src/test/java/com/pablords/parking/contract/CT001/features",
+    features = "src/test/java/com/pablords/parking/resources/features",
     glue = {"com.pablords.parking.contract"},
-    plugin = {"pretty", "json:target/cucumber-reports/report-CT001.json", "html:target/cucumber-reports/report-CT001.html"},
+    plugin = {"pretty", "json:target/cucumber-reports/contract/report-CT001.json", "html:target/cucumber-reports/contract/report-CT001.html"},
     monochrome = true
 )
-@ActiveProfiles("test")
+@ActiveProfiles("contract-test")
 public class CarContractTest {
    
 }

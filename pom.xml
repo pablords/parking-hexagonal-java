@@ -165,8 +165,7 @@
 									html:target/cucumber-reports/contract/report.html
 								</cucumber.plugin>
 								<cucumber.features>
-									src/test/java/com/pablords/parking/contract/CT001/features,
-									src/test/java/com/pablords/parking/contract/CT002/features
+									src/test/java/com/pablords/parking/resources/features
 								</cucumber.features>
 								<cucumber.glue>
 									com.pablords.parking.contract
@@ -185,7 +184,7 @@
 				<plugins>
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-failsafe-plugin</artifactId>
+						<artifactId>maven-surefire-plugin</artifactId>
 						<configuration>
 							<includes>
 								<include>**/*IntegrationTest.java</include>
@@ -204,24 +203,13 @@
 									html:target/cucumber-reports/integration/report.html
 								</cucumber.plugin>
 								<cucumber.features>
-									src/test/java/com/pablords/parking/integration/CT001/features,
-									src/test/java/com/pablords/parking/integration/CT002/features
+									src/test/java/com/pablords/parking/resources/features
 								</cucumber.features>
 								<cucumber.glue>
 									com.pablords.parking.integration
 								</cucumber.glue>
 							</systemPropertyVariables>
 						</configuration>
-						<executions>
-							<execution>
-								<id>integration-test</id>
-								<phase>test</phase> <!-- ⚠️ Alterado de 'integration-test' para 'test' -->
-								<goals>
-									<goal>integration-test</goal>
-									<goal>verify</goal> <!-- ⚠️ Rodando 'verify' na fase 'test' -->
-								</goals>
-							</execution>
-						</executions>
 					</plugin>
 				</plugins>
 			</build>

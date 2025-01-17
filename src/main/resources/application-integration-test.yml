@@ -1,0 +1,24 @@
+# Configuração do datasource
+spring:
+  datasource:
+    initialization-mode: always
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:parking-db;DB_CLOSE_DELAY=-1
+    username: parking
+    password: parking
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: admin
+    password: admin
+
+# Configuração do JPA/Hibernate
+  config:
+    activate:
+      on-profile: integration-test
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
+    hibernate:
+      ddl-auto: update

@@ -8,12 +8,12 @@ import io.cucumber.junit.CucumberOptions;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(
-    features = "src/test/java/com/pablords/parking/contract/CT002/features",
+    features = "src/test/java/com/pablords/parking/resources/features",
     glue = {"com.pablords.parking.contract"},
-    plugin = {"pretty", "json:target/cucumber-reports/report-CT002.json", "html:target/cucumber-reports/report-CT002.html"},
+    plugin = {"pretty", "json:target/cucumber-reports/contract/report-CT002.json", "html:target/cucumber-reports/contract/report-CT002.html"},
     monochrome = true
 )
-@ActiveProfiles("test")
+@ActiveProfiles("contract-test")
 public class CheckinContractTest {
 
 }
