@@ -128,7 +128,7 @@
 								<include>**/*UnitTest.java</include>
 							</includes>
 							<excludes>
-								<exclude>**/*ContractTest.java</exclude>
+								<exclude>**/*ComponentTest.java</exclude>
 								<exclude>**/*IntegrationTest.java</exclude>
 							</excludes>
 							<useFile>true</useFile>
@@ -141,7 +141,7 @@
 
 		<!-- Perfil para Testes de Contratos -->
 		<profile>
-			<id>contract-test</id>
+			<id>component-test</id>
 			<build>
 				<plugins>
 					<plugin>
@@ -149,7 +149,7 @@
 						<artifactId>maven-surefire-plugin</artifactId>
 						<configuration>
 							<includes>
-								<include>**/*ContractTest.java</include>
+								<include>**/*ComponentTest.java</include>
 							</includes>
 							<excludes>
 								<exclude>**/*UnitTest.java</exclude>
@@ -161,14 +161,14 @@
 								<cucumber.publish.quiet>true</cucumber.publish.quiet>
 								<cucumber.plugin>
 									pretty,
-									summary,json:target/cucumber-reports/contract/report.json,
-									html:target/cucumber-reports/contract/report.html
+									summary,json:target/cucumber-reports/component/report.json,
+									html:target/cucumber-reports/component/report.html
 								</cucumber.plugin>
 								<cucumber.features>
 									src/test/java/com/pablords/parking/resources/features
 								</cucumber.features>
 								<cucumber.glue>
-									com.pablords.parking.contract
+									com.pablords.parking.component
 								</cucumber.glue>
 							</systemPropertyVariables>
 						</configuration>
@@ -191,7 +191,7 @@
 							</includes>
 							<excludes>
 								<exclude>**/*UnitTest.java</exclude>
-								<include>**/*ContractTest.java</include>
+								<include>**/*ComponentTest.java</include>
 							</excludes>
 							<skipTests>${skipITs}</skipTests>
 							<systemPropertyVariables>

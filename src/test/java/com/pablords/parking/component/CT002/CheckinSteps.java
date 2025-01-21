@@ -1,4 +1,4 @@
-package com.pablords.parking.contract.CT002;
+package com.pablords.parking.component.CT002;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;

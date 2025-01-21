@@ -1,4 +1,4 @@
-package com.pablords.parking.contract;
+package com.pablords.parking.component;
 
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,7 +14,7 @@ import io.cucumber.spring.CucumberContextConfiguration;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @CucumberContextConfiguration
-@ActiveProfiles("contract-test")
+@ActiveProfiles("component-test")
 public class CucumberSpringConfiguration {
     @MockBean
     private CarRepositoryPort carRepositoryPortMock;

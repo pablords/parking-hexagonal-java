@@ -21,23 +21,23 @@
 1. Rodando testes por feature
 
 ```bash
-mvn test -Pcontract-test -Dcucumber.features=src/test/java/com/pablords/parking/contract/CT001/features
+mvn test -Pcomponent-test -Dcucumber.features=src/test/java/com/pablords/parking/component/CT001/features
 ```
 
 ```bash
-mvn test -Pintegration-test -Dcucumber.features=src/test/java/com/pablords/parking/contract/CT001/features
+mvn test -Pintegration-test -Dcucumber.features=src/test/java/com/pablords/parking/component/CT001/features
 ```
 
 2. Rodando testes de contrato por tags
 
 | Comando | O que faz? |
 |---------|-----------|
-| `mvn test -Pcontract-test -Dcucumber.filter.tags="@checkin"` | Executa apenas cenários com a tag `@checkin`. |
-| `mvn test -Pcontract-test -Dcucumber.filter.tags="@checkin or @checkout"` | Executa cenários com `@checkin` OU `@checkout`. |
-| `mvn test -Pcontract-test -Dcucumber.filter.tags="@checkin and @success"` | Executa cenários com `@checkin` E `@success`. |
-| `mvn test -Pcontract-test -Dcucumber.filter.tags="@checkin and @fail"` | Executa cenários com `@checkin` E `@fail`. |
-| `mvn test -Pcontract-test -Dcucumber.filter.tags="not @ignore"` | Executa todos os cenários, exceto os que têm `@ignore`. |
-| `mvn test -Pcontract-test -Dcucumber.filter.tags="(@checkin or @checkout) and not @ignore"` | Executa `@checkin` OU `@checkout`, mas exclui `@ignore`. |
+| `mvn test -Pcomponent-test -Dcucumber.filter.tags="@checkin"` | Executa apenas cenários com a tag `@checkin`. |
+| `mvn test -Pcomponent-test -Dcucumber.filter.tags="@checkin or @checkout"` | Executa cenários com `@checkin` OU `@checkout`. |
+| `mvn test -Pcomponent-test -Dcucumber.filter.tags="@checkin and @success"` | Executa cenários com `@checkin` E `@success`. |
+| `mvn test -Pcomponent-test -Dcucumber.filter.tags="@checkin and @fail"` | Executa cenários com `@checkin` E `@fail`. |
+| `mvn test -Pcomponent-test -Dcucumber.filter.tags="not @ignore"` | Executa todos os cenários, exceto os que têm `@ignore`. |
+| `mvn test -Pcomponent-test -Dcucumber.filter.tags="(@checkin or @checkout) and not @ignore"` | Executa `@checkin` OU `@checkout`, mas exclui `@ignore`. |
 
 3. Rodando testes de integração por tags
 

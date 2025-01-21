@@ -52,11 +52,11 @@ jobs:
       - name: Run Unit Tests
         run: mvn test -Punit-test
 
-      # Executa os testes de contratos
-      - name: Run Contract Tests
-        run: mvn test -Pcontract-test
+      # Executa os testes de componentes
+      - name: Run Component Tests
+        run: mvn test -Pcomponent-test
       
-      # Executa os testes de contratos
+      # Executa os testes de integracão
       - name: Run Integration Tests
         run: mvn test -Pintegration-test
 

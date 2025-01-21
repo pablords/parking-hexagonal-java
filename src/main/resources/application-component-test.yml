@@ -6,7 +6,7 @@ spring:
 
 config:
   activate:
-    on-profile: contract-test
+    on-profile: component-test
 
 logging:
   level:

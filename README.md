@@ -248,12 +248,12 @@ Rodando testes unitários:
   mvn test -Punit-test
 ```
 
-Rodando testes de contratos:
+Rodando testes de componentes:
 
 - Testamos toda a pilha da nossa camada de Http/API, pelos serviços e repositórios, validando nosso sistema mockando todos detalhes de infra e sistemas externos.
 
 ```bash
-  mvn test -Pcontract-test
+  mvn test -Pcomponent-test
 ```
 
 Rodando testes de integração:
