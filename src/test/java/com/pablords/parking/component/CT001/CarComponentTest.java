@@ -6,7 +6,7 @@ import org.junit.runner.RunWith;
 
 
 @RunWith(Cucumber.class)
-@CucumberOptions(features = "src/test/java/com/pablords/parking/resources/features", glue = {
+@CucumberOptions(features = "src/test/java/com/pablords/parking/resources/features/car", glue = {
         "com.pablords.parking.component" }, plugin = { "pretty",
                 "json:target/cucumber-reports/component/report-CT001.json",
                 "html:target/cucumber-reports/component/report-CT001.html" }, monochrome = true)

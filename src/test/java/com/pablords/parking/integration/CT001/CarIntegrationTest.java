@@ -9,7 +9,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(
-    features = "src/test/java/com/pablords/parking/resources/features",
+    features = "src/test/java/com/pablords/parking/resources/features/car",
     glue = {"com.pablords.parking.integration"},
     plugin = {"pretty", "json:target/cucumber-reports/integration/report-CT001.json", "html:target/cucumber-reports/integration/report-CT001.html"},
     monochrome = true

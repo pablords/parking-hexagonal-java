@@ -2,6 +2,7 @@ package com.pablords.parking.component.CT002;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -64,7 +65,6 @@ public class CheckinSteps {
     @Before
     public void setUp() {
         System.out.println("🔎 Active Profiles: " + String.join(", ", environment.getActiveProfiles()));
-
         // Mockando Slots disponíveis
         slots = new ArrayList<Slot>();
         for (int i = 1; i <= 2; i++) {
@@ -83,7 +83,6 @@ public class CheckinSteps {
 
     @Dado("que o carro com placa {string} não está estacionado")
     public void the_car_with_plate_is_not_checked_in(String plate) {
-
         // Mockando Checkins
         createdCheckin = new Checkin();
         car = new Car(new Plate(plate), "Audi", "Black", "A4");
@@ -99,9 +98,11 @@ public class CheckinSteps {
         checkout = new Checkout(createdCheckin);
         when(checkoutRepositoryPortMock.findByCheckinId(any())).thenReturn(Optional.of(checkout));
         when(checkoutRepositoryPortMock.save(any(Checkout.class))).thenReturn(checkout);
-        assertEquals("ABC1234", plate);
-    }
 
+
+        Optional<Checkin> existingCheckin = checkinRepositoryPortMock.findByPlate(plate);
+        assertTrue(!existingCheckin.isPresent(), "O carro não deveria estar estacionado, mas está!");
+    }
 
     @Dado("que o carro com placa {string} está estacionado")
     public void the_car_with_plate_is_checked_in(String plate) {
@@ -121,7 +122,9 @@ public class CheckinSteps {
 
         when(checkinRepositoryPortMock.findByPlate(any())).thenReturn(Optional.of(createdCheckin));
         when(checkoutRepositoryPortMock.findByCheckinId(createdCheckin.getId())).thenReturn(Optional.empty());
-        assertEquals("ABC1234", plate);
+
+        Optional<Checkin> existingCheckin = checkinRepositoryPortMock.findByPlate(plate);
+        assertTrue(existingCheckin.isPresent(), "O carro deveria estar estacionado, mas não está!");
     }
 
     @Quando("o cliente envia uma solicitação de check-in com {string}")
@@ -148,6 +151,13 @@ public class CheckinSteps {
                 });
     }
 
+    @Entao("o slot com id {int} deve ser ocupado")
+    public void theSlotWithIdShouldBeOccupied(int slotId) {
+        boolean isOccupied = slots.stream().filter(slot -> slot.getId().equals((long) slotId)).findFirst().get()
+                .isOccupied();
+        assertEquals(true, isOccupied);
+    }
+
     @Entao("o status da resposta do checkin deve ser {int}")
     public void the_response_status_should_be(int status) throws Exception {
         CheckinResponseDTO checkinResponseDTO = objectMapper.readValue(responseContent, CheckinResponseDTO.class);
@@ -167,7 +177,7 @@ public class CheckinSteps {
                 break;
         }
     }
-    
+
     @E("a resposta deve conter um timestamp de check-in")
     public void the_response_should_contain_a_check_in_timestamp() throws Exception {
         CheckinResponseDTO checkinResponseDTO = objectMapper.readValue(responseContent, CheckinResponseDTO.class);
