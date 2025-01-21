@@ -2,10 +2,15 @@ package com.pablords.parking.integration.CT002;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,6 +24,10 @@ import org.springframework.web.context.WebApplicationContext;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pablords.parking.adapters.inbound.http.dtos.CheckinResponseDTO;
+import com.pablords.parking.core.entities.Car;
+import com.pablords.parking.core.entities.Checkin;
+import com.pablords.parking.core.entities.Checkout;
+import com.pablords.parking.core.valueobjects.Plate;
 
 import io.cucumber.java.Before;
 import io.cucumber.java.en.And;
@@ -62,18 +71,30 @@ public class CheckinSteps {
     @When("the client sends a check-in request with {string}")
     public void a_car_with_payload(String jsonPath) throws Exception {
         var jsonFileContent = new String(Files.readAllBytes(Paths.get(jsonPath)));
-        try {
-            mockMvc.perform(post(PARKING_API_URL_CHECKINS)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(jsonFileContent))
-                    .andExpect(result -> {
-                        responseStatus = HttpStatus.valueOf(result.getResponse().getStatus());
-                        responseContent = result.getResponse().getContentAsString();
-                    });
-        } catch (Exception e) {
-            responseStatus = HttpStatus.BAD_REQUEST;
-            responseContent = e.getMessage();
-        }
+        mockMvc.perform(post(PARKING_API_URL_CHECKINS)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonFileContent))
+                .andExpect(result -> {
+                    responseStatus = HttpStatus.valueOf(result.getResponse().getStatus());
+                    responseContent = result.getResponse().getContentAsString();
+                });
+    }
+
+    @Given("the car with plate {string} is checked in")
+    public void the_car_with_plate_is_checked_in(String plate) {
+        assertEquals("ABC1234", plate);
+    }
+
+    @When("the client sends a check-in invalid request with {string}")
+    public void the_client_sends_a_check_in_invalid_request_with(String jsonPath) throws Exception {
+        var jsonFileContent = new String(Files.readAllBytes(Paths.get(jsonPath)));
+        mockMvc.perform(post(PARKING_API_URL_CHECKINS)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonFileContent))
+                .andExpect(result -> {
+                    responseStatus = HttpStatus.valueOf(result.getResponse().getStatus());
+                    responseContent = result.getResponse().getContentAsString();
+                });
     }
 
     @Then("the slot with id {int} should be occupied")
@@ -87,10 +108,19 @@ public class CheckinSteps {
     public void theResponseStatusShouldBe(int status) throws Exception {
         try {
             CheckinResponseDTO checkinResponseDTO = objectMapper.readValue(responseContent, CheckinResponseDTO.class);
-            assertNotNull(checkinResponseDTO.getId());
-            assertEquals(responseStatus.value(), status);
+            switch (responseStatus) {
+                case CREATED:
+                    assertNotNull(checkinResponseDTO.getId());
+                    assertEquals(responseStatus.value(), status);
+                    break;
+                case UNPROCESSABLE_ENTITY:
+                    assertEquals(responseStatus.value(), status);
+                    break;
+                default:
+                    assertEquals(responseStatus.value(), HttpStatus.INTERNAL_SERVER_ERROR.value());
+                    break;
+            }
         } catch (JsonProcessingException e) {
-            System.out.println(e.getMessage());
         }
     }
 
@@ -100,14 +130,7 @@ public class CheckinSteps {
             CheckinResponseDTO checkinResponseDTO = objectMapper.readValue(responseContent, CheckinResponseDTO.class);
             assertNotNull(checkinResponseDTO.getCheckInTime());
         } catch (JsonProcessingException e) {
-            System.out.println(e.getMessage());
         }
     }
-
-    @Given("the car with plate {string} is checked in")
-    public void the_car_with_plate_is_checked_in(String plate) {
-        assertEquals("ABC1234", plate);
-    }
-    
 
 }

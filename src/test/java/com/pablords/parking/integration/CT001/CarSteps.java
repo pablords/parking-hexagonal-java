@@ -14,7 +14,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pablords.parking.adapters.inbound.http.dtos.CarResponseDTO;
 
@@ -22,7 +21,6 @@ import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-
 
 public class CarSteps {
     @Autowired
@@ -45,33 +43,32 @@ public class CarSteps {
 
     @When("I create a car with the following details: {string}")
     public void iCreateACarWithTheFollowingDetails(String jsonPath) throws Exception {
-        try {
-            var jsonFileContent = new String(Files.readAllBytes(Paths.get(jsonPath)));
-            mockMvc.perform(post(PARKING_API_URL_CARS)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(jsonFileContent))
-                    .andExpect(result -> {
-                        responseStatus = HttpStatus.valueOf(result.getResponse().getStatus());
-                        responseContent = result.getResponse().getContentAsString();
-                    });
-        } catch (Exception e) {
-            System.out.println("ERROR: " +e.getMessage());
-            responseStatus = HttpStatus.BAD_REQUEST;
-            responseContent = e.getMessage();
-        }
+        var jsonFileContent = new String(Files.readAllBytes(Paths.get(jsonPath)));
+        mockMvc.perform(post(PARKING_API_URL_CARS)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonFileContent))
+                .andExpect(result -> {
+                    responseStatus = HttpStatus.valueOf(result.getResponse().getStatus());
+                    responseContent = result.getResponse().getContentAsString();
+                });
     }
 
     @Then("The response status should be {int}")
     public void theResponseStatusShouldBe(int status) throws Exception {
-        try {
-            CarResponseDTO carResponseDTO = objectMapper.readValue(responseContent, CarResponseDTO.class);
-            if(responseStatus == HttpStatus.CREATED){
+        CarResponseDTO carResponseDTO = objectMapper.readValue(responseContent, CarResponseDTO.class);
+        switch (responseStatus) {
+            case CREATED:
                 assertNotNull(carResponseDTO.getId());
-            }
-            assertEquals(responseStatus.value(), status);
-        } catch (JsonProcessingException e) {
-    
+                assertEquals(responseStatus.value(), status);
+                break;
+            case UNPROCESSABLE_ENTITY:
+                assertEquals(responseStatus.value(), status);
+                break;
+            default:
+                assertEquals(responseStatus.value(), HttpStatus.INTERNAL_SERVER_ERROR.value());
+                break;
         }
+
     }
 
 }

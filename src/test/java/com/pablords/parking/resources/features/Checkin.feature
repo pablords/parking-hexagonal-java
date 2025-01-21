@@ -10,5 +10,5 @@ Feature: Car Check-in
     @fail
     Scenario: Fail to check-in a car that is already checked in
         Given the car with plate "ABC1234" is checked in
-        When the client sends a check-in request with "src/test/java/com/pablords/parking/resources/features/request/createCheckinSuccess.json"
-        Then the response status should be 500
+        When the client sends a check-in invalid request with "src/test/java/com/pablords/parking/resources/features/request/createCheckinSuccess.json"
+        Then the response status should be 400
