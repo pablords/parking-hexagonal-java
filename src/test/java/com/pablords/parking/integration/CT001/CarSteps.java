@@ -18,9 +18,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pablords.parking.adapters.inbound.http.dtos.CarResponseDTO;
 
 import io.cucumber.java.Before;
-import io.cucumber.java.en.Given;
-import io.cucumber.java.en.Then;
-import io.cucumber.java.en.When;
+import io.cucumber.java.pt.Dado;
+import io.cucumber.java.pt.Entao;
+import io.cucumber.java.pt.Quando;
 
 public class CarSteps {
     @Autowired
@@ -36,12 +36,12 @@ public class CarSteps {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     }
 
-    @Given("That I am in the api endpoint {string}")
+    @Dado("que estou no endpoint da API {string}")
     public void thatIAmInTheApiEndpoint(String endpoint) {
         assertEquals(endpoint, PARKING_API_URL_CARS);
     }
 
-    @When("I create a car with the following details: {string}")
+    @Quando("eu crio um carro com os seguintes detalhes: {string}")
     public void iCreateACarWithTheFollowingDetails(String jsonPath) throws Exception {
         var jsonFileContent = new String(Files.readAllBytes(Paths.get(jsonPath)));
         mockMvc.perform(post(PARKING_API_URL_CARS)
@@ -53,7 +53,8 @@ public class CarSteps {
                 });
     }
 
-    @Then("The response status should be {int}")
+   
+    @Entao("o status da resposta do carro deve ser {int}")
     public void theResponseStatusShouldBe(int status) throws Exception {
         CarResponseDTO carResponseDTO = objectMapper.readValue(responseContent, CarResponseDTO.class);
         switch (responseStatus) {

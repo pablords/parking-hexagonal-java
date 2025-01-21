@@ -21,22 +21,20 @@ import com.pablords.parking.core.entities.Car;
 import com.pablords.parking.core.ports.outbound.repositories.CarRepositoryPort;
 
 import io.cucumber.java.Before;
-import io.cucumber.java.en.Given;
-import io.cucumber.java.en.Then;
-import io.cucumber.java.en.When;
+import io.cucumber.java.pt.Dado;
+import io.cucumber.java.pt.Entao;
+import io.cucumber.java.pt.Quando;
 
 public class CarSteps {
     @Autowired
     private MockMvc mockMvc;
     @Autowired
     private CarRepositoryPort carRepositoryPortMock;
-    
+
     private HttpStatus responseStatus;
     private String responseContent;
     private final String PARKING_API_URL_CARS = "/cars";
     private final ObjectMapper objectMapper = new ObjectMapper();
-
-
 
     @Before
     public void setUp() {
@@ -47,12 +45,12 @@ public class CarSteps {
         });
     }
 
-    @Given("That I am in the api endpoint {string}")
+    @Dado("que estou no endpoint da API {string}")
     public void that_i_am_in_the_api_endpoint(String endpoint) {
         assertEquals(endpoint, PARKING_API_URL_CARS);
     }
 
-    @When("I create a car with the following details: {string}")
+    @Quando("eu crio um carro com os seguintes detalhes: {string}")
     public void i_create_a_car_with_the_following_details(String jsonPath) throws Exception {
         var jsonFileContent = new String(Files.readAllBytes(Paths.get(jsonPath)));
 
@@ -65,7 +63,7 @@ public class CarSteps {
                 });
     }
 
-    @Then("The response status should be {int}")
+    @Entao("o status da resposta do carro deve ser {int}")
     public void the_response_status_should_be(int status) throws Exception {
         CarResponseDTO carResponseDTO = objectMapper.readValue(responseContent, CarResponseDTO.class);
         switch (responseStatus) {

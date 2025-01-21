@@ -2,15 +2,10 @@ package com.pablords.parking.integration.CT002;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.time.LocalDateTime;
-import java.util.Optional;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,19 +16,17 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.pablords.parking.adapters.inbound.http.dtos.CheckinResponseDTO;
-import com.pablords.parking.core.entities.Car;
-import com.pablords.parking.core.entities.Checkin;
-import com.pablords.parking.core.entities.Checkout;
-import com.pablords.parking.core.valueobjects.Plate;
 
 import io.cucumber.java.Before;
-import io.cucumber.java.en.And;
-import io.cucumber.java.en.Given;
-import io.cucumber.java.en.Then;
-import io.cucumber.java.en.When;
+
+import io.cucumber.java.pt.Dado;
+import io.cucumber.java.pt.E;
+import io.cucumber.java.pt.Entao;
+import io.cucumber.java.pt.Quando;
 
 public class CheckinSteps {
     @Autowired
@@ -44,7 +37,8 @@ public class CheckinSteps {
     private final String PARKING_API_URL_CHECKINS = "/checkins";
     @Autowired
     private JdbcTemplate jdbcTemplate;
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule())
+            .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
     @Before
     public void setUp() {
@@ -63,12 +57,17 @@ public class CheckinSteps {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     }
 
-    @Given("the car with plate {string} is not checked in")
+    @Dado("que o carro com placa {string} não está estacionado")
     public void thatIAmInTheApiEndpoint(String plate) {
         assertEquals("ABC1234", plate);
     }
 
-    @When("the client sends a check-in request with {string}")
+    @Dado("que o carro com placa {string} está estacionado")
+    public void the_car_with_plate_is_checked_in(String plate) {
+        assertEquals("ABC1234", plate);
+    }
+
+    @Quando("o cliente envia uma solicitação de check-in com {string}")
     public void a_car_with_payload(String jsonPath) throws Exception {
         var jsonFileContent = new String(Files.readAllBytes(Paths.get(jsonPath)));
         mockMvc.perform(post(PARKING_API_URL_CHECKINS)
@@ -80,12 +79,7 @@ public class CheckinSteps {
                 });
     }
 
-    @Given("the car with plate {string} is checked in")
-    public void the_car_with_plate_is_checked_in(String plate) {
-        assertEquals("ABC1234", plate);
-    }
-
-    @When("the client sends a check-in invalid request with {string}")
+    @Quando("o cliente envia uma solicitação de check-in inválida com {string}")
     public void the_client_sends_a_check_in_invalid_request_with(String jsonPath) throws Exception {
         var jsonFileContent = new String(Files.readAllBytes(Paths.get(jsonPath)));
         mockMvc.perform(post(PARKING_API_URL_CHECKINS)
@@ -97,40 +91,39 @@ public class CheckinSteps {
                 });
     }
 
-    @Then("the slot with id {int} should be occupied")
-    public void theSlotWithIdShouldBeOccupied(int slotId) {
-        var isOccupied = jdbcTemplate.queryForObject("SELECT occupied FROM slots WHERE id = ?", new Object[] { slotId },
-                Boolean.class);
-        assertEquals(true, isOccupied);
-    }
+    // @Then("the slot with id {int} should be occupied")
+    // public void theSlotWithIdShouldBeOccupied(int slotId) {
+    // var isOccupied = jdbcTemplate.queryForObject("SELECT occupied FROM slots
+    // WHERE id = ?", new Object[] { slotId },
+    // Boolean.class);
+    // assertEquals(true, isOccupied);
+    // }
 
-    @And("the response status should be {int}")
+    @Entao("o status da resposta do checkin deve ser {int}")
     public void theResponseStatusShouldBe(int status) throws Exception {
-        try {
-            CheckinResponseDTO checkinResponseDTO = objectMapper.readValue(responseContent, CheckinResponseDTO.class);
-            switch (responseStatus) {
-                case CREATED:
-                    assertNotNull(checkinResponseDTO.getId());
-                    assertEquals(responseStatus.value(), status);
-                    break;
-                case UNPROCESSABLE_ENTITY:
-                    assertEquals(responseStatus.value(), status);
-                    break;
-                default:
-                    assertEquals(responseStatus.value(), HttpStatus.INTERNAL_SERVER_ERROR.value());
-                    break;
-            }
-        } catch (JsonProcessingException e) {
+        CheckinResponseDTO checkinResponseDTO = objectMapper.readValue(responseContent, CheckinResponseDTO.class);
+        switch (responseStatus) {
+            case CREATED:
+                assertNotNull(checkinResponseDTO.getId());
+                assertEquals(responseStatus.value(), status);
+                break;
+            case UNPROCESSABLE_ENTITY:
+                assertEquals(responseStatus.value(), status);
+                break;
+            case BAD_REQUEST:
+                assertEquals(responseStatus.value(), status);
+                break;
+            default:
+                assertEquals(responseStatus.value(), HttpStatus.INTERNAL_SERVER_ERROR.value());
+                break;
         }
+
     }
 
-    @Then("the response should contain a check-in timestamp")
+    @E("a resposta deve conter um timestamp de check-in")
     public void the_response_should_contain_a_check_in_timestamp() throws Exception {
-        try {
-            CheckinResponseDTO checkinResponseDTO = objectMapper.readValue(responseContent, CheckinResponseDTO.class);
-            assertNotNull(checkinResponseDTO.getCheckInTime());
-        } catch (JsonProcessingException e) {
-        }
+        CheckinResponseDTO checkinResponseDTO = objectMapper.readValue(responseContent, CheckinResponseDTO.class);
+        assertNotNull(checkinResponseDTO.getCheckInTime());
     }
 
 }

@@ -33,10 +33,10 @@ import com.pablords.parking.core.ports.outbound.repositories.SlotRepositoryPort;
 import com.pablords.parking.core.valueobjects.Plate;
 
 import io.cucumber.java.Before;
-import io.cucumber.java.en.And;
-import io.cucumber.java.en.Given;
-import io.cucumber.java.en.Then;
-import io.cucumber.java.en.When;
+import io.cucumber.java.pt.Dado;
+import io.cucumber.java.pt.E;
+import io.cucumber.java.pt.Entao;
+import io.cucumber.java.pt.Quando;
 
 public class CheckinSteps {
     @Autowired
@@ -81,7 +81,7 @@ public class CheckinSteps {
         when(slotRepositoryPortMock.save(any(Slot.class))).thenReturn(slots.get(0));
     }
 
-    @Given("the car with plate {string} is not checked in")
+    @Dado("que o carro com placa {string} não está estacionado")
     public void the_car_with_plate_is_not_checked_in(String plate) {
 
         // Mockando Checkins
@@ -102,19 +102,8 @@ public class CheckinSteps {
         assertEquals("ABC1234", plate);
     }
 
-    @When("the client sends a check-in request with {string}")
-    public void a_car_with_payload(String jsonPath) throws Exception {
-        var jsonFileContent = new String(Files.readAllBytes(Paths.get(jsonPath)));
-        mockMvc.perform(post(PARKING_API_URL_CHECKINS)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(jsonFileContent))
-                .andExpect(result -> {
-                    responseStatus = HttpStatus.valueOf(result.getResponse().getStatus());
-                    responseContent = result.getResponse().getContentAsString();
-                });
-    }
 
-    @Given("the car with plate {string} is checked in")
+    @Dado("que o carro com placa {string} está estacionado")
     public void the_car_with_plate_is_checked_in(String plate) {
         slots.get(1).setOccupied(true);
         when(slotRepositoryPortMock.findAvailableSlot()).thenReturn(Optional.of(slots.get(1)));
@@ -135,7 +124,19 @@ public class CheckinSteps {
         assertEquals("ABC1234", plate);
     }
 
-    @When("the client sends a check-in invalid request with {string}")
+    @Quando("o cliente envia uma solicitação de check-in com {string}")
+    public void a_car_with_payload(String jsonPath) throws Exception {
+        var jsonFileContent = new String(Files.readAllBytes(Paths.get(jsonPath)));
+        mockMvc.perform(post(PARKING_API_URL_CHECKINS)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonFileContent))
+                .andExpect(result -> {
+                    responseStatus = HttpStatus.valueOf(result.getResponse().getStatus());
+                    responseContent = result.getResponse().getContentAsString();
+                });
+    }
+
+    @Quando("o cliente envia uma solicitação de check-in inválida com {string}")
     public void the_client_sends_a_check_in_invalid_request_with(String jsonPath) throws Exception {
         var jsonFileContent = new String(Files.readAllBytes(Paths.get(jsonPath)));
         mockMvc.perform(post(PARKING_API_URL_CHECKINS)
@@ -147,7 +148,7 @@ public class CheckinSteps {
                 });
     }
 
-    @And("the response status should be {int}")
+    @Entao("o status da resposta do checkin deve ser {int}")
     public void the_response_status_should_be(int status) throws Exception {
         CheckinResponseDTO checkinResponseDTO = objectMapper.readValue(responseContent, CheckinResponseDTO.class);
         switch (responseStatus) {
@@ -166,8 +167,8 @@ public class CheckinSteps {
                 break;
         }
     }
-
-    @Then("the response should contain a check-in timestamp")
+    
+    @E("a resposta deve conter um timestamp de check-in")
     public void the_response_should_contain_a_check_in_timestamp() throws Exception {
         CheckinResponseDTO checkinResponseDTO = objectMapper.readValue(responseContent, CheckinResponseDTO.class);
         assertNotNull(checkinResponseDTO.getCheckInTime(), "Checkin timestamp não foi retornado na resposta.");

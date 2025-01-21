@@ -170,6 +170,7 @@
 								<cucumber.glue>
 									com.pablords.parking.component
 								</cucumber.glue>
+								<cucumber.language>pt</cucumber.language>
 							</systemPropertyVariables>
 						</configuration>
 					</plugin>
@@ -208,6 +209,7 @@
 								<cucumber.glue>
 									com.pablords.parking.integration
 								</cucumber.glue>
+								<cucumber.language>pt</cucumber.language>
 							</systemPropertyVariables>
 						</configuration>
 					</plugin>

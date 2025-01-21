@@ -1,14 +1,16 @@
-@checkin
-Feature: Car Check-in
-    @success
-    Scenario: Successful car check-in
-        Given the car with plate "ABC1234" is not checked in
-        When the client sends a check-in request with "src/test/java/com/pablords/parking/resources/features/request/createCheckinSuccess.json"
-        And the response status should be 201
-        And the response should contain a check-in timestamp
+#language: pt
 
-    @fail
-    Scenario: Fail to check-in a car that is already checked in
-        Given the car with plate "ABC1234" is checked in
-        When the client sends a check-in invalid request with "src/test/java/com/pablords/parking/resources/features/request/createCheckinSuccess.json"
-        Then the response status should be 400
+@checkin
+Funcionalidade: Check-in de Carros
+  @success
+  Cenário: Check-in bem-sucedido de um carro
+    Dado que o carro com placa "ABC1234" não está estacionado
+    Quando o cliente envia uma solicitação de check-in com "src/test/java/com/pablords/parking/resources/features/request/createCheckinSuccess.json"
+    Então o status da resposta do checkin deve ser 201
+    E a resposta deve conter um timestamp de check-in
+
+  @fail
+  Cenário: Falha ao realizar check-in de um carro já estacionado
+    Dado que o carro com placa "ABC1234" está estacionado
+    Quando o cliente envia uma solicitação de check-in inválida com "src/test/java/com/pablords/parking/resources/features/request/createCheckinSuccess.json"
+    Então o status da resposta do checkin deve ser 400
