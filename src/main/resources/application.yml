@@ -3,6 +3,7 @@ spring:
     allow-bean-definition-overriding: true
   profiles:
     active: dev
+
   doc:
     api-docs:
       path: /api-docs
@@ -17,7 +18,4 @@ server:
   servlet:
     context-path: /api/v1
 
-logging:
-  level:
-    root: WARN
-    com.pablords.parking: TRACE
+

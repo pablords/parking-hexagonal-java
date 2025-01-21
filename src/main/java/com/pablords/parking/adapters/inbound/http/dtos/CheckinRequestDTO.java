@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Data
 public class CheckinRequestDTO {
-    @NotBlank
+    @NotBlank(message = "Plate cannot be empty")
     @JsonProperty
     String plate;
     @NotBlank

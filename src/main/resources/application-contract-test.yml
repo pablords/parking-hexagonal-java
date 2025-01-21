@@ -1,7 +1,3 @@
-
-
-
-
 spring:
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
@@ -11,3 +7,9 @@ spring:
 config:
   activate:
     on-profile: contract-test
+
+logging:
+  level:
+    root: OFF  # Desliga todos os logs
+    # org.springframework: ERROR  # Mostra apenas erros críticos do Spring
+    # com.pablords: ERROR  # Mostra apenas erros críticos do seu código

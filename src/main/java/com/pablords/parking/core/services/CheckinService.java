@@ -42,8 +42,10 @@ public class CheckinService implements CheckinServicePort {
 
         var checkinByPlate = checkinRepository.findByPlate(car.getPlate().getValue()).orElse(null);
         if (checkinByPlate != null) {
+            log.info("PLaca {} já está estacionada", car.getPlate().getValue());
             var checkout = checkoutRepository.findByCheckinId(checkinByPlate.getId());
             if (!checkout.isPresent()) {
+                log.warn("Carro com a placa: {} já está estacionado e não foi feito checkout", car.getPlate().getValue());
                 throw new InvalidCheckinException(ErrorMessages.INVALID_CHECKIN_CHECKOUT_NOT_FOUND);
             }
         }
