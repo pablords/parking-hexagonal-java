@@ -48,8 +48,6 @@ public class CheckinSteps {
     private SlotRepositoryPort slotRepositoryPortMock;
     @Autowired
     private CheckoutRepositoryPort checkoutRepositoryPortMock;
-    @Autowired
-    private Environment environment;
 
     private Checkin createdCheckin;
     private Car car;
@@ -64,7 +62,6 @@ public class CheckinSteps {
 
     @Before
     public void setUp() {
-        System.out.println("🔎 Active Profiles: " + String.join(", ", environment.getActiveProfiles()));
         // Mockando Slots disponíveis
         slots = new ArrayList<Slot>();
         for (int i = 1; i <= 2; i++) {

@@ -26,8 +26,10 @@ import com.pablords.parking.adapters.inbound.http.dtos.CarRequestDTO;
 import com.pablords.parking.adapters.inbound.http.dtos.CheckinResponseDTO;
 import com.pablords.parking.core.entities.Car;
 import com.pablords.parking.core.entities.Checkin;
+import com.pablords.parking.core.entities.Slot;
 import com.pablords.parking.core.ports.inbound.services.CheckinServicePort;
 import com.pablords.parking.core.ports.outbound.repositories.CheckinRepositoryPort;
+import com.pablords.parking.core.ports.outbound.repositories.SlotRepositoryPort;
 import com.pablords.parking.core.valueobjects.Plate;
 
 import io.cucumber.java.Before;
@@ -51,6 +53,7 @@ public class CheckinSteps {
     @Autowired
     private CheckinRepositoryPort checkinRepositoryPort;
 
+
     private final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule())
             .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
@@ -66,13 +69,14 @@ public class CheckinSteps {
         jdbcTemplate.execute("INSERT INTO slots (id, occupied) VALUES (1, false)");
         jdbcTemplate.execute("INSERT INTO slots (id,occupied) VALUES (2, false)");
 
-        System.out.println("Slots criados no banco H2 para teste.");
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     }
 
     @Dado("que o carro com placa {string} não está estacionado")
     public void thatIAmInTheApiEndpoint(String plate) {
         Optional<Checkin> existingCheckin = checkinRepositoryPort.findByPlate(plate);
+        var slots = jdbcTemplate.query("SELECT occupied FROM slots", (rs, rowNum) -> rs.getBoolean("occupied"));
+        slots.forEach(slot -> assertEquals(false, slot));;
         assertTrue(!existingCheckin.isPresent(), "O carro não deveria estar estacionado, mas está!");
     }
 
