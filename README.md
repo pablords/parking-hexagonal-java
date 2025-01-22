@@ -199,7 +199,10 @@ Certifique-se de ter os seguintes softwares instalados em sua máquina:
 
 - [Java 17+](https://www.oracle.com/java/technologies/javase-jdk11-downloads.html)
 - [Maven 3.6+](https://maven.apache.org/download.cgi)
-- [Docker](https://www.docker.com/products/docker-desktop) (para rodar o RabbitMQ e Mysql)
+- [Docker](https://www.docker.com/products/docker-desktop)
+- [PactCli](https://docs.pact.io/implementation_guides/cli) 
+
+
 
 ### Passos para Rodar o Projeto
 
