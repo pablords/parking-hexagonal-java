@@ -137,6 +137,7 @@
 							<excludes>
 								<exclude>**/*ComponentTest.java</exclude>
 								<exclude>**/*IntegrationTest.java</exclude>
+								<exclude>**/*ContractTest.java</exclude>
 							</excludes>
 							<useFile>true</useFile>
 							<reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory>
@@ -161,6 +162,7 @@
 							<excludes>
 								<exclude>**/*UnitTest.java</exclude>
 								<exclude>**/*IntegrationTest.java</exclude>
+								<exclude>**/*ContractTest.java</exclude>
 							</excludes>
 							<skipTests>${skipITs}</skipTests>
 							<systemPropertyVariables>
@@ -199,7 +201,8 @@
 							</includes>
 							<excludes>
 								<exclude>**/*UnitTest.java</exclude>
-								<include>**/*ComponentTest.java</include>
+								<exclude>**/*ComponentTest.java</exclude>
+								<exclude>**/*ContractTest.java</exclude>
 							</excludes>
 							<skipTests>${skipITs}</skipTests>
 							<systemPropertyVariables>
@@ -218,6 +221,45 @@
 								</cucumber.glue>
 								<cucumber.language>pt</cucumber.language>
 							</systemPropertyVariables>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+		<!-- Testes de Contrato -->
+		<profile>
+			<id>contract-tests</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<configuration>
+							<includes>
+								<include>**/*ContractTest.java</include>
+							</includes>
+							<excludes>
+								<exclude>**/*UnitTest.java</exclude>
+								<exclude>**/*ComponentTest.java</exclude>
+								<exclude>**/*IntegrationTest.java</exclude>
+							</excludes>
+							<skipTests>${skipITs}</skipTests>
+							<serviceProviders>
+								<serviceProvider>
+									<name>ParkingService</name>
+									<pactSource>
+										<directory>target/pacts</directory>
+									</pactSource>
+									<verificationType>ANNOTATED_METHOD</verificationType>
+									<providerRootUrl>http://localhost:8080</providerRootUrl>
+								</serviceProvider>
+							</serviceProviders>
+							<pactSource>
+								<pactBroker>
+									<url>http://localhost:9292</url>
+								</pactBroker>
+							</pactSource>
 						</configuration>
 					</plugin>
 				</plugins>
@@ -265,34 +307,11 @@
 				</executions>
 			</plugin>
 
-			<!-- Failsafe para testes de contrato e integração -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-failsafe-plugin</artifactId>
-				<version>3.0.0-M7</version>
-			</plugin>
 
 			<plugin>
 				<groupId>au.com.dius.pact.provider</groupId>
 				<artifactId>maven</artifactId>
 				<version>4.1.11</version>
-				<configuration>
-					<serviceProviders>
-						<serviceProvider>
-							<name>ParkingService</name>
-							<pactSource>
-								<directory>target/pacts</directory>
-							</pactSource>
-							<verificationType>ANNOTATED_METHOD</verificationType>
-							<providerRootUrl>http://localhost:8080</providerRootUrl>
-						</serviceProvider>
-					</serviceProviders>
-					<pactSource>
-						<pactBroker>
-							<url>http://localhost:9292</url>
-						</pactBroker>
-					</pactSource>
-				</configuration>
 			</plugin>
 		</plugins>
 	</build>

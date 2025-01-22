@@ -3,6 +3,7 @@ package com.pablords.parking.core.services;
 import java.util.List;
 
 import com.pablords.parking.core.entities.Car;
+import com.pablords.parking.core.exceptions.CarNotFoundException;
 import com.pablords.parking.core.exceptions.ErrorMessages;
 import com.pablords.parking.core.exceptions.ExistPlateException;
 import com.pablords.parking.core.ports.inbound.services.CarServicePort;
@@ -17,7 +18,6 @@ public class CarService implements CarServicePort {
 
     @Override
     public Car create(Car car) {
-
         Boolean plateExists = carRepositoryPort.existsByPlate(car.getPlate().getValue());
         if (plateExists) {
             throw new ExistPlateException(
@@ -34,7 +34,7 @@ public class CarService implements CarServicePort {
     @Override  
     public Car findByPlate(String plate) {
         return carRepositoryPort.findByPlate(plate)
-                .orElseThrow(() -> new ExistPlateException(String.format(ErrorMessages.CAR_WITH_PLATE_EXISTS, plate)));
+                .orElseThrow(() -> new CarNotFoundException(String.format(ErrorMessages.CAR_WITH_PLATE_NOT_EXISTS, plate)));
     }
 
 }

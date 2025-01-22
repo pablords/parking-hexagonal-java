@@ -7,10 +7,15 @@
     },
     "interactions": [
       {
-        "description": "Buscar carro pelo ID",
+        "description": "Buscar carro pela Placa",
+        "providerStates": [
+          {
+            "name": "Existe um carro cadastrado com a placa ABC1234"
+          }
+        ],
         "request": {
           "method": "GET",
-          "path": "/api/v1/cars/1234",
+          "path": "/api/v1/cars/ABC1234",
           "headers": {
             "Accept": "application/json"
           }
@@ -21,7 +26,7 @@
             "Content-Type": "application/json"
           },
           "body": {
-            "id": "1234",
+            "id": "f5d4b3b4-1b4b-4b4b-8b4b-4b4b4b4b4b4b",
             "brand": "Toyota",
             "color": "Red",
             "model": "Sedan",

@@ -2,15 +2,15 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
-      ddl-auto: none  # ⚠️ Evita a criação automática das tabelas
+      ddl-auto: none
   sql:
     init:
       mode: never # ⚠️ Impede que scripts SQL rodem automaticamente
-      
+
 config:
   activate:
-    on-profile: component-test
+    on-profile: contract-test
 
 logging:
   level:
-    root: OFF  # Desliga todos os logs
+    root: OFF # Desliga todos os logs
