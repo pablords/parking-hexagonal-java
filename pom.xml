@@ -229,9 +229,10 @@
 
 		<!-- Testes de Contrato -->
 		<profile>
-			<id>contract-tests</id>
+			<id>contract-test</id>
 			<build>
 				<plugins>
+					<!-- Plugin para rodar os testes de contrato na fase 'test' -->
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-surefire-plugin</artifactId>
@@ -245,21 +246,22 @@
 								<exclude>**/*IntegrationTest.java</exclude>
 							</excludes>
 							<skipTests>${skipITs}</skipTests>
+						</configuration>
+					</plugin>
+
+					<!-- Plugin do Pact para verificar os contratos -->
+					<plugin>
+						<groupId>au.com.dius.pact.provider</groupId>
+						<artifactId>maven</artifactId>
+						<version>4.1.11</version>
+						<configuration>
+							<!-- <pactBrokerUrl>http://localhost:9292</pactBrokerUrl>  -->
 							<serviceProviders>
 								<serviceProvider>
 									<name>ParkingService</name>
-									<pactSource>
-										<directory>target/pacts</directory>
-									</pactSource>
 									<verificationType>ANNOTATED_METHOD</verificationType>
-									<providerRootUrl>http://localhost:8080</providerRootUrl>
 								</serviceProvider>
 							</serviceProviders>
-							<pactSource>
-								<pactBroker>
-									<url>http://localhost:9292</url>
-								</pactBroker>
-							</pactSource>
 						</configuration>
 					</plugin>
 				</plugins>
