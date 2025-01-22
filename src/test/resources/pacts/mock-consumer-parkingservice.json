@@ -1,0 +1,34 @@
+{
+    "consumer": {
+      "name": "MockConsumer"
+    },
+    "provider": {
+      "name": "ParkingService"
+    },
+    "interactions": [
+      {
+        "description": "Buscar carro pelo ID",
+        "request": {
+          "method": "GET",
+          "path": "/api/v1/cars/1234",
+          "headers": {
+            "Accept": "application/json"
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "Content-Type": "application/json"
+          },
+          "body": {
+            "id": "1234",
+            "brand": "Toyota",
+            "color": "Red",
+            "model": "Sedan",
+            "plate": "ABC1234"
+          }
+        }
+      }
+    ]
+  }
+  

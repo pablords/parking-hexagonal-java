@@ -1,5 +1,14 @@
 services:
 
+  pact-broker:
+    image: pactfoundation/pact-broker
+    ports:
+      - "9292:9292"
+    environment:
+      PACT_BROKER_DATABASE_URL: "sqlite://pacts.sqlite"
+      PACT_BROKER_DATABASE_USERNAME: "pact_user"
+      PACT_BROKER_DATABASE_PASSWORD: "password"
+
   rabbitmq:
     image: rabbitmq:3-management
     container_name: rabbitmq
