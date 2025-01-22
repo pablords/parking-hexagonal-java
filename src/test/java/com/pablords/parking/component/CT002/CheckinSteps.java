@@ -15,7 +15,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -24,14 +23,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.pablords.parking.adapters.inbound.http.dtos.CheckinResponseDTO;
-import com.pablords.parking.core.entities.Car;
-import com.pablords.parking.core.entities.Checkin;
-import com.pablords.parking.core.entities.Checkout;
-import com.pablords.parking.core.entities.Slot;
-import com.pablords.parking.core.ports.outbound.repositories.CheckinRepositoryPort;
-import com.pablords.parking.core.ports.outbound.repositories.CheckoutRepositoryPort;
-import com.pablords.parking.core.ports.outbound.repositories.SlotRepositoryPort;
-import com.pablords.parking.core.valueobjects.Plate;
+import com.pablords.parking.adapters.outbound.database.jpa.models.CarModel;
+import com.pablords.parking.adapters.outbound.database.jpa.models.CheckinModel;
+import com.pablords.parking.adapters.outbound.database.jpa.models.CheckoutModel;
+import com.pablords.parking.adapters.outbound.database.jpa.models.SlotModel;
+import com.pablords.parking.adapters.outbound.database.jpa.repositories.JpaCheckinRepository;
+import com.pablords.parking.adapters.outbound.database.jpa.repositories.JpaCheckoutRepository;
+import com.pablords.parking.adapters.outbound.database.jpa.repositories.JpaSlotRepository;
 
 import io.cucumber.java.Before;
 import io.cucumber.java.pt.Dado;
@@ -43,16 +41,16 @@ public class CheckinSteps {
     @Autowired
     private MockMvc mockMvc;
     @Autowired
-    private CheckinRepositoryPort checkinRepositoryPortMock;
+    private JpaSlotRepository jpaSlotRepositoryMock;
     @Autowired
-    private SlotRepositoryPort slotRepositoryPortMock;
+    private JpaCheckinRepository jpaCheckinRepositoryMock;
     @Autowired
-    private CheckoutRepositoryPort checkoutRepositoryPortMock;
+    private JpaCheckoutRepository jpaCheckoutRepositoryMock;
 
-    private Checkin createdCheckin;
-    private Car car;
-    private ArrayList<Slot> slots;
-    private Checkout checkout;
+    private CheckinModel createdCheckin;
+    private ArrayList<SlotModel> slots;
+    private CheckoutModel checkout;
+    private CarModel car;
 
     private HttpStatus responseStatus;
     private String responseContent;
@@ -63,64 +61,69 @@ public class CheckinSteps {
     @Before
     public void setUp() {
         // Mockando Slots disponíveis
-        slots = new ArrayList<Slot>();
+        slots = new ArrayList<SlotModel>();
         for (int i = 1; i <= 2; i++) {
-            var slot = new Slot();
+            var slot = new SlotModel();
             slot.setId((long) i);
             slot.setOccupied(false);
             slots.add(slot);
         }
-        when(slotRepositoryPortMock.findAvailableSlot()).thenReturn(Optional.of(slots.get(0)));
-        when(slotRepositoryPortMock.findById(any())).thenAnswer(invocation -> {
+
+        car = new CarModel();
+        car.setPlate("ABC1234");
+        car.setBrand("Audi");
+        car.setColor("Black");
+        car.setModel("A4");
+        car.setId(UUID.fromString("f5d4b3b4-1b4b-4b4b-8b4b-4b4b4b4b4b4b"));
+        checkout = new CheckoutModel();
+        createdCheckin = new CheckinModel();
+        createdCheckin.setCar(car);
+        createdCheckin.setId(UUID.fromString("f5d4b3b4-1b4b-4b4b-8b4b-4b4b4b4b4b4b"));
+        createdCheckin.setCheckInTime(LocalDateTime.now());
+
+        // Mock para buscar o primeiro slot disponível
+        when(jpaSlotRepositoryMock.findFirstByOccupiedFalse()).thenReturn(Optional.of(slots.get(0)));
+
+        // Mock para buscar um slot pelo ID
+        when(jpaSlotRepositoryMock.findById(any())).thenAnswer(invocation -> {
             Long id = invocation.getArgument(0);
             return slots.stream().filter(slot -> slot.getId().equals(id)).findFirst();
         });
-        when(slotRepositoryPortMock.save(any(Slot.class))).thenReturn(slots.get(0));
+
+        // Mock para salvar um slot e atualizar a ocupação corretamente
+        when(jpaSlotRepositoryMock.save(any(SlotModel.class))).thenAnswer(invocation -> {
+            SlotModel slot = invocation.getArgument(0);
+            slots.stream().filter(s -> s.getId().equals(slot.getId())).findFirst()
+                    .ifPresent(s -> s.setOccupied(slot.isOccupied()));
+            return slot;
+        });
     }
 
     @Dado("que o carro com placa {string} não está estacionado")
     public void the_car_with_plate_is_not_checked_in(String plate) {
         // Mockando Checkins
-        createdCheckin = new Checkin();
-        car = new Car(new Plate(plate), "Audi", "Black", "A4");
-        createdCheckin.setCar(car);
-        createdCheckin.setId(UUID.fromString("f5d4b3b4-1b4b-4b4b-8b4b-4b4b4b4b4b4b"));
         createdCheckin.setSlot(slots.get(0));
-        createdCheckin.setCheckInTime(LocalDateTime.now());
-        when(checkinRepositoryPortMock.save(any(Checkin.class))).thenReturn(createdCheckin);
-        when(checkinRepositoryPortMock.findByPlate(any())).thenReturn(Optional.ofNullable(null));
-        when(checkinRepositoryPortMock.findById(any())).thenReturn(Optional.ofNullable(null));
+        when(jpaCheckinRepositoryMock.save(any(CheckinModel.class))).thenReturn(createdCheckin);
+        when(jpaCheckinRepositoryMock.findByCarPlate(any())).thenReturn(Optional.ofNullable(null));
+        when(jpaCheckinRepositoryMock.findById(any())).thenReturn(Optional.ofNullable(null));
 
         // Mockando Checkout
-        checkout = new Checkout(createdCheckin);
-        when(checkoutRepositoryPortMock.findByCheckinId(any())).thenReturn(Optional.of(checkout));
-        when(checkoutRepositoryPortMock.save(any(Checkout.class))).thenReturn(checkout);
+        when(jpaCheckoutRepositoryMock.findByCheckinId(any())).thenReturn(Optional.of(checkout));
+        when(jpaCheckoutRepositoryMock.save(any(CheckoutModel.class))).thenReturn(checkout);
 
-
-        Optional<Checkin> existingCheckin = checkinRepositoryPortMock.findByPlate(plate);
+        Optional<CheckinModel> existingCheckin = jpaCheckinRepositoryMock.findByCarPlate(plate);
         assertTrue(!existingCheckin.isPresent(), "O carro não deveria estar estacionado, mas está!");
     }
 
     @Dado("que o carro com placa {string} está estacionado")
     public void the_car_with_plate_is_checked_in(String plate) {
         slots.get(1).setOccupied(true);
-        when(slotRepositoryPortMock.findAvailableSlot()).thenReturn(Optional.of(slots.get(1)));
-
-        createdCheckin = new Checkin();
-        car = new Car(new Plate(plate), "Audi", "Black", "A4");
-        createdCheckin.setCar(car);
-        createdCheckin.setId(UUID.fromString("f5d4b3b4-1b4b-4b4b-8b4b-4b4b4b4b4b4b"));
-        createdCheckin.setSlot(slots.get(1));
-        createdCheckin.setCheckInTime(LocalDateTime.now());
-
-        checkout = new Checkout(createdCheckin);
-        checkout.setCheckin(createdCheckin);
+        when(jpaSlotRepositoryMock.findFirstByOccupiedFalse()).thenReturn(Optional.of(slots.get(1)));
+        createdCheckin.setSlot(slots.get(0));
         checkout.setId(UUID.fromString("f5d4b3b4-1b4b-4b4b-8b4b-4b4b4b4b4b4b"));
-
-        when(checkinRepositoryPortMock.findByPlate(any())).thenReturn(Optional.of(createdCheckin));
-        when(checkoutRepositoryPortMock.findByCheckinId(createdCheckin.getId())).thenReturn(Optional.empty());
-
-        Optional<Checkin> existingCheckin = checkinRepositoryPortMock.findByPlate(plate);
+        when(jpaCheckinRepositoryMock.findByCarPlate(any())).thenReturn(Optional.of(createdCheckin));
+        when(jpaCheckoutRepositoryMock.findByCheckinId(createdCheckin.getId())).thenReturn(Optional.empty());
+        Optional<CheckinModel> existingCheckin = jpaCheckinRepositoryMock.findByCarPlate(plate);
         assertTrue(existingCheckin.isPresent(), "O carro deveria estar estacionado, mas não está!");
     }
 
@@ -150,9 +153,9 @@ public class CheckinSteps {
 
     @Entao("o slot com id {int} deve ser ocupado")
     public void theSlotWithIdShouldBeOccupied(int slotId) {
-        boolean isOccupied = slots.stream().filter(slot -> slot.getId().equals((long) slotId)).findFirst().get()
-                .isOccupied();
-        assertEquals(true, isOccupied);
+        Optional<SlotModel> updatedSlot = jpaSlotRepositoryMock.findById((long) slotId);
+        assertTrue(updatedSlot.isPresent(), "O slot com ID " + slotId + " não foi encontrado.");
+        assertTrue(updatedSlot.get().isOccupied(), "O slot com ID " + slotId + " deveria estar ocupado, mas não está.");
     }
 
     @Entao("o status da resposta do checkin deve ser {int}")

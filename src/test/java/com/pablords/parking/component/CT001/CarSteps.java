@@ -17,8 +17,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pablords.parking.adapters.inbound.http.dtos.CarResponseDTO;
-import com.pablords.parking.core.entities.Car;
-import com.pablords.parking.core.ports.outbound.repositories.CarRepositoryPort;
+import com.pablords.parking.adapters.outbound.database.jpa.models.CarModel;
+import com.pablords.parking.adapters.outbound.database.jpa.repositories.JpaCarRepository;
+
 
 import io.cucumber.java.Before;
 import io.cucumber.java.pt.Dado;
@@ -29,7 +30,7 @@ public class CarSteps {
     @Autowired
     private MockMvc mockMvc;
     @Autowired
-    private CarRepositoryPort carRepositoryPortMock;
+    private JpaCarRepository jpaCarRepositoryMock;
 
     private HttpStatus responseStatus;
     private String responseContent;
@@ -38,8 +39,8 @@ public class CarSteps {
 
     @Before
     public void setUp() {
-        when(carRepositoryPortMock.save(any(Car.class))).thenAnswer(invocation -> {
-            Car car = invocation.getArgument(0);
+        when(jpaCarRepositoryMock.save(any(CarModel.class))).thenAnswer(invocation -> {
+            CarModel car = invocation.getArgument(0);
             car.setId(UUID.fromString("f7f6b3e3-4b7b-4b7b-8b7b-4b7b7b7b7b7b"));
             return car;
         });
