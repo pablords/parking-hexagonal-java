@@ -3,9 +3,9 @@ package com.pablords.parking.contract;
 import au.com.dius.pact.provider.junit5.*;
 import au.com.dius.pact.provider.junitsupport.Provider;
 import au.com.dius.pact.provider.junitsupport.State;
+import au.com.dius.pact.provider.junitsupport.loader.PactBroker;
+import au.com.dius.pact.provider.junitsupport.loader.PactBrokerAuth;
 import au.com.dius.pact.provider.junitsupport.loader.PactFolder;
-
-
 
 import static org.mockito.Mockito.when;
 
@@ -26,7 +26,11 @@ import com.pablords.parking.core.valueobjects.Plate;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Provider("ParkingService")
-@PactFolder("src/test/java/com/pablords/parking/resources/contracts") // Caminho para os contratos "mockados"
+// @PactFolder("src/test/java/com/pablords/parking/resources/contracts") //
+// Caminho para os contratos "mockados"
+@PactBroker(url = "http://localhost:9292", // URL do Pact Broker
+        authentication = @PactBrokerAuth(username = "admin", password = "password") // Se necessário autenticação
+)
 @ActiveProfiles("contract-test")
 class ProviderContractTest {
 
@@ -35,7 +39,6 @@ class ProviderContractTest {
 
     @MockBean
     private CarRepositoryPort carRepositoryPort; // Mock do repositório
-
 
     @BeforeEach
     void setup(PactVerificationContext context) {
