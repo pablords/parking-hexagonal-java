@@ -62,7 +62,7 @@ jobs:
 
       # Armazena o artefato gerado
       - name: Upload Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: parking-application
           path: target/parking-*.jar
