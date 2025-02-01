@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping("/cars")
 @Slf4j
-public class CarController {
+public class CarController implements CarControllerSwagger{
 
     private final CarServicePort carServiceAdapter;
 
