@@ -60,6 +60,10 @@ jobs:
       - name: Run Integration Tests
         run: mvn test -Pintegration-test
 
+      # Executa os testes de contrato
+      - name: Run Contract Tests
+        run: mvn test -Pcontract-test
+
       # Armazena o artefato gerado
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
