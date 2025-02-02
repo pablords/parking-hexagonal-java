@@ -8,9 +8,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Optional;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -26,10 +26,8 @@ import com.pablords.parking.adapters.inbound.http.dtos.CarRequestDTO;
 import com.pablords.parking.adapters.inbound.http.dtos.CheckinResponseDTO;
 import com.pablords.parking.core.entities.Car;
 import com.pablords.parking.core.entities.Checkin;
-import com.pablords.parking.core.entities.Slot;
 import com.pablords.parking.core.ports.inbound.services.CheckinServicePort;
 import com.pablords.parking.core.ports.outbound.repositories.CheckinRepositoryPort;
-import com.pablords.parking.core.ports.outbound.repositories.SlotRepositoryPort;
 import com.pablords.parking.core.valueobjects.Plate;
 
 import io.cucumber.java.Before;
@@ -53,6 +51,8 @@ public class CheckinSteps {
     @Autowired
     private CheckinRepositoryPort checkinRepositoryPort;
 
+    @Value("${features.request.path}")
+    private String featuresRequestPath;
 
     private final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule())
             .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
@@ -82,7 +82,8 @@ public class CheckinSteps {
 
     @Dado("que o carro com placa {string} está estacionado")
     public void the_car_with_plate_is_checked_in(String plate) throws Exception {
-        var jsonPath = "src/test/java/com/pablords/parking/resources/features/request/createCarSuccess.json";
+        var jsonPath = String.join("/", featuresRequestPath, "create-car-success.json");
+
         var jsonFileContent = new String(Files.readAllBytes(Paths.get(jsonPath)));
         var carToCreate = objectMapper.readValue(jsonFileContent, CarRequestDTO.class);
         var car = new Car(new Plate(carToCreate.getPlate()), carToCreate.getBrand(), carToCreate.getColor(),

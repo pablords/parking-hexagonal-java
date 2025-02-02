@@ -14,3 +14,10 @@ config:
 logging:
   level:
     root: OFF  # Desliga todos os logs
+
+features:
+  path: src/test/resources/features
+  request:
+    path: src/test/resources/requests
+  response:
+    path: src/test/resources/responses

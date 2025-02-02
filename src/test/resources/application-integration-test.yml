@@ -29,3 +29,11 @@ logging:
     root: OFF  # Desliga todos os logs
     # org.springframework: ERROR  # Mostra apenas erros críticos do Spring
     # com.pablords: ERROR  # Mostra apenas erros críticos do seu código
+
+
+features:
+  path: src/test/resources/features
+  request:
+    path: src/test/resources/features/requests
+  response:
+    path: src/test/resources/features/responses

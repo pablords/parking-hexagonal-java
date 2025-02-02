@@ -5,7 +5,7 @@ import io.cucumber.junit.CucumberOptions;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(
-    features = "src/test/java/com/pablords/parking/resources/features/checkin",
+    features = "src/test/resources/features/checkin",
     glue = {"com.pablords.parking.component"},
     plugin = {"pretty", "json:target/cucumber-reports/component/report-CT002.json", "html:target/cucumber-reports/component/report-CT002.html"},
     monochrome = true

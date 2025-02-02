@@ -9,10 +9,10 @@ Funcionalidade: Gerenciamento de Carros
   @success
   Cenário: Criar um carro com sucesso
     Dado que estou no endpoint da API "/cars"
-    Quando eu crio um carro com os seguintes detalhes: "src/test/java/com/pablords/parking/resources/features/request/createCarSuccess.json"
+    Quando eu crio um carro com os seguintes detalhes: "src/test/resources/features/requests/create-car-success.json"
     Então o status da resposta do carro deve ser 201
 
   @fail
   Cenário: Falha ao criar um carro com detalhes inválidos
-    Quando eu crio um carro com os seguintes detalhes: "src/test/java/com/pablords/parking/resources/features/request/createCarInvalid.json"
+    Quando eu crio um carro com os seguintes detalhes: "src/test/resources/features/requests/create-car-invalid.json"
     Então o status da resposta do carro deve ser 422

@@ -174,7 +174,7 @@
 									html:target/cucumber-reports/component/report.html
 								</cucumber.plugin>
 								<cucumber.features>
-									src/test/java/com/pablords/parking/resources/features
+									src/test/resources/features
 								</cucumber.features>
 								<cucumber.glue>
 									com.pablords.parking.component
@@ -214,7 +214,7 @@
 									html:target/cucumber-reports/integration/report.html
 								</cucumber.plugin>
 								<cucumber.features>
-									src/test/java/com/pablords/parking/resources/features
+									src/test/resources/features
 								</cucumber.features>
 								<cucumber.glue>
 									com.pablords.parking.integration
