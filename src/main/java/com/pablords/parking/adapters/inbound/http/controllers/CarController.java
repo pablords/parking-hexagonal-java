@@ -24,10 +24,10 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class CarController implements SwaggerCar {
 
-    private final CarServicePort carServiceAdapter;
+    private final CarServicePort carServicePort;
 
     public CarController(CarServicePort carServicePort) {
-        this.carServiceAdapter = carServicePort;
+        this.carServicePort = carServicePort;
     }
 
     @PostMapping
@@ -35,7 +35,7 @@ public class CarController implements SwaggerCar {
     public CarResponseDTO create(@RequestBody @Valid CarRequestDTO createCarDto) {
         log.info("Recebendo requisição para criação de carro com payload={}", createCarDto.toString());
         var car = CarMapper.toEntity(createCarDto);
-        var createdCar = this.carServiceAdapter.create(car);
+        var createdCar = this.carServicePort.create(car);
         log.info("Respondendo com status={} para carro com response={}", HttpStatus.CREATED, createdCar.toString());
         return CarMapper.toResponse(createdCar);
     }
@@ -43,7 +43,7 @@ public class CarController implements SwaggerCar {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<CarResponseDTO> find() {
-        var cars = this.carServiceAdapter.find();
+        var cars = this.carServicePort.find();
         return cars.stream()
                 .map(CarMapper::toResponse)
                 .collect(Collectors.toList());
@@ -52,7 +52,7 @@ public class CarController implements SwaggerCar {
     @GetMapping("/{plate}")
     @ResponseStatus(HttpStatus.OK)
     public CarResponseDTO findByPlate(@PathVariable String plate) {
-        var car = this.carServiceAdapter.findByPlate(plate);
+        var car = this.carServicePort.findByPlate(plate);
         return CarMapper.toResponse(car);
     }
 }
