@@ -12,7 +12,7 @@ spring:
 
 
 app:
-  name: parking
+  name: parking-hexagonal-java
 
 server:
   servlet:

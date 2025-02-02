@@ -50,7 +50,7 @@ services:
       - 8080:8080
       - 35729:35729
       - 5005:5005
-    command: sleep infinity
+    # command: sleep infinity
   parking-hexagonal-java:
     container_name: parking-hexagonal-java
     image: pablords/parking-hexagonal-java:latest
