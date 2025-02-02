@@ -19,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping("/checkins")
 @Slf4j
-public class CheckinController {
+public class CheckinController implements SwaggerCheckin {
 
     private final CheckinServicePort checkinServicePort;
 
@@ -30,7 +30,7 @@ public class CheckinController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @Transactional
-    public CheckinResponseDTO checkIn(@RequestBody @Valid CheckinRequestDTO checkinRequestDTO) {
+    public CheckinResponseDTO checkin(@RequestBody @Valid CheckinRequestDTO checkinRequestDTO) {
         log.info("Recebendo requisição para estacionamento do carro com a placa: {}, payload={}",
         checkinRequestDTO.getPlate(), checkinRequestDTO.toString());
         var checkin = CheckinMapper.toEntity(checkinRequestDTO);

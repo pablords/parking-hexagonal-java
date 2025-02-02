@@ -19,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping("/checkouts")
 @Slf4j
-public class CheckoutController {
+public class CheckoutController implements SwaggerCheckout {
 
     private final ModelMapper modelMapper = new ModelMapper();
 
