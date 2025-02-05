@@ -25,7 +25,7 @@ public class CheckinMapper {
     }
 
     public CheckinModel toModel(Checkin checkin) {
-        log.debug("Mapeando o Checkin para CheckinModel: {}", checkin.toString());
+        log.info("Mapeando o Checkin para CheckinModel: {}", checkin.toString());
         var model = new CheckinModel();
         model.setId(checkin.getId());
         model.setSlot(SlotMapper.toModel(checkin.getSlot()));
@@ -45,7 +45,7 @@ public class CheckinMapper {
     }
 
     public static Checkin toEntity(CheckinModel checkinModel) {
-        log.debug("Mapeando o CheckinModel para Checkin: {}", checkinModel.toString());
+        log.info("Mapeando o CheckinModel para Checkin: {}", checkinModel.toString());
         var car = new Car();
         var parsedPlate = new Plate(checkinModel.getCar().getPlate());
         car.setPlate(parsedPlate);

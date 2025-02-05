@@ -1,6 +1,5 @@
 package com.pablords.parking.core.services;
 
-import com.pablords.parking.adapters.outbound.messaging.producers.CheckoutProducerAdapter;
 import com.pablords.parking.core.entities.Checkout;
 import com.pablords.parking.core.entities.Slot;
 import com.pablords.parking.core.exceptions.CarNotFoundException;
@@ -8,13 +7,13 @@ import com.pablords.parking.core.exceptions.CheckinNotFoundException;
 import com.pablords.parking.core.exceptions.CheckinTimeMissingException;
 import com.pablords.parking.core.exceptions.ErrorMessages;
 import com.pablords.parking.core.ports.inbound.services.CheckoutServicePort;
+import com.pablords.parking.core.ports.outbound.producers.CheckoutProducerPort;
 import com.pablords.parking.core.ports.outbound.repositories.CarRepositoryPort;
 import com.pablords.parking.core.ports.outbound.repositories.CheckinRepositoryPort;
 import com.pablords.parking.core.ports.outbound.repositories.CheckoutRepositoryPort;
 import com.pablords.parking.core.ports.outbound.repositories.SlotRepositoryPort;
 
 import lombok.extern.slf4j.Slf4j;
-
 
 @Slf4j
 public class CheckoutService implements CheckoutServicePort {
@@ -23,20 +22,19 @@ public class CheckoutService implements CheckoutServicePort {
     private final CheckoutRepositoryPort checkoutRepository;
     private final SlotRepositoryPort slotRepository;
     private final CarRepositoryPort carRepository;
-    private final CheckoutProducerAdapter checkoutProducerAdapter;
+    private final CheckoutProducerPort checkoutProducer;
 
     public CheckoutService(
             CheckinRepositoryPort checkinRepository,
             CheckoutRepositoryPort checkoutRepository,
             SlotRepositoryPort slotRepository,
             CarRepositoryPort carRepository,
-            CheckoutProducerAdapter checkoutProducerAdapter
-            ) {
+            CheckoutProducerPort checkoutProducer) {
         this.checkinRepository = checkinRepository;
         this.checkoutRepository = checkoutRepository;
         this.slotRepository = slotRepository;
         this.carRepository = carRepository;
-        this.checkoutProducerAdapter = checkoutProducerAdapter;
+        this.checkoutProducer = checkoutProducer;
     }
 
     public Checkout checkout(String plate) {
@@ -70,7 +68,7 @@ public class CheckoutService implements CheckoutServicePort {
 
     public void sendCheckoutMessage(Checkout checkout) {
         try {
-            checkoutProducerAdapter.sendCheckoutMessage(checkout);
+            checkoutProducer.sendCheckoutMessage(checkout);
         } catch (Exception e) {
             log.error("Erro ao publicar mensagem: {}", e.getMessage());
         }

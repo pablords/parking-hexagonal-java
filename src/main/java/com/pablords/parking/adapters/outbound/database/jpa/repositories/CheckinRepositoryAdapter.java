@@ -25,14 +25,14 @@ public class CheckinRepositoryAdapter implements CheckinRepositoryPort {
 
     @Override
     public Checkin save(Checkin checkin) {
-        log.debug("Persistindo checkin: {} no slot: {}", checkin.toString(), checkin.getSlot().toString());
+        log.info("Persistindo checkin: {} no slot: {}", checkin.toString(), checkin.getSlot().toString());
         var checkinModel = jpaRepositoryCheckin.save(checkinMapper.toModel(checkin));
         return CheckinMapper.toEntity(checkinModel);
     }
 
     @Override
     public Optional<Checkin> findByPlate(String plate) {
-        log.debug("Buscando checkin de carro com Placa: {}", plate);
+        log.info("Buscando checkin de carro com Placa: {}", plate);
         plate = plate.trim().toUpperCase();
         return jpaRepositoryCheckin.findLatestByCarPlate(plate)
                 .map(CheckinMapper::toEntity);

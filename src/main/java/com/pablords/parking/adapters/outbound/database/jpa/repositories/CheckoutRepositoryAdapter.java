@@ -24,7 +24,7 @@ public class CheckoutRepositoryAdapter implements CheckoutRepositoryPort {
 
     @Override
     public Checkout save(Checkout checkout) {
-        log.debug("Persistindo checkout: {}", checkout.toString());
+        log.info("Persistindo checkout: {}", checkout.toString());
         var createdCheckout = jpaRepositoryCheckout.save(CheckoutMapper.toModel(checkout));
         return CheckoutMapper.toEntity(createdCheckout, checkout.getCheckin());
     }

@@ -21,14 +21,14 @@ public class Plate {
     }
 
     public Plate(String value) {
-        log.debug("Iniciando validação da placa: {}", value);
+        log.info("Iniciando validação da placa: {}", value);
         this.value = value != null ? value.trim() : "";
         
         Matcher matcher = VALID_PLATE_REGEX.matcher(this.value);
         if (!matcher.matches()) { // Usando matches para validar a string inteira
             throw new InvalidPlateException();
         }
-        log.debug("Placa valida: {}", value);
+        log.info("Placa valida: {}", value);
     }
 
     public String getValue() {

@@ -15,7 +15,7 @@ public class CarMapper {
     private static final ModelMapper modelMapper = new ModelMapper();
 
     public static Car toEntity(CarRequestDTO createCarDTO) {
-        log.debug("Mapeando CarRequestDTO para Car: {}", createCarDTO);
+        log.info("Mapeando CarRequestDTO para Car: {}", createCarDTO);
         modelMapper.typeMap(CarRequestDTO.class, Car.class)
                 .addMappings(mapper -> mapper.skip(Car::setPlate)) // Skip default mapping for Plate
                 .setPostConverter(context -> {
@@ -28,7 +28,7 @@ public class CarMapper {
     }
 
     public static CarResponseDTO toResponse(Car car) {
-        log.debug("Mapeando Car para CarResponseDTO: {}", car);
+        log.info("Mapeando Car para CarResponseDTO: {}", car);
         modelMapper.typeMap(Car.class, CarResponseDTO.class).addMappings(mapper -> {
             mapper.map(src -> src.getPlate().getValue(),
                     CarResponseDTO::setPlate);

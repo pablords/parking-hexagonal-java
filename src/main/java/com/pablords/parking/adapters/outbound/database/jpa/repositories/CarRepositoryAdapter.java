@@ -27,7 +27,7 @@ public class CarRepositoryAdapter implements CarRepositoryPort {
 
     @Override
     public Optional<Car> findById(UUID id) {
-        log.debug("Buscando carro com ID: {}", id);
+        log.info("Buscando carro com ID: {}", id);
         return jpaRepositoryCar.findById(id).map(CarMapper::toEntity);
     }
 
@@ -41,7 +41,7 @@ public class CarRepositoryAdapter implements CarRepositoryPort {
 
     @Override
     public Car save(Car car) {
-        log.debug("Persistindo carro: {}", car.toString());
+        log.info("Persistindo carro: {}", car.toString());
         CarModel carModel = CarMapper.toModel(car);
 
         if (!this.existsByPlate(car.getPlate().getValue())) {

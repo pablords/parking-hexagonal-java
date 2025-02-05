@@ -32,7 +32,7 @@ public class CheckinService implements CheckinServicePort {
 
     @Override
     public Checkin checkIn(Car car) {
-        log.debug("Iniciando estacionamento para o carro com a placa: {}", car.getPlate().getValue());
+        log.info("Iniciando estacionamento para o carro com a placa: {}", car.getPlate().getValue());
         var availableSlot = slotRepository.findAvailableSlot()
                 .orElseThrow(() -> {
                     log.warn("Estacionamento está cheio. Não é possível estacionar o carro com a placa: {}",

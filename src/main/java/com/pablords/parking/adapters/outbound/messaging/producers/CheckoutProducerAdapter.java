@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pablords.parking.core.entities.Car;
 import com.pablords.parking.core.entities.Checkout;
+import com.pablords.parking.core.ports.outbound.producers.CheckoutProducerPort;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -19,7 +20,7 @@ import static com.pablords.parking.adapters.outbound.messaging.config.RabbitMQCo
 
 @Component
 @Slf4j
-public class CheckoutProducerAdapter {
+public class CheckoutProducerAdapter implements CheckoutProducerPort {
 
     private final RabbitTemplate rabbitTemplate;
     private final ObjectMapper objectMapper;
@@ -36,12 +37,12 @@ public class CheckoutProducerAdapter {
         message.put("parkingFee", checkout.getParkingFee());
         message.put("timestamp", LocalDateTime.now());
 
-        log.debug("Publicando mensagem na fila: {}, com o payload: {}", QUEUE_NAME, message);
+        log.info("Publicando mensagem na fila: {}, com o payload: {}", QUEUE_NAME, message);
 
         try {
             String jsonMessage = objectMapper.writeValueAsString(message);
             rabbitTemplate.convertAndSend(EXCHANGE_NAME, "checkoutRoutingKey", jsonMessage);
-            log.debug("Mensagem publicada: {}, {}", QUEUE_NAME, jsonMessage);
+            log.info("Mensagem publicada: {}, {}", QUEUE_NAME, jsonMessage);
         } catch (JsonProcessingException e) {
             log.error("Erro ao publicar mensagem serializada: {}", e.getMessage());
         }

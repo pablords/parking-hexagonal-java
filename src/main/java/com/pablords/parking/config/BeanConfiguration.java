@@ -3,10 +3,10 @@ package com.pablords.parking.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.pablords.parking.adapters.outbound.messaging.producers.CheckoutProducerAdapter;
 import com.pablords.parking.core.ports.inbound.services.CarServicePort;
 import com.pablords.parking.core.ports.inbound.services.CheckinServicePort;
 import com.pablords.parking.core.ports.inbound.services.CheckoutServicePort;
+import com.pablords.parking.core.ports.outbound.producers.CheckoutProducerPort;
 import com.pablords.parking.core.ports.outbound.repositories.CarRepositoryPort;
 import com.pablords.parking.core.ports.outbound.repositories.CheckinRepositoryPort;
 import com.pablords.parking.core.ports.outbound.repositories.CheckoutRepositoryPort;
@@ -42,9 +42,9 @@ public class BeanConfiguration {
             CheckoutRepositoryPort checkoutRepository,
             SlotRepositoryPort slotRepository,
             CarRepositoryPort carRepository,
-            CheckoutProducerAdapter checkoutProducerAdapter
+            CheckoutProducerPort checkoutProducer
             ) {
-        return new CheckoutService(checkinRepository, checkoutRepository, slotRepository, carRepository, checkoutProducerAdapter);
+        return new CheckoutService(checkinRepository, checkoutRepository, slotRepository, carRepository, checkoutProducer);
     }
 
 }
