@@ -127,7 +127,7 @@ public class CheckinSteps {
     @Entao("o status da resposta do checkin deve ser {int}")
     public void theResponseStatusShouldBe(int status) throws Exception {
         CheckinResponseDTO checkinResponseDTO = objectMapper.readValue(responseContent, CheckinResponseDTO.class);
-        switch (responseStatus) {
+        switch (HttpStatus.valueOf(status)) {
             case CREATED:
                 assertNotNull(checkinResponseDTO.getId());
                 assertEquals(responseStatus.value(), status);

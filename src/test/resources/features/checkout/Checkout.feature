@@ -12,6 +12,6 @@ Funcionalidade: Checkout de Carros
 
   @fail
   Cenário: Falha ao realizar checkout de um carro não estacionado
-    Dado que o carro com placa "JVV1609" não está estacionado
+    Dado que o carro com placa "ABC1234" não está estacionado
     Quando o cliente envia uma solicitação de checkout inválida com "src/test/resources/features/requests/create-checkout-success.json"
     Então o status da resposta do checkout deve ser 404
