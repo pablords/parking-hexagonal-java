@@ -15,3 +15,9 @@ Funcionalidade: Check-in de Carros
     Dado que o carro com placa "ABC1234" está estacionado
     Quando o cliente envia uma solicitação de check-in inválida com "src/test/resources/features/requests/create-checkin-success.json"
     Então o status da resposta do checkin deve ser 400
+
+  @fail
+  Cenário: Falha ao realizar check-in de um carro com placa inválida
+    Dado que o carro com placa "ABC1234" não está estacionado
+    Quando o cliente envia uma solicitação de check-in inválida com "src/test/resources/features/requests/create-checkin-invalid.json"
+    Então o status da resposta do checkin deve ser 422
