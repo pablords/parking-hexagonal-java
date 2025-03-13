@@ -1,5 +1,7 @@
 package com.pablords.parking.core.services;
 
+import java.time.Clock;
+
 import com.pablords.parking.core.entities.Car;
 import com.pablords.parking.core.entities.Checkin;
 import com.pablords.parking.core.entities.Checkout;
@@ -48,12 +50,15 @@ public class CheckoutService implements CheckoutServicePort {
         checkinByPlate.setCar(carByPlate);
 
         Checkout checkout = new Checkout(checkinByPlate);
+        checkout.calculateParkingFee();
 
         updateSlotAndCheckin(checkinByPlate);
 
         sendCheckoutMessage(checkout);
 
-        return checkoutRepository.save(checkout);
+        var savedCheckout = checkoutRepository.save(checkout);
+        log.info("Checkout realizado com sucesso: {}", savedCheckout);
+        return savedCheckout;
     }
 
     private void validateCheckinTime(Checkin checkin) {

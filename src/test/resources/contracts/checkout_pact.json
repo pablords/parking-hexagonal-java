@@ -1,0 +1,42 @@
+{
+  "provider": {
+    "name": "ParkingService"
+  },
+  "consumer": {
+    "name": "ParkingApp"
+  },
+  "interactions": [
+    {
+      "description": "Realiza check-out de um carro",
+      "providerState": "Existe um carro estacionado com a placa ABC1234",
+      "request": {
+        "method": "POST",
+        "path": "/api/v1/checkouts",
+        "body": {
+          "plate": "ABC1234"
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "response": {
+        "status": 201,
+        "body": {
+          "checkOutTime": "2025-03-13T14:00:00",
+          "checkin": {
+            "checkInTime": "2025-03-13T13:00:00",
+            "id": "f5d4b3b4-1b4b-4b4b-8b4b-4b4b4b4b4b4b",
+            "slot": {
+              "id": 1,
+              "occupied": false
+            }
+          },
+          "parkingFee": 2.50
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    }
+  ]
+}

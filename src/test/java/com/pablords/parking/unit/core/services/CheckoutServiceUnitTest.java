@@ -65,8 +65,9 @@ class CheckoutServiceUnitTest {
     @Test
     void testCheckout_Success() {
         // Cenário: Realizando checkout com sucesso
-        Checkout checkout = new Checkout(checkin);
         checkin.setId(uuid);
+        Checkout checkout = new Checkout(checkin);
+        checkout.calculateParkingFee();
 
         when(checkinRepository.findByPlate("ABC1234")).thenReturn(Optional.of(checkin));
         // when(checkinRepository.findById(uuid)).thenReturn(Optional.of(checkin));

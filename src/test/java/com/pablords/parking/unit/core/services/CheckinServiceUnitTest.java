@@ -43,9 +43,12 @@ class CheckinServiceUnitTest {
 
     @BeforeEach
     void setUp() {
-        availableSlot = new Slot(); // Criar um objeto de vaga disponível
+        availableSlot = new Slot(1l, false); // Criar um objeto de vaga disponível
         var plate = new Plate("ABC1234");
         car = new Car(plate, "Honda", "Green", "Civic"); // Criar um objeto de carro com uma placa fictícia
+
+        lenient().when(slotRepository.save(any(Slot.class))).thenReturn(availableSlot);
+        lenient().when(carRepository.save(any(Car.class))).thenReturn(car);
     }
 
     @Test

@@ -15,51 +15,54 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class CheckinService implements CheckinServicePort {
-    private final CheckinRepositoryPort checkinRepository;
-    private final SlotRepositoryPort slotRepository;
-    private final CheckoutRepositoryPort checkoutRepository;
-    private final CarRepositoryPort carRepository;
+  private final CheckinRepositoryPort checkinRepository;
+  private final SlotRepositoryPort slotRepository;
+  private final CheckoutRepositoryPort checkoutRepository;
+  private final CarRepositoryPort carRepository;
 
-    public CheckinService(CheckinRepositoryPort checkinRepository,
-            SlotRepositoryPort slotRepository,
-            CheckoutRepositoryPort checkoutRepository,
-            CarRepositoryPort carRepository) {
-        this.checkinRepository = checkinRepository;
-        this.slotRepository = slotRepository;
-        this.checkoutRepository = checkoutRepository;
-        this.carRepository = carRepository;
+  public CheckinService(CheckinRepositoryPort checkinRepository,
+      SlotRepositoryPort slotRepository,
+      CheckoutRepositoryPort checkoutRepository,
+      CarRepositoryPort carRepository) {
+    this.checkinRepository = checkinRepository;
+    this.slotRepository = slotRepository;
+    this.checkoutRepository = checkoutRepository;
+    this.carRepository = carRepository;
+  }
+
+  @Override
+  public Checkin checkIn(Car car) {
+    log.info("Iniciando estacionamento para o carro com a placa: {}", car.getPlate().getValue());
+    var availableSlot = slotRepository.findAvailableSlot()
+        .orElseThrow(() -> {
+          log.warn("Estacionamento está cheio. Não é possível estacionar o carro com a placa: {}",
+              car.getPlate());
+          return new ParkingFullException();
+        });
+
+    var checkinByPlate = checkinRepository.findByPlate(car.getPlate().getValue()).orElse(null);
+    if (checkinByPlate != null) {
+      log.info("PLaca {} já está estacionada", car.getPlate().getValue());
+      var checkout = checkoutRepository.findByCheckinId(checkinByPlate.getId());
+      if (!checkout.isPresent()) {
+        log.warn("Carro com a placa: {} já está estacionado e não foi feito checkout", car.getPlate().getValue());
+        throw new InvalidCheckinException(ErrorMessages.INVALID_CHECKIN_CHECKOUT_NOT_FOUND);
+      }
     }
 
-    @Override
-    public Checkin checkIn(Car car) {
-        log.info("Iniciando estacionamento para o carro com a placa: {}", car.getPlate().getValue());
-        var availableSlot = slotRepository.findAvailableSlot()
-                .orElseThrow(() -> {
-                    log.warn("Estacionamento está cheio. Não é possível estacionar o carro com a placa: {}",
-                            car.getPlate());
-                    return new ParkingFullException();
-                });
+    availableSlot.occupy(); // Marca a vaga como ocupada
+    var savedSlot = slotRepository.save(availableSlot); // Atualiza a vaga
+    log.info("Vaga {} ocupada", savedSlot.getId());
 
-        var checkinByPlate = checkinRepository.findByPlate(car.getPlate().getValue()).orElse(null);
-        if (checkinByPlate != null) {
-            log.info("PLaca {} já está estacionada", car.getPlate().getValue());
-            var checkout = checkoutRepository.findByCheckinId(checkinByPlate.getId());
-            if (!checkout.isPresent()) {
-                log.warn("Carro com a placa: {} já está estacionado e não foi feito checkout", car.getPlate().getValue());
-                throw new InvalidCheckinException(ErrorMessages.INVALID_CHECKIN_CHECKOUT_NOT_FOUND);
-            }
-        }
+    // Salva o carro (delegado ao adaptador, que lida com persistência)
+    var savedCar = carRepository.save(car);
+    log.info("Carro com a placa: {} salvo com sucesso", savedCar.getPlate().getValue());
 
-        availableSlot.occupy(); // Marca a vaga como ocupada
-        slotRepository.save(availableSlot); // Atualiza a vaga
+    var checkin = new Checkin(availableSlot, car);
+    log.info("Criado checkin para o carro com a placa: {}", car.getPlate().getValue());
+    var checkinSaved = checkinRepository.save(checkin); // Salva o checkin
 
-        // Salva o carro (delegado ao adaptador, que lida com persistência)
-        carRepository.save(car);
-
-        Checkin checkin = new Checkin(availableSlot, car);
-
-        var checkinSaved = checkinRepository.save(checkin); // Salva o checkin
-        log.info("Carro com a placa: {} estacionado com sucesso", car.getPlate().getValue());
-        return checkinSaved;
-    }
+    log.info("Carro com a placa: {} estacionado com sucesso", checkinSaved.getCar().getPlate().getValue());
+    return checkinSaved;
+  }
 }
