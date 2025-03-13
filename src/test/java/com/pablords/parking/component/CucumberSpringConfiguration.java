@@ -1,6 +1,5 @@
 package com.pablords.parking.component;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,6 +11,8 @@ import com.pablords.parking.adapters.outbound.database.jpa.repositories.JpaCarRe
 import com.pablords.parking.adapters.outbound.database.jpa.repositories.JpaCheckinRepository;
 import com.pablords.parking.adapters.outbound.database.jpa.repositories.JpaCheckoutRepository;
 import com.pablords.parking.adapters.outbound.database.jpa.repositories.JpaSlotRepository;
+import com.pablords.parking.adapters.outbound.messaging.producers.CheckoutProducerAdapter;
+import com.pablords.parking.core.ports.outbound.producers.CheckoutProducerPort;
 
 import io.cucumber.java.Before;
 import io.cucumber.spring.CucumberContextConfiguration;
@@ -21,20 +22,22 @@ import io.cucumber.spring.CucumberContextConfiguration;
 @CucumberContextConfiguration
 @ActiveProfiles("component-test")
 public class CucumberSpringConfiguration {
-    @MockBean
-    private JpaCarRepository jpaCarRepositoryMock;
-    @MockBean
-    private JpaSlotRepository jpaSlotRepositoryMock;
-    @MockBean
-    private JpaCheckinRepository jpaCheckinRepositoryMock;
-    @MockBean
-    private JpaCheckoutRepository jpaCheckoutRepositoryMock;
+  @MockBean
+  private JpaCarRepository jpaCarRepositoryMock;
+  @MockBean
+  private JpaSlotRepository jpaSlotRepositoryMock;
+  @MockBean
+  private JpaCheckinRepository jpaCheckinRepositoryMock;
+  @MockBean
+  private JpaCheckoutRepository jpaCheckoutRepositoryMock;
+  @MockBean
+  private CheckoutProducerAdapter checkoutProducerAdapterMock;
 
-    @Autowired
-    private Environment environment;
+  @Autowired
+  private Environment environment;
 
-    @Before
-    public void setUp() {
-        System.out.println("🔎 Active Profiles: " + String.join(", ", environment.getActiveProfiles()));
-    }
+  @Before
+  public void setUp() {
+    System.out.println("🔎 Active Profiles: " + String.join(", ", environment.getActiveProfiles()));
+  }
 }

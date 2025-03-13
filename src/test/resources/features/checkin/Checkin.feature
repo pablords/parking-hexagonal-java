@@ -1,6 +1,6 @@
 #language: pt
 
-@checkin
+@checkin @CT002
 Funcionalidade: Check-in de Carros
   @success
   Cenário: Check-in bem-sucedido de um carro

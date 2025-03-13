@@ -1,8 +1,9 @@
-package com.pablords.parking.component.CT002;
+package com.pablords.parking.component.CT003;
 
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -22,6 +23,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.pablords.parking.adapters.inbound.http.dtos.CheckinResponseDTO;
+import com.pablords.parking.adapters.inbound.http.dtos.CheckoutResponseDTO;
 import com.pablords.parking.adapters.outbound.database.jpa.models.CarModel;
 import com.pablords.parking.adapters.outbound.database.jpa.models.CheckinModel;
 import com.pablords.parking.adapters.outbound.database.jpa.models.CheckoutModel;
@@ -30,16 +32,17 @@ import com.pablords.parking.adapters.outbound.database.jpa.repositories.JpaCarRe
 import com.pablords.parking.adapters.outbound.database.jpa.repositories.JpaCheckinRepository;
 import com.pablords.parking.adapters.outbound.database.jpa.repositories.JpaCheckoutRepository;
 import com.pablords.parking.adapters.outbound.database.jpa.repositories.JpaSlotRepository;
+import com.pablords.parking.adapters.outbound.messaging.producers.CheckoutProducerAdapter;
 import com.pablords.parking.component.TestUtils;
+import com.pablords.parking.core.ports.outbound.producers.CheckoutProducerPort;
 
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
-import io.cucumber.java.pt.Dado;
 import io.cucumber.java.pt.E;
 import io.cucumber.java.pt.Entao;
 import io.cucumber.java.pt.Quando;
 
-public class CheckinSteps {
+public class CheckoutSteps {
   @Autowired
   private MockMvc mockMvc;
   @Autowired
@@ -47,9 +50,11 @@ public class CheckinSteps {
   @Autowired
   private JpaCheckinRepository jpaCheckinRepositoryMock;
   @Autowired
+  private JpaCarRepository jpaCarRepositoryMock;
+  @Autowired
   private JpaCheckoutRepository jpaCheckoutRepositoryMock;
   @Autowired
-  private JpaCarRepository jpaCarRepositoryMock;
+  private CheckoutProducerAdapter checkoutProducerAdapterMock;
 
   private CheckinModel createdCheckin;
   private ArrayList<SlotModel> slots;
@@ -58,7 +63,7 @@ public class CheckinSteps {
 
   private HttpStatus responseStatus;
   private String responseContent;
-  private final String PARKING_API_URL_CHECKINS = "/checkins";
+  private final String PARKING_API_URL_CHECKOUTS = "/checkouts";
   private final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule())
       .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
@@ -66,43 +71,29 @@ public class CheckinSteps {
   public void setUp() {
     slots = TestUtils.createSlots();
     car = TestUtils.createCarModel();
-    checkout = new CheckoutModel();
     createdCheckin = TestUtils.createCheckinModel(car, slots);
+    checkout = TestUtils.createCheckoutModel(createdCheckin);
     TestUtils.mockSlotRepository(jpaSlotRepositoryMock, slots);
+    when(jpaCarRepositoryMock.findByPlate(any())).thenReturn(Optional.of(car));
+    when(jpaCheckinRepositoryMock.findByCarPlate(any())).thenReturn(Optional.of(createdCheckin));
+    when(jpaCheckinRepositoryMock.save(any())).thenReturn(createdCheckin);
+    Mockito.doNothing().when(checkoutProducerAdapterMock).sendCheckoutMessage(any());
+    when(jpaCheckoutRepositoryMock.save(any())).thenReturn(checkout);
   }
 
   @After
   public void tearDown() {
-    slots = null;
+    slots.clear();
     car = null;
-    checkout = null;
     createdCheckin = null;
+    checkout = null;
     Mockito.reset();
   }
 
-  @Dado("que o carro com placa {string} não está estacionado")
-  public void the_car_with_plate_is_not_checked_in(String plate) {
-    when(jpaCheckinRepositoryMock.findLatestByCarPlate(any())).thenReturn(Optional.ofNullable(null));
-    when(jpaCheckoutRepositoryMock.findByCheckinId(any())).thenReturn(Optional.ofNullable(null));
-    when(jpaCarRepositoryMock.save(any())).thenReturn(car);
-    when(jpaCheckinRepositoryMock.save(any(CheckinModel.class))).thenReturn(createdCheckin);
-    Optional<CheckinModel> existingCheckin = jpaCheckinRepositoryMock.findLatestByCarPlate(plate);
-    assertTrue(!existingCheckin.isPresent(), "O carro não deveria estar estacionado, mas está!");
-  }
-
-  @Dado("que o carro com placa {string} está estacionado")
-  public void the_car_with_plate_is_checked_in(String plate) {
-    slots.get(0).setOccupied(true);
-    when(jpaCheckinRepositoryMock.findLatestByCarPlate(any())).thenReturn(Optional.of(createdCheckin));
-    when(jpaCheckoutRepositoryMock.findByCheckinId(createdCheckin.getId())).thenReturn(Optional.empty());
-    Optional<CheckinModel> existingCheckin = jpaCheckinRepositoryMock.findLatestByCarPlate(plate);
-    assertTrue(existingCheckin.isPresent(), "O carro deveria estar estacionado, mas não está!");
-  }
-
-  @Quando("o cliente envia uma solicitação de check-in com {string}")
+  @Quando("o cliente envia uma solicitação de checkout com a placa {string}")
   public void a_car_with_payload(String jsonPath) throws Exception {
     var jsonFileContent = new String(Files.readAllBytes(Paths.get(jsonPath)));
-    mockMvc.perform(post(PARKING_API_URL_CHECKINS)
+    mockMvc.perform(post(PARKING_API_URL_CHECKOUTS)
         .contentType(MediaType.APPLICATION_JSON)
         .content(jsonFileContent))
         .andExpect(result -> {
@@ -111,10 +102,10 @@ public class CheckinSteps {
         });
   }
 
-  @Quando("o cliente envia uma solicitação de check-in inválida com {string}")
+  @Quando("o cliente envia uma solicitação de checkout inválida com {string}")
   public void the_client_sends_a_check_in_invalid_request_with(String jsonPath) throws Exception {
     var jsonFileContent = new String(Files.readAllBytes(Paths.get(jsonPath)));
-    mockMvc.perform(post(PARKING_API_URL_CHECKINS)
+    mockMvc.perform(post(PARKING_API_URL_CHECKOUTS)
         .contentType(MediaType.APPLICATION_JSON)
         .content(jsonFileContent))
         .andExpect(result -> {
@@ -123,22 +114,16 @@ public class CheckinSteps {
         });
   }
 
-  @Entao("o slot com id {int} deve ser ocupado")
-  public void theSlotWithIdShouldBeOccupied(int slotId) {
-    Optional<SlotModel> updatedSlot = jpaSlotRepositoryMock.findById((long) slotId);
-    assertTrue(updatedSlot.isPresent(), "O slot com ID " + slotId + " não foi encontrado.");
-    assertTrue(updatedSlot.get().isOccupied(), "O slot com ID " + slotId + " deveria estar ocupado, mas não está.");
-  }
-
-  @Entao("o status da resposta do checkin deve ser {int}")
+  @Entao("o status da resposta do checkout deve ser {int}")
   public void the_response_status_should_be(int status) throws Exception {
-    CheckinResponseDTO checkinResponseDTO = objectMapper.readValue(responseContent, CheckinResponseDTO.class);
-    System.out.println("responseStatus: " + responseStatus.value());
-    System.out.println("checkinResponseDTO: " + checkinResponseDTO);
-    System.out.println("status: " + status);
+    CheckoutResponseDTO checkoutResponseDTO = objectMapper.readValue(responseContent, CheckoutResponseDTO.class);
+    System.out.println("Response: " + responseContent);
+    System.out.println("Status: " + status);
+    System.out.println("Response Status: " + responseStatus.value());
+    System.out.println("CheckoutResponseDTO: " + checkoutResponseDTO);
     switch (HttpStatus.valueOf(status)) {
       case CREATED:
-        assertNotNull(checkinResponseDTO.getId());
+        assertNotNull(checkoutResponseDTO.getCheckOutTime(), "Checkout timestamp não foi retornado na resposta.");
         assertEquals(responseStatus.value(), status);
         break;
       case UNPROCESSABLE_ENTITY:
@@ -147,16 +132,25 @@ public class CheckinSteps {
       case BAD_REQUEST:
         assertEquals(responseStatus.value(), status);
         break;
+      case NOT_FOUND:
+        assertEquals(responseStatus.value(), status);
+        break;
       default:
         assertEquals(responseStatus.value(), HttpStatus.INTERNAL_SERVER_ERROR.value());
         break;
     }
   }
 
-  @E("a resposta deve conter um timestamp de check-in")
+  @E("o slot com id {int} deve ser liberado")
+  public void o_slot_com_id_deve_ser_liberado(Integer slotId) {
+    SlotModel slot = slots.stream().filter(s -> s.getId() == slotId.longValue()).findFirst().get();
+    assertTrue("O slot não foi liberado.", !slot.isOccupied());
+  }
+
+  @E("a resposta deve conter um timestamp de checkout")
   public void the_response_should_contain_a_check_in_timestamp() throws Exception {
-    CheckinResponseDTO checkinResponseDTO = objectMapper.readValue(responseContent, CheckinResponseDTO.class);
-    assertNotNull(checkinResponseDTO.getCheckInTime(), "Checkin timestamp não foi retornado na resposta.");
+    CheckoutResponseDTO checkoutResponseDTO = objectMapper.readValue(responseContent, CheckoutResponseDTO.class);
+    assertNotNull(checkoutResponseDTO.getCheckOutTime(), "Checkout timestamp não foi retornado na resposta.");
   }
 
 }

@@ -1,5 +1,7 @@
 package com.pablords.parking.core.services;
 
+import com.pablords.parking.core.entities.Car;
+import com.pablords.parking.core.entities.Checkin;
 import com.pablords.parking.core.entities.Checkout;
 import com.pablords.parking.core.entities.Slot;
 import com.pablords.parking.core.exceptions.CarNotFoundException;
@@ -38,32 +40,45 @@ public class CheckoutService implements CheckoutServicePort {
     }
 
     public Checkout checkout(String plate) {
-        var checkinByPlate = checkinRepository.findByPlate(plate)
-                .orElseThrow(() -> new CheckinNotFoundException(
-                        String.format(ErrorMessages.CHECKIN_NOT_FOUND_BY_PLATE, plate)));
-        var checkinById = checkinRepository.findById(checkinByPlate.getId())
-                .orElseThrow(() -> new CheckinNotFoundException(
-                        String.format(ErrorMessages.CHECKIN_NOT_FOUND_BY_ID, checkinByPlate.getId())));
-        var carByPlate = carRepository.findByPlate(plate)
-                .orElseThrow(
-                        () -> new CarNotFoundException(String.format(ErrorMessages.CAR_NOT_FOUND_BY_PLATE, plate)));
+        var checkinByPlate = getCheckinByPlate(plate);
+        var carByPlate = getCarByPlate(plate);
 
-        if (checkinById.getCheckInTime() == null) {
+        validateCheckinTime(checkinByPlate);
+
+        checkinByPlate.setCar(carByPlate);
+
+        Checkout checkout = new Checkout(checkinByPlate);
+
+        updateSlotAndCheckin(checkinByPlate);
+
+        sendCheckoutMessage(checkout);
+
+        return checkoutRepository.save(checkout);
+    }
+
+    private void validateCheckinTime(Checkin checkin) {
+        if (checkin.getCheckInTime() == null) {
             throw new CheckinTimeMissingException(ErrorMessages.CHECKIN_TIME_IS_MISSING);
         }
+    }
 
-        checkinById.setCar(carByPlate);
+    private Checkin getCheckinByPlate(String plate) {
+        return checkinRepository.findByPlate(plate)
+                .orElseThrow(() -> new CheckinNotFoundException(
+                        String.format(ErrorMessages.CHECKIN_NOT_FOUND_BY_PLATE, plate)));
+    }
 
-        Checkout checkout = new Checkout(checkinById);
+    private Car getCarByPlate(String plate) {
+        return carRepository.findByPlate(plate)
+                .orElseThrow(() -> new CarNotFoundException(
+                        String.format(ErrorMessages.CAR_NOT_FOUND_BY_PLATE, plate)));
+    }
 
-        Slot slot = checkinById.getSlot();
-        slot.free(); // Libera a vaga
-
-        slotRepository.save(slot); // Atualiza a vaga
-        checkinRepository.save(checkinById); // Atualiza a checkin
-        this.sendCheckoutMessage(checkout); // Envia a mensagem
-        return checkoutRepository.save(checkout); // Salva o checkout
-
+    private void updateSlotAndCheckin(Checkin checkin) {
+        Slot slot = checkin.getSlot();
+        slot.free();
+        slotRepository.save(slot);
+        checkinRepository.save(checkin);
     }
 
     public void sendCheckoutMessage(Checkout checkout) {

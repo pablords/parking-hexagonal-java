@@ -1,6 +1,6 @@
 #language: pt 
 
-@car
+@car @CT001
 Funcionalidade: Gerenciamento de Carros
   Como um usuário
   Quero gerenciar carros no estacionamento

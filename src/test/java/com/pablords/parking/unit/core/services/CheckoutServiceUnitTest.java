@@ -69,7 +69,7 @@ class CheckoutServiceUnitTest {
         checkin.setId(uuid);
 
         when(checkinRepository.findByPlate("ABC1234")).thenReturn(Optional.of(checkin));
-        when(checkinRepository.findById(uuid)).thenReturn(Optional.of(checkin));
+        // when(checkinRepository.findById(uuid)).thenReturn(Optional.of(checkin));
         when(carRepository.findByPlate("ABC1234")).thenReturn(Optional.of(car));
 
         when(checkoutRepository.save(any(Checkout.class))).thenReturn(checkout);
@@ -99,7 +99,7 @@ class CheckoutServiceUnitTest {
         checkin.setId(uuid);
 
         when(checkinRepository.findByPlate("ABC1234")).thenReturn(Optional.of(checkin));
-        when(checkinRepository.findById(uuid)).thenReturn(Optional.of(checkin));
+        // when(checkinRepository.findById(uuid)).thenReturn(Optional.of(checkin));
         when(carRepository.findByPlate("ABC1234")).thenReturn(Optional.of(car));
         // Cenário: Testa o caso em que o checkin não tem hora registrada (deve dar erro
         // ou não permitir o checkout)
@@ -117,7 +117,7 @@ class CheckoutServiceUnitTest {
         checkin.setId(uuid);
 
         when(checkinRepository.findByPlate("ABC1234")).thenReturn(Optional.of(checkin));
-        when(checkinRepository.findById(uuid)).thenReturn(Optional.of(checkin));
+        // when(checkinRepository.findById(uuid)).thenReturn(Optional.of(checkin));
         when(carRepository.findByPlate("ABC1234")).thenReturn(Optional.of(car));
 
         // Cenário: Verifica se a vaga é liberada corretamente

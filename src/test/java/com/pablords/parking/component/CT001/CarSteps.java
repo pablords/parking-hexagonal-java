@@ -67,7 +67,7 @@ public class CarSteps {
     @Entao("o status da resposta do carro deve ser {int}")
     public void the_response_status_should_be(int status) throws Exception {
         CarResponseDTO carResponseDTO = objectMapper.readValue(responseContent, CarResponseDTO.class);
-        switch (responseStatus) {
+        switch (HttpStatus.valueOf(status)) {
             case CREATED:
                 assertNotNull(carResponseDTO.getId());
                 assertEquals(responseStatus.value(), status);
