@@ -38,8 +38,8 @@ import com.pablords.parking.core.valueobjects.Plate;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @Provider("ParkingService")
-@PactFolder("src/test/resources/contracts")
 // Caminho para os contratos "mockados"
+@PactFolder("src/test/resources/contracts")
 // @PactBroker(url = "http://localhost:9292", // URL do Pact Broker
 // authentication = @PactBrokerAuth(username = "admin", password = "password")
 // // Se necessário autenticação
@@ -139,9 +139,6 @@ class ProviderContractTest {
     when(checkoutRepositoryPort.save(any(Checkout.class)))
         .thenReturn(checkout);
   }
-
-
-
 
   @TestTemplate
   @ExtendWith(PactVerificationInvocationContextProvider.class)

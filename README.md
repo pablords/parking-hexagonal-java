@@ -264,26 +264,9 @@ Rodando testes de contratos:
 
 - Validamos se a comunicação entre consumidores e provedores da API está alinhada, garantindo que mudanças na API não quebrem a integração. O provider verifica os contratos esperados pelos consumers, utilizando pactos armazenados no Pact Broker.
 
-  - Antes é necessário publicar o contrato mockado do consumer:
-
-  - Suba o broker:
-```bash
-docker compose up pact-broker
-```
-  - Publique o contrato:
-
-```bash
-pact-broker publish src/test/java/com/pablords/parking/resources/contracts \
-  --consumer-app-version 1.0.0 \
-  --broker-base-url http://localhost:9292
-```
-
-  - Rode o teste:
-
 ```bash
   mvn test -Pcontract-tests
 ```
-
 
 Rodando testes de integração:
 

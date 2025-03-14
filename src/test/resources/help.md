@@ -28,7 +28,7 @@ mvn test -Pcomponent-test -Dcucumber.features=src/test/java/com/pablords/parking
 mvn test -Pintegration-test -Dcucumber.features=src/test/java/com/pablords/parking/component/CT001/features
 ```
 
-2. Rodando testes de contrato por tags
+2. Rodando testes de componente por tags
 
 | Comando | O que faz? |
 |---------|-----------|
@@ -49,3 +49,36 @@ mvn test -Pintegration-test -Dcucumber.features=src/test/java/com/pablords/parki
 | `mvn test -Pintegration-test -Dcucumber.filter.tags="@checkin and @fail"` | Executa cenários com `@checkin` E `@fail`. |
 | `mvn test -Pintegration-test -Dcucumber.filter.tags="not @ignore"` | Executa todos os cenários, exceto os que têm `@ignore`. |
 | `mvn test -Pintegration-test -Dcucumber.filter.tags="(@checkin or @checkout) and not @ignore"` | Executa `@checkin` OU `@checkout`, mas exclui `@ignore`. |
+
+
+4. Rodando testes de contratos com pact-broker:
+
+
+- Antes é necessário publicar o contrato mockado do consumer:
+
+- Suba o broker:
+```bash
+docker compose up pact-broker
+```
+  - Publique o contrato:
+
+```bash
+pact-broker publish src/test/java/com/pablords/parking/resources/contracts \
+  --consumer-app-version 1.0.0 \
+  --broker-base-url http://localhost:9292
+```
+
+- Comente a linha no arquivo `ProviderContractTest.java`
+```bash
+@PactFolder("src/test/resources/contracts")
+```
+
+- Remova os comentários da linha no arquivo `ProviderContractTest.java`
+```bash
+@PactBroker(url = "http://localhost:9292", authentication = @PactBrokerAuth(username = "admin", password = "password"))
+```
+
+- Rode o teste:
+```bash
+  mvn test -Pcontract-tests
+```

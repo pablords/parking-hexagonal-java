@@ -147,7 +147,7 @@
 			</build>
 		</profile>
 
-		<!-- Perfil para Testes de Contratos -->
+		<!-- Perfil para Testes de Componentes -->
 		<profile>
 			<id>component-test</id>
 			<build>
