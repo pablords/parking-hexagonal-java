@@ -13,6 +13,6 @@ config:
 
 logging:
   level:
-    root: INFO # Desliga todos os logs
+    root: OFF # Desliga todos os logs
 server:
   port: 8080
