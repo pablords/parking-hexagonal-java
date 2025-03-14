@@ -8,7 +8,7 @@
   "interactions": [
     {
       "description": "Realiza check-in de um carro",
-      "providerState": "Existe um carro estacionado com a placa ABC1234",
+      "providerState": "Existe um carro cadastrado com a placa ABC1234 e uma vaga disponível",
       "request": {
         "method": "POST",
         "path": "/api/v1/checkins",

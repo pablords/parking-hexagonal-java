@@ -8,7 +8,7 @@
   "interactions": [
     {
       "description": "Realiza check-out de um carro",
-      "providerState": "Existe um carro estacionado com a placa ABC1234",
+      "providerState": "Existe um carro está estacionado com a placa ABC1234 e pronto para checkout",
       "request": {
         "method": "POST",
         "path": "/api/v1/checkouts",
