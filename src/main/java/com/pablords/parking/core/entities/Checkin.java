@@ -1,68 +1,71 @@
 package com.pablords.parking.core.entities;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.UUID;
 
 public class Checkin {
-    private UUID id;
-    private Slot slot;
-    private Car car;
-    private LocalDateTime checkInTime;
-    private LocalDateTime checkOutTime;
+  private UUID id;
+  private Slot slot;
+  private Car car;
+  private LocalDateTime checkInTime;
+  private LocalDateTime checkOutTime;
 
-    public Checkin() {
-        this.checkInTime = LocalDateTime.now();
-    }
+  public Checkin() {
+    this.checkInTime = ZonedDateTime.now(ZoneOffset.UTC).toLocalDateTime();
 
-    public Checkin(Slot slot, Car car) {
-        this.slot = slot;
-        this.car = car;
-        this.checkInTime = LocalDateTime.now();
-    }
+  }
 
-    public LocalDateTime getCheckInTime() {
-        return checkInTime;
-    }
+  public Checkin(Slot slot, Car car) {
+    this.slot = slot;
+    this.car = car;
+    this.checkInTime = ZonedDateTime.now(ZoneOffset.UTC).toLocalDateTime();
+  }
 
-    public Slot getSlot() {
-        return slot;
-    }
+  public LocalDateTime getCheckInTime() {
+    return checkInTime;
+  }
 
-    public Car getCar() {
-        return car;
-    }
+  public Slot getSlot() {
+    return slot;
+  }
 
-    public UUID getId() {
-        return id;
-    }
+  public Car getCar() {
+    return car;
+  }
 
-    public void setId(UUID id) {
-        this.id = id;
-    }
+  public UUID getId() {
+    return id;
+  }
 
-    public void setCheckOutTime(LocalDateTime checkOutTime) {
-        this.checkOutTime = checkOutTime;
-    }
+  public void setId(UUID id) {
+    this.id = id;
+  }
 
-    public LocalDateTime getCheckOutTime() {
-        return this.checkOutTime;
-    }
+  public void setCheckOutTime(LocalDateTime checkOutTime) {
+    this.checkOutTime = checkOutTime;
+  }
 
-    public void setCheckInTime(LocalDateTime minusHours) {
-        this.checkInTime = minusHours;
-    }
+  public LocalDateTime getCheckOutTime() {
+    return this.checkOutTime;
+  }
 
-    public void setCar(Car car) {
-        this.car = car;
-    }
+  public void setCheckInTime(LocalDateTime minusHours) {
+    this.checkInTime = minusHours;
+  }
 
-    public void setSlot(Slot slot) {
-        this.slot = slot;
-    }
+  public void setCar(Car car) {
+    this.car = car;
+  }
 
-    @Override
-    public String toString() {
-        return "Checkin [car=" + car + ", checkInTime=" + checkInTime + ", checkOutTime=" + checkOutTime + ", id=" + id
-                + ", slot=" + slot.toString() + "]";
-    }
+  public void setSlot(Slot slot) {
+    this.slot = slot;
+  }
+
+  @Override
+  public String toString() {
+    return "Checkin [car=" + car + ", checkInTime=" + checkInTime + ", checkOutTime=" + checkOutTime + ", id=" + id
+        + ", slot=" + slot.toString() + "]";
+  }
 }
