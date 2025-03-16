@@ -1,0 +1,39 @@
+{
+  "provider": {
+    "name": "ParkingService"
+  },
+  "consumer": {
+    "name": "ParkingApp"
+  },
+  "interactions": [
+    {
+      "description": "Retorna erro ao tentar realizar check-in de um carro com placa inválida",
+      "providerState": "Tentativa de check-in com placa inválida",
+      "request": {
+        "method": "POST",
+        "path": "/api/v1/checkins",
+        "body": {
+          "brand": "Toyota",
+          "color": "Red",
+          "model": "Sedan",
+          "plate": "1234567890"
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "response": {
+        "status": 400,
+        "body": {
+          "error": "Bad Request",
+          "message": "Invalid plate",
+          "path": "/api/v1/checkins",
+          "timestamp": "2025-03-13T14:00:00"
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    }
+  ]
+}

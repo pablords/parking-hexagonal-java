@@ -6,6 +6,7 @@ import au.com.dius.pact.provider.junitsupport.State;
 import au.com.dius.pact.provider.junitsupport.loader.PactBroker;
 import au.com.dius.pact.provider.junitsupport.loader.PactBrokerAuth;
 import au.com.dius.pact.provider.junitsupport.loader.PactFolder;
+import jakarta.servlet.http.HttpServletRequest;
 import kotlin.reflect.jvm.internal.impl.util.Check;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -26,10 +27,12 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
 
+import com.pablords.parking.adapters.inbound.http.handlers.GlobalExceptionHandler;
 import com.pablords.parking.core.entities.Car;
 import com.pablords.parking.core.entities.Checkin;
 import com.pablords.parking.core.entities.Checkout;
 import com.pablords.parking.core.entities.Slot;
+import com.pablords.parking.core.exceptions.InvalidPlateException;
 import com.pablords.parking.core.ports.outbound.repositories.CarRepositoryPort;
 import com.pablords.parking.core.ports.outbound.repositories.CheckinRepositoryPort;
 import com.pablords.parking.core.ports.outbound.repositories.CheckoutRepositoryPort;
@@ -62,6 +65,9 @@ class ProviderContractTest {
   @MockBean
   private SlotRepositoryPort slotRepositoryPort; // Mock do repositório
 
+  @MockBean
+  private GlobalExceptionHandler exceptionHandler;
+
   Checkin checkin;
   Checkout checkout;
   Slot slot;
@@ -79,7 +85,7 @@ class ProviderContractTest {
 
   }
 
-  @State("Existe um carro cadastrado com a placa ABC1234")
+  @State("Não existe um carro cadastrado com a placa ABC1234")
   public void setupCar() {
     System.out.println("Configurando o estado: Carro cadastrado no sistema");
     when(carRepositoryPort.findByPlate("ABC1234"))
@@ -88,7 +94,7 @@ class ProviderContractTest {
         .thenReturn(car);
   }
 
-  @State("Existe um carro cadastrado com a placa ABC1234 e uma vaga disponível")
+  @State("Existe uma vaga disponível")
   public void setupCheckin() {
     System.out.println("Configurando o estado: Carro cadastrado com a placa ABC1234 e uma vaga disponível");
     when(carRepositoryPort.findByPlate("ABC1234"))
@@ -112,11 +118,10 @@ class ProviderContractTest {
     checkout.setParkingFee(2.5);
     when(checkoutRepositoryPort.findByCheckinId(UUID.fromString("f5d4b3b4-1b4b-4b4b-8b4b-4b4b4b4b4b4b")))
         .thenReturn(Optional.of(checkout));
-    when(checkoutRepositoryPort.save(any(Checkout.class)))
-        .thenReturn(checkout);
+
   }
 
-  @State("Existe um carro está estacionado com a placa ABC1234 e pronto para checkout")
+  @State("Existe um carro estacionado com a placa ABC1234 e pronto para checkout")
   public void setupCheckout() {
     System.out.println("Configurando o estado: Carro está estacionado com a placa ABC1234 e pronto para checkout");
     when(carRepositoryPort.findByPlate("ABC1234"))
@@ -138,6 +143,33 @@ class ProviderContractTest {
         .thenReturn(Optional.of(checkout));
     when(checkoutRepositoryPort.save(any(Checkout.class)))
         .thenReturn(checkout);
+  }
+
+  @State("Tentativa de check-in com placa vazia")
+  public void setupEmptyPlate() {
+    System.out.println("Configurando o estado: Tentativa de check-in com placa vazia");
+    Instant fixedInstant = Instant.parse("2025-03-13T14:00:00Z");
+    ZoneId zoneId = ZoneId.of("UTC");
+    Clock fixedClock = Clock.fixed(fixedInstant, zoneId);
+    when(exceptionHandler.handleValidationExceptions(any(), any()))
+        .thenAnswer(invocation -> {
+          return new GlobalExceptionHandler(fixedClock).handleValidationExceptions(invocation.getArgument(0), invocation.getArgument(1));
+        });
+  }
+
+  @State("Tentativa de check-in com placa inválida")
+  public void setupInvalidPlate() {
+    System.out.println("Configurando o estado: Tentativa de check-in com placa inválida");
+    // Definir um horário fixo para check-in e check-out
+    Instant fixedInstant = Instant.parse("2025-03-13T14:00:00Z");
+    ZoneId zoneId = ZoneId.of("UTC");
+    Clock fixedClock = Clock.fixed(fixedInstant, zoneId);
+    when(exceptionHandler.handleRuntimeException(any(InvalidPlateException.class), any(HttpServletRequest.class)))
+        .thenAnswer(invocation -> {
+          HttpServletRequest request = invocation.getArgument(1);
+          return new GlobalExceptionHandler(fixedClock).handleRuntimeException(invocation.getArgument(0),
+              request);
+        });
   }
 
   @TestTemplate

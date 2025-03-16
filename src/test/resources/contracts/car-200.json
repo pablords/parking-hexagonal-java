@@ -8,7 +8,7 @@
   "interactions": [
     {
       "description": "Buscar carro pela Placa",
-      "providerState": "Existe um carro cadastrado com a placa ABC1234",
+      "providerState": "Não existe um carro cadastrado com a placa ABC1234",
       "request": {
         "method": "GET",
         "path": "/api/v1/cars/ABC1234",
