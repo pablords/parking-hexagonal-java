@@ -16,6 +16,7 @@ public class CarMapper {
 
     public static Car toEntity(CarRequestDTO createCarDTO) {
         log.info("Mapeando CarRequestDTO para Car: {}", createCarDTO);
+        new Plate(createCarDTO.getPlate());
         modelMapper.typeMap(CarRequestDTO.class, Car.class)
                 .addMappings(mapper -> mapper.skip(Car::setPlate)) // Skip default mapping for Plate
                 .setPostConverter(context -> {

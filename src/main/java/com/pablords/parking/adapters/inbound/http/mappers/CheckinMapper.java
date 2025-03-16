@@ -16,6 +16,7 @@ public class CheckinMapper {
 
     public static Car toEntity(CheckinRequestDTO checkinRequestDTO) {
         log.info("Mapeando CheckinRequestDTO para Car: {}", checkinRequestDTO);
+        new Plate(checkinRequestDTO.getPlate());
         modelMapper.typeMap(CheckinRequestDTO.class, Car.class)
                 .addMappings(mapper -> mapper.skip(Car::setPlate)) // Skip default mapping for Plate
                 .setPostConverter(context -> {
