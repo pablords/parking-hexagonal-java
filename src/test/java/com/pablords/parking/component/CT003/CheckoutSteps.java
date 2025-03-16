@@ -1,6 +1,5 @@
 package com.pablords.parking.component.CT003;
 
-import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -89,7 +88,7 @@ public class CheckoutSteps {
   }
 
   @Quando("o cliente envia uma solicitação de checkout com a placa {string}")
-  public void a_car_with_payload(String jsonPath) throws Exception {
+  public void aCarWithPayload(String jsonPath) throws Exception {
     var jsonFileContent = new String(Files.readAllBytes(Paths.get(jsonPath)));
     mockMvc.perform(post(PARKING_API_URL_CHECKOUTS)
         .contentType(MediaType.APPLICATION_JSON)
@@ -101,7 +100,7 @@ public class CheckoutSteps {
   }
 
   @Quando("o cliente envia uma solicitação de checkout inválida com {string}")
-  public void the_client_sends_a_check_in_invalid_request_with(String jsonPath) throws Exception {
+  public void theClientSendsACheckoutInvalidRequestWith(String jsonPath) throws Exception {
     var jsonFileContent = new String(Files.readAllBytes(Paths.get(jsonPath)));
     mockMvc.perform(post(PARKING_API_URL_CHECKOUTS)
         .contentType(MediaType.APPLICATION_JSON)
@@ -113,7 +112,7 @@ public class CheckoutSteps {
   }
 
   @Entao("o status da resposta do checkout deve ser {int}")
-  public void the_response_status_should_be(int status) throws Exception {
+  public void theResponseStatusShouldBe(int status) throws Exception {
     CheckoutResponseDTO checkoutResponseDTO = objectMapper.readValue(responseContent, CheckoutResponseDTO.class);
     switch (HttpStatus.valueOf(status)) {
       case CREATED:
@@ -136,13 +135,13 @@ public class CheckoutSteps {
   }
 
   @E("o slot com id {int} deve ser liberado")
-  public void o_slot_com_id_deve_ser_liberado(Integer slotId) {
+  public void theSlotWithIdShouldBeReleased(Integer slotId) {
     SlotModel slot = slots.stream().filter(s -> s.getId() == slotId.longValue()).findFirst().get();
     assertTrue(!slot.isOccupied(), "O slot não foi liberado.");
   }
 
   @E("a resposta deve conter um timestamp de checkout")
-  public void the_response_should_contain_a_check_in_timestamp() throws Exception {
+  public void theResponseShouldContainACheckoutTimestamp() throws Exception {
     CheckoutResponseDTO checkoutResponseDTO = objectMapper.readValue(responseContent, CheckoutResponseDTO.class);
     assertNotNull(checkoutResponseDTO.getCheckOutTime(), "Checkout timestamp não foi retornado na resposta.");
   }

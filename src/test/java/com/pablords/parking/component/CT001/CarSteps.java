@@ -20,7 +20,6 @@ import com.pablords.parking.adapters.inbound.http.dtos.CarResponseDTO;
 import com.pablords.parking.adapters.outbound.database.jpa.models.CarModel;
 import com.pablords.parking.adapters.outbound.database.jpa.repositories.JpaCarRepository;
 
-
 import io.cucumber.java.Before;
 import io.cucumber.java.pt.Dado;
 import io.cucumber.java.pt.Entao;
@@ -47,12 +46,12 @@ public class CarSteps {
     }
 
     @Dado("que estou no endpoint da API {string}")
-    public void that_i_am_in_the_api_endpoint(String endpoint) {
+    public void thatIAmInTheApiEndpoint(String endpoint) {
         assertEquals(endpoint, PARKING_API_URL_CARS);
     }
 
     @Quando("eu crio um carro com os seguintes detalhes: {string}")
-    public void i_create_a_car_with_the_following_details(String jsonPath) throws Exception {
+    public void iCreateACarWithTheFollowingDetails(String jsonPath) throws Exception {
         var jsonFileContent = new String(Files.readAllBytes(Paths.get(jsonPath)));
 
         mockMvc.perform(post(PARKING_API_URL_CARS)
@@ -65,7 +64,7 @@ public class CarSteps {
     }
 
     @Entao("o status da resposta do carro deve ser {int}")
-    public void the_response_status_should_be(int status) throws Exception {
+    public void theResponseStatusShouldBe(int status) throws Exception {
         CarResponseDTO carResponseDTO = objectMapper.readValue(responseContent, CarResponseDTO.class);
         switch (HttpStatus.valueOf(status)) {
             case CREATED:
