@@ -1,5 +1,6 @@
 package com.pablords.parking.adapters.inbound.http.handlers;
 
+import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,47 +28,63 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class GlobalExceptionHandler {
 
-    private static final Map<Class<? extends RuntimeException>, HttpStatus> EXCEPTION_STATUS_MAP = new HashMap<>();
-    private static final String DEFAULT_MESSAGE_SERVER_ERROR = "Contact Admin Server";
+  private static final Map<Class<? extends RuntimeException>, HttpStatus> EXCEPTION_STATUS_MAP = new HashMap<>();
+  private static final String DEFAULT_MESSAGE_SERVER_ERROR = "Contact Admin Server";
 
-    static {
-        EXCEPTION_STATUS_MAP.put(CarNotFoundException.class, HttpStatus.NOT_FOUND);
-        EXCEPTION_STATUS_MAP.put(CheckinNotFoundException.class, HttpStatus.NOT_FOUND);
-        EXCEPTION_STATUS_MAP.put(CheckinTimeMissingException.class, HttpStatus.BAD_REQUEST);
-        EXCEPTION_STATUS_MAP.put(ExistPlateException.class, HttpStatus.CONFLICT);
-        EXCEPTION_STATUS_MAP.put(InvalidCheckinException.class, HttpStatus.BAD_REQUEST);
-        EXCEPTION_STATUS_MAP.put(InvalidPlateException.class, HttpStatus.BAD_REQUEST);
-        EXCEPTION_STATUS_MAP.put(ParkingFullException.class, HttpStatus.SERVICE_UNAVAILABLE);
-        EXCEPTION_STATUS_MAP.put(SlotOccupiedException.class, HttpStatus.CONFLICT);
-    }
+  private final Clock clock;
 
-    @ExceptionHandler({ RuntimeException.class })
-    public ResponseEntity<ApiError> handleRuntimeException(RuntimeException ex,
-            HttpServletRequest request) {
-        log.error(ex.getMessage(), ex);
+  public GlobalExceptionHandler() {
+    this(Clock.systemDefaultZone());
+  }
 
-        HttpStatus status = EXCEPTION_STATUS_MAP.getOrDefault(ex.getClass(),
-                HttpStatus.INTERNAL_SERVER_ERROR);
+  public GlobalExceptionHandler(Clock clock) {
+    this.clock = clock;
+  }
 
-        var error = ApiError.builder()
-                .timestamp(LocalDateTime.now())
-                .status(status.value())
-                .error(status.getReasonPhrase())
-                .message(HttpStatus.valueOf(status.value()).value() == 500 ? DEFAULT_MESSAGE_SERVER_ERROR
-                        : ex.getMessage())
-                .path(request.getRequestURI())
-                .build();
-        return ResponseEntity.status(status.value()).body(error);
-    }
+  static {
+    EXCEPTION_STATUS_MAP.put(CarNotFoundException.class, HttpStatus.NOT_FOUND);
+    EXCEPTION_STATUS_MAP.put(CheckinNotFoundException.class, HttpStatus.NOT_FOUND);
+    EXCEPTION_STATUS_MAP.put(CheckinTimeMissingException.class, HttpStatus.BAD_REQUEST);
+    EXCEPTION_STATUS_MAP.put(ExistPlateException.class, HttpStatus.CONFLICT);
+    EXCEPTION_STATUS_MAP.put(InvalidCheckinException.class, HttpStatus.BAD_REQUEST);
+    EXCEPTION_STATUS_MAP.put(InvalidPlateException.class, HttpStatus.BAD_REQUEST);
+    EXCEPTION_STATUS_MAP.put(ParkingFullException.class, HttpStatus.SERVICE_UNAVAILABLE);
+    EXCEPTION_STATUS_MAP.put(SlotOccupiedException.class, HttpStatus.CONFLICT);
+  }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
-    public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new HashMap<>();
-        ex.getBindingResult().getFieldErrors().forEach(error -> {
-            errors.put(error.getField(), error.getDefaultMessage());
-        });
-        return errors;
-    }
+  @ExceptionHandler({ RuntimeException.class })
+  public ResponseEntity<ApiError> handleRuntimeException(RuntimeException ex,
+      HttpServletRequest request) {
+    log.error(ex.getMessage(), ex);
+
+    HttpStatus status = EXCEPTION_STATUS_MAP.getOrDefault(ex.getClass(),
+        HttpStatus.INTERNAL_SERVER_ERROR);
+
+    var error = ApiError.builder()
+        .timestamp(LocalDateTime.now(clock))
+        .error(status.getReasonPhrase())
+        .message(HttpStatus.valueOf(status.value()).value() == 500 ? DEFAULT_MESSAGE_SERVER_ERROR
+            : ex.getMessage())
+        .path(request.getRequestURI())
+        .build();
+    return ResponseEntity.status(status.value()).body(error);
+  }
+
+  @ExceptionHandler(MethodArgumentNotValidException.class)
+  public ResponseEntity<ApiError> handleValidationExceptions(MethodArgumentNotValidException ex,
+      HttpServletRequest request) {
+    Map<String, String> errors = new HashMap<>();
+    ex.getBindingResult().getFieldErrors().forEach(error -> {
+      errors.put(error.getField(), error.getDefaultMessage());
+    });
+    var error = ApiError.builder()
+        .timestamp(LocalDateTime.now(clock))
+        .error(HttpStatus.UNPROCESSABLE_ENTITY.getReasonPhrase())
+        .errors(errors)
+        .message("Validation error")
+        .path(request.getRequestURI())
+        .build();
+    return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(error);
+  }
 
 }
