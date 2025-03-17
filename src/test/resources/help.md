@@ -63,7 +63,7 @@ docker compose up pact-broker
   - Publique o contrato:
 
 ```bash
-pact-broker publish src/test/java/com/pablords/parking/resources/contracts \
+pact-broker publish src/test/resources/contracts \
   --consumer-app-version 1.0.0 \
   --broker-base-url http://localhost:9292
 ```
