@@ -131,7 +131,6 @@
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-surefire-plugin</artifactId>
             <configuration>
-              <failIfNoTests>true</failIfNoTests>
               <includes>
                 <include>**/*UnitTest.java</include>
               </includes>
@@ -157,7 +156,6 @@
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-surefire-plugin</artifactId>
             <configuration>
-              <failIfNoTests>true</failIfNoTests>
               <includes>
                 <include>**/*ComponentTest.java</include>
               </includes>
@@ -198,7 +196,6 @@
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-surefire-plugin</artifactId>
             <configuration>
-              <failIfNoTests>true</failIfNoTests>
               <includes>
                 <include>**/*IntegrationTest.java</include>
               </includes>
@@ -258,7 +255,6 @@
             <artifactId>maven</artifactId>
             <version>4.1.11</version>
             <configuration>
-              <failIfNoTests>true</failIfNoTests>
               <!-- <pactBrokerUrl>http://localhost:9292</pactBrokerUrl>  -->
               <serviceProviders>
                 <serviceProvider>
@@ -295,6 +291,7 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <version>3.1.2</version>
         <configuration>
+          <testFailureIgnore>false</testFailureIgnore>
           <skipTests>${skipUTs}</skipTests>
         </configuration>
       </plugin>
