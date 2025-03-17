@@ -7,7 +7,6 @@ import au.com.dius.pact.provider.junitsupport.loader.PactBroker;
 import au.com.dius.pact.provider.junitsupport.loader.PactBrokerAuth;
 import au.com.dius.pact.provider.junitsupport.loader.PactFolder;
 import jakarta.servlet.http.HttpServletRequest;
-import kotlin.reflect.jvm.internal.impl.util.Check;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -72,6 +71,8 @@ class ProviderContractTest {
   Checkout checkout;
   Slot slot;
   Car car;
+  Clock checkoutFixedClock, exceptionFixedClock;
+  ZoneId zoneId = ZoneId.of("UTC");
 
   @BeforeEach
   void setup() {
@@ -83,6 +84,12 @@ class ProviderContractTest {
     checkin.setCheckInTime(LocalDateTime.parse("2025-03-13T13:00:00"));
     checkin.setCheckOutTime(LocalDateTime.parse("2025-03-13T14:00:00"));
 
+    // Definir um horário fixo para check-in e check-out
+    Instant fixedCheckout = Instant.parse("2025-03-13T14:00:00Z");
+    checkoutFixedClock = Clock.fixed(fixedCheckout, zoneId);
+
+    Instant fixedException = Instant.parse("2025-03-13T14:00:00Z");
+    exceptionFixedClock = Clock.fixed(fixedException, zoneId);
   }
 
   @State("Não existe um carro cadastrado com a placa ABC1234")
@@ -109,12 +116,8 @@ class ProviderContractTest {
         .thenReturn(Optional.of(slot));
     when(slotRepositoryPort.save(slot))
         .thenReturn(slot);
-    // Definir um horário fixo para check-in e check-out
-    Instant fixedInstant = Instant.parse("2025-03-13T14:00:00Z");
-    ZoneId zoneId = ZoneId.of("UTC");
-    Clock fixedClock = Clock.fixed(fixedInstant, zoneId);
 
-    checkout = new Checkout(checkin, fixedClock);
+    checkout = new Checkout(checkin, checkoutFixedClock);
     checkout.setParkingFee(2.5);
     when(checkoutRepositoryPort.findByCheckinId(UUID.fromString("f5d4b3b4-1b4b-4b4b-8b4b-4b4b4b4b4b4b")))
         .thenReturn(Optional.of(checkout));
@@ -132,12 +135,8 @@ class ProviderContractTest {
         .thenReturn(Optional.of(checkin));
     when(checkinRepositoryPort.save(any(Checkin.class)))
         .thenReturn(checkin);
-    // Definir um horário fixo para check-in e check-out
-    Instant fixedInstant = Instant.parse("2025-03-13T14:00:00Z");
-    ZoneId zoneId = ZoneId.of("UTC");
-    Clock fixedClock = Clock.fixed(fixedInstant, zoneId);
 
-    checkout = new Checkout(checkin, fixedClock);
+    checkout = new Checkout(checkin, checkoutFixedClock);
     checkout.setParkingFee(2.5);
     when(checkoutRepositoryPort.findByCheckinId(UUID.fromString("f5d4b3b4-1b4b-4b4b-8b4b-4b4b4b4b4b4b")))
         .thenReturn(Optional.of(checkout));
@@ -148,26 +147,40 @@ class ProviderContractTest {
   @State("Tentativa de check-in com placa vazia")
   public void setupEmptyPlate() {
     System.out.println("Configurando o estado: Tentativa de check-in com placa vazia");
-    Instant fixedInstant = Instant.parse("2025-03-13T14:00:00Z");
-    ZoneId zoneId = ZoneId.of("UTC");
-    Clock fixedClock = Clock.fixed(fixedInstant, zoneId);
     when(exceptionHandler.handleValidationExceptions(any(), any()))
         .thenAnswer(invocation -> {
-          return new GlobalExceptionHandler(fixedClock).handleValidationExceptions(invocation.getArgument(0), invocation.getArgument(1));
+          return new GlobalExceptionHandler(exceptionFixedClock).handleValidationExceptions(invocation.getArgument(0),
+              invocation.getArgument(1));
         });
   }
 
   @State("Tentativa de check-in com placa inválida")
   public void setupInvalidPlate() {
     System.out.println("Configurando o estado: Tentativa de check-in com placa inválida");
-    // Definir um horário fixo para check-in e check-out
-    Instant fixedInstant = Instant.parse("2025-03-13T14:00:00Z");
-    ZoneId zoneId = ZoneId.of("UTC");
-    Clock fixedClock = Clock.fixed(fixedInstant, zoneId);
     when(exceptionHandler.handleRuntimeException(any(InvalidPlateException.class), any(HttpServletRequest.class)))
         .thenAnswer(invocation -> {
           HttpServletRequest request = invocation.getArgument(1);
-          return new GlobalExceptionHandler(fixedClock).handleRuntimeException(invocation.getArgument(0),
+          return new GlobalExceptionHandler(exceptionFixedClock).handleRuntimeException(invocation.getArgument(0),
+              request);
+        });
+  }
+
+  @State("Tentativa de check-out sem data de check-in")
+  public void setupCheckoutWithoutCheckin() {
+    checkin.setCheckInTime(null);
+    when(carRepositoryPort.findByPlate("ABC1234"))
+        .thenReturn(Optional.of(car));
+    when(carRepositoryPort.save(any(Car.class)))
+        .thenReturn(car);
+    when(checkinRepositoryPort.findByPlate("ABC1234"))
+        .thenReturn(Optional.of(checkin));
+    when(checkinRepositoryPort.save(any(Checkin.class)))
+        .thenReturn(checkin);
+    System.out.println("Configurando o estado: Tentativa de check-out sem check-in");
+    when(exceptionHandler.handleRuntimeException(any(RuntimeException.class), any(HttpServletRequest.class)))
+        .thenAnswer(invocation -> {
+          HttpServletRequest request = invocation.getArgument(1);
+          return new GlobalExceptionHandler(exceptionFixedClock).handleRuntimeException(invocation.getArgument(0),
               request);
         });
   }

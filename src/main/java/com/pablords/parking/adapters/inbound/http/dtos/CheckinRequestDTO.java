@@ -10,13 +10,13 @@ public class CheckinRequestDTO {
     @NotBlank(message = "Plate cannot be empty")
     @JsonProperty
     String plate;
-    @NotBlank
+    @NotBlank(message = "Brand cannot be empty")
     @JsonProperty
     String brand;
-    @NotBlank
+    @NotBlank(message = "Color cannot be empty")
     @JsonProperty
     String color;
-    @NotBlank
+    @NotBlank(message = "Model cannot be empty")
     @JsonProperty
     String model;
 }

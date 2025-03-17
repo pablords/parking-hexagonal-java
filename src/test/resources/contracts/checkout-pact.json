@@ -37,6 +37,32 @@
           "Content-Type": "application/json"
         }
       }
+    },
+    {
+      "description": "Retorna erro ao tentar realizar checkout de um carro sem check-in",
+      "providerState": "Tentativa de check-out sem data de check-in",
+      "request": {
+        "method": "POST",
+        "path": "/api/v1/checkouts",
+        "body": {
+          "plate": "ABC1234"
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "response": {
+        "status": 400,
+        "body": {
+          "error": "Bad Request",
+          "message": "Checkin time is missing",
+          "path": "/api/v1/checkouts",
+          "timestamp": "2025-03-13T14:00:00"
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
     }
   ]
 }
