@@ -72,7 +72,7 @@ public class CheckoutSteps {
   }
 
   @Quando("o cliente envia uma solicitação de checkout com a placa {string}")
-  public void a_car_with_payload(String jsonPath) throws Exception {
+  public void aCarWithPayload(String jsonPath) throws Exception {
     var jsonFileContent = new String(Files.readAllBytes(Paths.get(jsonPath)));
     mockMvc.perform(post(PARKING_API_URL_CHECKOUTS)
         .contentType(MediaType.APPLICATION_JSON)
@@ -84,7 +84,7 @@ public class CheckoutSteps {
   }
 
   @Quando("o cliente envia uma solicitação de checkout inválida com {string}")
-  public void the_client_sends_a_check_in_invalid_request_with(String jsonPath) throws Exception {
+  public void theClientSendsACheckInInvalidRequestWith(String jsonPath) throws Exception {
 
     var jsonFileContent = new String(Files.readAllBytes(Paths.get(jsonPath)));
     mockMvc.perform(post(PARKING_API_URL_CHECKOUTS)
@@ -121,7 +121,7 @@ public class CheckoutSteps {
   }
 
   @E("o slot com id {int} deve ser liberado")
-  public void o_slot_com_id_deve_ser_liberado(Integer slotId) {
+  public void theSlotWithIdMustBeReleased(Integer slotId) {
     var isOccupied = jdbcTemplate.queryForObject("SELECT occupied FROM slots WHERE id = ?", new Object[] { slotId },
         Boolean.class);
     assertTrue(!isOccupied, "O slot não foi liberado.");

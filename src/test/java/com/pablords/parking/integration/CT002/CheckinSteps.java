@@ -81,8 +81,8 @@ public class CheckinSteps {
     }
 
     @Dado("que o carro com placa {string} está estacionado")
-    public void the_car_with_plate_is_checked_in(String plate) throws Exception {
-        var jsonPath = String.join("/", featuresRequestPath, "create-car-success.json");
+    public void theCarWithPlateIsCheckedIn(String plate) throws Exception {
+        var jsonPath = String.join("/", featuresRequestPath, "create-car-201.json");
 
         var jsonFileContent = new String(Files.readAllBytes(Paths.get(jsonPath)));
         var carToCreate = objectMapper.readValue(jsonFileContent, CarRequestDTO.class);
@@ -93,7 +93,7 @@ public class CheckinSteps {
     }
 
     @Quando("o cliente envia uma solicitação de check-in com {string}")
-    public void a_car_with_payload(String jsonPath) throws Exception {
+    public void aCarWithPayload(String jsonPath) throws Exception {
         var jsonFileContent = new String(Files.readAllBytes(Paths.get(jsonPath)));
         mockMvc.perform(post(PARKING_API_URL_CHECKINS)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -105,7 +105,7 @@ public class CheckinSteps {
     }
 
     @Quando("o cliente envia uma solicitação de check-in inválida com {string}")
-    public void the_client_sends_a_check_in_invalid_request_with(String jsonPath) throws Exception {
+    public void theClientSendsACheckInInvalidRequestWith(String jsonPath) throws Exception {
 
         var jsonFileContent = new String(Files.readAllBytes(Paths.get(jsonPath)));
         mockMvc.perform(post(PARKING_API_URL_CHECKINS)
@@ -146,7 +146,7 @@ public class CheckinSteps {
     }
 
     @E("a resposta deve conter um timestamp de check-in")
-    public void the_response_should_contain_a_check_in_timestamp() throws Exception {
+    public void theResponseShouldContainACheckInTimestamp() throws Exception {
         CheckinResponseDTO checkinResponseDTO = objectMapper.readValue(responseContent, CheckinResponseDTO.class);
         assertNotNull(checkinResponseDTO.getCheckInTime());
     }
