@@ -14,7 +14,10 @@ import static org.mockito.Mockito.when;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -41,9 +44,9 @@ import com.pablords.parking.core.valueobjects.Plate;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @Provider("ParkingService")
 // Caminho para os contratos "mockados"
-@PactFolder("src/test/resources/contracts")
+@PactFolder("consumer-api/pacts")
 // @PactBroker(url = "http://localhost:9292", // URL do Pact Broker
-// authentication = @PactBrokerAuth(username = "admin", password = "password")
+//     authentication = @PactBrokerAuth(username = "admin", password = "password")
 // // Se necessário autenticação
 // )
 @ActiveProfiles("contract-test")
@@ -71,30 +74,43 @@ class ProviderContractTest {
   Checkout checkout;
   Slot slot;
   Car car;
-  Clock checkoutFixedClock, exceptionFixedClock;
+  Clock checkoutFixedClock, exceptionFixedClock, checkinFixedClock;
   ZoneId zoneId = ZoneId.of("UTC");
 
   @BeforeEach
   void setup() {
+
     car = new Car(new Plate("ABC1234"), "Toyota", "Red", "Sedan");
     car.setId(UUID.fromString("f5d4b3b4-1b4b-4b4b-8b4b-4b4b4b4b4b4b"));
     slot = new Slot(1l, false);
-    checkin = new Checkin(slot, car);
+
+    checkinFixedClock = Clock.fixed(
+        LocalDateTime.parse("2015-01-01T14:00:00").atZone(zoneId).toInstant(),
+        zoneId);
+    checkin = new Checkin(slot, car, checkinFixedClock);
     checkin.setId(UUID.fromString("f5d4b3b4-1b4b-4b4b-8b4b-4b4b4b4b4b4b"));
-    checkin.setCheckInTime(LocalDateTime.parse("2025-03-13T13:00:00"));
-    checkin.setCheckOutTime(LocalDateTime.parse("2025-03-13T14:00:00"));
+
+    var fixedCheckin = Instant.parse("2025-03-13T14:00:00Z")
+        .truncatedTo(ChronoUnit.SECONDS);
+    checkin.setCheckInTime(LocalDateTime.ofInstant(fixedCheckin, zoneId));
 
     // Definir um horário fixo para check-in e check-out
-    Instant fixedCheckout = Instant.parse("2025-03-13T14:00:00Z");
-    checkoutFixedClock = Clock.fixed(fixedCheckout, zoneId);
+    checkoutFixedClock = Clock.fixed(
+        LocalDateTime.parse("2015-01-01T15:00:00").atZone(zoneId).toInstant(),
+        zoneId);
 
-    Instant fixedException = Instant.parse("2025-03-13T14:00:00Z");
-    exceptionFixedClock = Clock.fixed(fixedException, zoneId);
+    var fixedCheckout = Instant.parse("2025-03-13T15:00:00Z")
+        .truncatedTo(ChronoUnit.SECONDS);
+    checkin.setCheckOutTime(LocalDateTime.ofInstant(fixedCheckout, zoneId));
+
+    exceptionFixedClock = Clock.fixed(
+        LocalDateTime.parse("2015-01-01T13:00:00").atZone(zoneId).toInstant(),
+        zoneId);
   }
 
-  @State("Não existe um carro cadastrado com a placa ABC1234")
+  @State("Existe um carro cadastrado com a placa ABC1234")
   public void setupCar() {
-    System.out.println("Configurando o estado: Carro cadastrado no sistema");
+    System.out.println("Configurando o estado: Carro cadastrado nÏo sistema");
     when(carRepositoryPort.findByPlate("ABC1234"))
         .thenReturn(Optional.of(car));
     when(carRepositoryPort.save(any(Car.class)))

@@ -53,24 +53,13 @@ mvn test -Pintegration-test -Dcucumber.features=src/test/java/com/pablords/parki
 
 4. Rodando testes de contratos com pact-broker:
 
+- Antes é necessário publicar o contrato do consumer:
 
-- Antes é necessário publicar o contrato mockado do consumer:
-
-- Suba o broker:
-```bash
-docker compose up pact-broker
-```
-  - Publique o contrato:
-
-```bash
-pact-broker publish src/test/resources/contracts \
-  --consumer-app-version 1.0.0 \
-  --broker-base-url http://localhost:9292
-```
+Vá até `consumer-api` na raiz do repositório e leia as instruções
 
 - Comente a linha no arquivo `ProviderContractTest.java`
 ```bash
-@PactFolder("src/test/resources/contracts")
+@PactFolder("consumer-api/pacts")
 ```
 
 - Remova os comentários da linha no arquivo `ProviderContractTest.java`
