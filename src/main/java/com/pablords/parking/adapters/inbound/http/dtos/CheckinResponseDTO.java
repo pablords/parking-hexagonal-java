@@ -1,6 +1,7 @@
 package com.pablords.parking.adapters.inbound.http.dtos;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -13,10 +14,10 @@ import lombok.Data;
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CheckinResponseDTO {
-    @JsonProperty
-    private UUID id;
-    @JsonProperty
-    private Slot slot;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private LocalDateTime checkInTime;
+  @JsonProperty
+  private UUID id;
+  @JsonProperty
+  private Slot slot;
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "UTC")
+  private LocalDateTime checkInTime;
 }

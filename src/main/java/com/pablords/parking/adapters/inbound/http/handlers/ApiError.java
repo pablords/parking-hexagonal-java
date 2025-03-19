@@ -24,7 +24,7 @@ public class ApiError {
   private String error;
   private String message;
   private String path;
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "UTC")
   private LocalDateTime timestamp;
   private Map<String, String> errors;
 }
