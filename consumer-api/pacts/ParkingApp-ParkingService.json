@@ -1,0 +1,261 @@
+{
+  "consumer": {
+    "name": "ParkingApp"
+  },
+  "interactions": [
+    {
+      "description": "Realiza check-in de um carro",
+      "providerState": "Existe uma vaga disponível",
+      "request": {
+        "body": {
+          "brand": "Toyota",
+          "color": "Red",
+          "model": "Sedan",
+          "plate": "ABC1234"
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "method": "POST",
+        "path": "/api/v1/checkins"
+      },
+      "response": {
+        "body": {
+          "checkInTime": "2025-03-13T13:00:00.000Z",
+          "id": "ce118b6e-d8e1-11e7-9296-cec278b6b50a",
+          "slot": {
+            "id": 1,
+            "occupied": true
+          }
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "$.body": {
+            "match": "type"
+          },
+          "$.body.checkInTime": {
+            "match": "regex",
+            "regex": "^\\d{4}-[01]\\d-[0-3]\\dT[0-2]\\d:[0-5]\\d:[0-5]\\d(?:\\.\\d{3})?Z$"
+          },
+          "$.body.id": {
+            "match": "regex",
+            "regex": "^[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}$"
+          },
+          "$.body.slot.id": {
+            "match": "type"
+          }
+        },
+        "status": 201
+      }
+    },
+    {
+      "description": "Retorna erro ao tentar realizar check-in de um carro com placa inválida",
+      "providerState": "Tentativa de check-in com placa inválida",
+      "request": {
+        "body": {
+          "brand": "Toyota",
+          "color": "Red",
+          "model": "Sedan",
+          "plate": "1234567890"
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "method": "POST",
+        "path": "/api/v1/checkins"
+      },
+      "response": {
+        "body": {
+          "error": "Bad Request",
+          "message": "Invalid plate"
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "$.body": {
+            "match": "type"
+          }
+        },
+        "status": 400
+      }
+    },
+    {
+      "description": "Retorna erro ao tentar realizar check-in de um carro com placa vazia",
+      "providerState": "Tentativa de check-in com placa vazia",
+      "request": {
+        "body": {
+          "brand": "Toyota",
+          "color": "Red",
+          "model": "Sedan",
+          "plate": ""
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "method": "POST",
+        "path": "/api/v1/checkins"
+      },
+      "response": {
+        "body": {
+          "error": "Unprocessable Entity",
+          "errors": {
+            "plate": "Plate cannot be empty"
+          },
+          "message": "Validation error"
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "$.body": {
+            "match": "type"
+          }
+        },
+        "status": 422
+      }
+    },
+    {
+      "description": "Um pedido de checkout sem check-in",
+      "providerState": "Tentativa de check-out sem data de check-in",
+      "request": {
+        "body": {
+          "plate": "ABC1234"
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "method": "POST",
+        "path": "/api/v1/checkouts"
+      },
+      "response": {
+        "body": {
+          "error": "Bad Request",
+          "message": "Checkin time is missing",
+          "path": "/api/v1/checkouts",
+          "timestamp": "2025-03-13T15:00:00.000Z"
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "$.body.timestamp": {
+            "match": "regex",
+            "regex": "^\\d{4}-[01]\\d-[0-3]\\dT[0-2]\\d:[0-5]\\d:[0-5]\\d(?:\\.\\d{3})?Z$"
+          }
+        },
+        "status": 400
+      }
+    },
+    {
+      "description": "Um pedido de checkout válido",
+      "providerState": "Existe um carro estacionado com a placa ABC1234 e pronto para checkout",
+      "request": {
+        "body": {
+          "plate": "ABC1234"
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "method": "POST",
+        "path": "/api/v1/checkouts"
+      },
+      "response": {
+        "body": {
+          "checkOutTime": "2025-03-13T14:00:00.000Z",
+          "checkin": {
+            "checkInTime": "2025-03-13T13:00:00.000Z",
+            "id": "ce118b6e-d8e1-11e7-9296-cec278b6b50a",
+            "slot": {
+              "id": 13,
+              "occupied": false
+            }
+          },
+          "parkingFee": 13.01
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "$.body.checkOutTime": {
+            "match": "regex",
+            "regex": "^\\d{4}-[01]\\d-[0-3]\\dT[0-2]\\d:[0-5]\\d:[0-5]\\d(?:\\.\\d{3})?Z$"
+          },
+          "$.body.checkin.checkInTime": {
+            "match": "regex",
+            "regex": "^\\d{4}-[01]\\d-[0-3]\\dT[0-2]\\d:[0-5]\\d:[0-5]\\d(?:\\.\\d{3})?Z$"
+          },
+          "$.body.checkin.id": {
+            "match": "regex",
+            "regex": "^[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}$"
+          },
+          "$.body.checkin.slot.id": {
+            "match": "type"
+          },
+          "$.body.parkingFee": {
+            "match": "type"
+          }
+        },
+        "status": 201
+      }
+    },
+    {
+      "description": "Um request para buscar um carro pela placa",
+      "providerState": "Existe um carro cadastrado com a placa ABC1234",
+      "request": {
+        "headers": {
+          "Accept": "application/json"
+        },
+        "method": "GET",
+        "path": "/api/v1/cars/ABC1234"
+      },
+      "response": {
+        "body": {
+          "brand": "Toyota",
+          "color": "Red",
+          "id": "f5d4b3b4-1b4b-4b4b-8b4b-4b4b4b4b4b4b",
+          "model": "Sedan",
+          "plate": "ABC1234"
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "$.body.brand": {
+            "match": "type"
+          },
+          "$.body.color": {
+            "match": "type"
+          },
+          "$.body.id": {
+            "match": "type"
+          },
+          "$.body.model": {
+            "match": "type"
+          },
+          "$.body.plate": {
+            "match": "type"
+          }
+        },
+        "status": 200
+      }
+    }
+  ],
+  "metadata": {
+    "pact-js": {
+      "version": "14.0.0"
+    },
+    "pactRust": {
+      "ffi": "0.4.22",
+      "models": "1.2.3"
+    },
+    "pactSpecification": {
+      "version": "2.0.0"
+    }
+  },
+  "provider": {
+    "name": "ParkingService"
+  }
+}
