@@ -1,5 +1,6 @@
 package com.pablords.parking.core.entities;
 
+import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -12,15 +13,18 @@ public class Checkin {
   private LocalDateTime checkInTime;
   private LocalDateTime checkOutTime;
 
-  public Checkin() {
-    this.checkInTime = ZonedDateTime.now(ZoneOffset.UTC).toLocalDateTime();
-
+  public Checkin(Slot slot, Car car) {
+    this(slot, car, Clock.systemDefaultZone());
   }
 
-  public Checkin(Slot slot, Car car) {
+  public Checkin(Slot slot, Car car, Clock clock) {
     this.slot = slot;
     this.car = car;
-    this.checkInTime = ZonedDateTime.now(ZoneOffset.UTC).toLocalDateTime();
+    this.checkInTime = LocalDateTime.now(clock);
+  }
+
+  public Checkin() {
+    //TODO Auto-generated constructor stub
   }
 
   public LocalDateTime getCheckInTime() {
