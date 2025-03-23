@@ -12,7 +12,6 @@ import com.pablords.parking.adapters.outbound.database.jpa.repositories.JpaCheck
 import com.pablords.parking.adapters.outbound.database.jpa.repositories.JpaCheckoutRepository;
 import com.pablords.parking.adapters.outbound.database.jpa.repositories.JpaSlotRepository;
 import com.pablords.parking.adapters.outbound.messaging.producers.CheckoutProducerAdapter;
-import com.pablords.parking.core.ports.outbound.producers.CheckoutProducerPort;
 
 import io.cucumber.java.Before;
 import io.cucumber.spring.CucumberContextConfiguration;

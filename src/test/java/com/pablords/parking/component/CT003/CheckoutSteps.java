@@ -22,6 +22,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.pablords.parking.adapters.inbound.http.dtos.CheckoutResponseDTO;
+import com.pablords.parking.adapters.inbound.http.handlers.ApiError;
 import com.pablords.parking.adapters.outbound.database.jpa.models.CarModel;
 import com.pablords.parking.adapters.outbound.database.jpa.models.CheckinModel;
 import com.pablords.parking.adapters.outbound.database.jpa.models.CheckoutModel;
@@ -114,22 +115,27 @@ public class CheckoutSteps {
   @Entao("o status da resposta do checkout deve ser {int}")
   public void theResponseStatusShouldBe(int status) throws Exception {
     CheckoutResponseDTO checkoutResponseDTO = objectMapper.readValue(responseContent, CheckoutResponseDTO.class);
+    ApiError error = objectMapper.readValue(responseContent, ApiError.class);
     switch (HttpStatus.valueOf(status)) {
       case CREATED:
         assertNotNull(checkoutResponseDTO.getCheckOutTime(), "Checkout timestamp não foi retornado na resposta.");
-        assertEquals(responseStatus.value(), status);
+        assertEquals(status, responseStatus.value());
         break;
       case UNPROCESSABLE_ENTITY:
-        assertEquals(responseStatus.value(), status);
+        assertEquals(status, responseStatus.value());
         break;
       case BAD_REQUEST:
-        assertEquals(responseStatus.value(), status);
+      assertEquals(HttpStatus.BAD_REQUEST.getReasonPhrase(), error.getError());
+        assertEquals(status, responseStatus.value());
         break;
       case NOT_FOUND:
-        assertEquals(responseStatus.value(), status);
+        assertEquals(HttpStatus.NOT_FOUND.getReasonPhrase(), error.getError());
+        assertEquals("Not Found", error.getError());
+        assertEquals("No check-in found for plate: ABC1234", error.getMessage());
+        assertEquals(status, responseStatus.value());
         break;
       default:
-        assertEquals(responseStatus.value(), HttpStatus.INTERNAL_SERVER_ERROR.value());
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR.value(), responseStatus.value());
         break;
     }
   }
