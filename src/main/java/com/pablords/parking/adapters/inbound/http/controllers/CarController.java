@@ -24,35 +24,35 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class CarController implements SwaggerCar {
 
-    private final CarServicePort carServicePort;
+  private final CarServicePort carServicePort;
 
-    public CarController(CarServicePort carServicePort) {
-        this.carServicePort = carServicePort;
-    }
+  public CarController(CarServicePort carServicePort) {
+    this.carServicePort = carServicePort;
+  }
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public CarResponseDTO create(@RequestBody @Valid CarRequestDTO createCarDto) {
-        log.info("Recebendo requisição para criação de carro com payload={}", createCarDto.toString());
-        var car = CarMapper.toEntity(createCarDto);
-        var createdCar = this.carServicePort.create(car);
-        log.info("Respondendo com status={} para carro com response={}", HttpStatus.CREATED, createdCar.toString());
-        return CarMapper.toResponse(createdCar);
-    }
+  @PostMapping
+  @ResponseStatus(HttpStatus.CREATED)
+  public CarResponseDTO create(@RequestBody @Valid CarRequestDTO createCarDto) {
+    log.info("Recebendo requisição para criação de carro com payload={}", createCarDto.toString());
+    var car = CarMapper.toEntity(createCarDto);
+    var createdCar = this.carServicePort.create(car);
+    log.info("Respondendo com status={} para carro com response={}", HttpStatus.CREATED, createdCar.toString());
+    return CarMapper.toDTO(createdCar);
+  }
 
-    @GetMapping
-    @ResponseStatus(HttpStatus.OK)
-    public List<CarResponseDTO> find() {
-        var cars = this.carServicePort.find();
-        return cars.stream()
-                .map(CarMapper::toResponse)
-                .collect(Collectors.toList());
-    }
+  @GetMapping
+  @ResponseStatus(HttpStatus.OK)
+  public List<CarResponseDTO> find() {
+    var cars = this.carServicePort.find();
+    return cars.stream()
+        .map(CarMapper::toDTO)
+        .collect(Collectors.toList());
+  }
 
-    @GetMapping("/{plate}")
-    @ResponseStatus(HttpStatus.OK)
-    public CarResponseDTO findByPlate(@PathVariable String plate) {
-        var car = this.carServicePort.findByPlate(plate);
-        return CarMapper.toResponse(car);
-    }
+  @GetMapping("/{plate}")
+  @ResponseStatus(HttpStatus.OK)
+  public CarResponseDTO findByPlate(@PathVariable String plate) {
+    var car = this.carServicePort.findByPlate(plate);
+    return CarMapper.toDTO(car);
+  }
 }

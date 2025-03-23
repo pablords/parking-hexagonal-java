@@ -18,10 +18,8 @@ public class CarMapper {
         modelMapper.typeMap(Car.class, CarModel.class)
                 .addMappings(mapper -> mapper.skip(CarModel::setPlate)) // Skip default mapping for Plate
                 .setPostConverter(context -> {
-                    Car source = context.getSource();
-                    CarModel destination = context.getDestination();
-                    destination.setPlate(source.getPlate().getValue());
-                    return destination;
+                    context.getDestination().setPlate(context.getSource().getPlate().getValue());
+                    return context.getDestination();
                 });
         return modelMapper.map(car, CarModel.class);
     }
@@ -31,10 +29,8 @@ public class CarMapper {
         modelMapper.typeMap(CarModel.class, Car.class)
                 .addMappings(mapper -> mapper.skip(Car::setPlate)) // Skip default mapping for Plate
                 .setPostConverter(context -> {
-                    CarModel source = context.getSource();
-                    Car destination = context.getDestination();
-                    destination.setPlate(new Plate(source.getPlate()));
-                    return destination;
+                    context.getDestination().setPlate(new Plate(context.getSource().getPlate()));
+                    return context.getDestination();
                 });
         return modelMapper.map(model, Car.class);
     }

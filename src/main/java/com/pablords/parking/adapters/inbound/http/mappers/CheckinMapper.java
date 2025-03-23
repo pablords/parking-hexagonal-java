@@ -28,7 +28,7 @@ public class CheckinMapper {
         return modelMapper.map(checkinRequestDTO, Car.class);
     }
 
-    public static CheckinResponseDTO toResponse(Checkin checkin) {
+    public static CheckinResponseDTO toDTO(Checkin checkin) {
         log.info("Mapeando Checkin para CheckinResponseDTO: {}", checkin);
         return modelMapper.map(checkin, CheckinResponseDTO.class);
     }

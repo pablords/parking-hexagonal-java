@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.pablords.parking.adapters.inbound.http.dtos.CheckoutRequestDTO;
 import com.pablords.parking.adapters.inbound.http.dtos.CheckoutResponseDTO;
+import com.pablords.parking.adapters.inbound.http.mappers.CheckoutMapper;
 import com.pablords.parking.core.ports.inbound.services.CheckoutServicePort;
 
 import jakarta.transaction.Transactional;
@@ -38,6 +39,6 @@ public class CheckoutController implements SwaggerCheckout {
         var response = checkoutServicePort.checkout(checkoutRequestDTO.getPlate());
         log.info("Respondendo com status={} para carro com a placa: {} response={}", HttpStatus.CREATED,
                 checkoutRequestDTO.getPlate(), response.toString());
-        return modelMapper.map(response, CheckoutResponseDTO.class);
+        return CheckoutMapper.toDTO(response);
     }
 }

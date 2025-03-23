@@ -4,5 +4,4 @@ import com.pablords.parking.core.entities.Checkout;
 
 public interface CheckoutServicePort {
     Checkout checkout(String plate);
-    void sendCheckoutMessage(Checkout checkout);
 }

@@ -13,9 +13,9 @@ import com.pablords.parking.adapters.outbound.database.jpa.models.CheckinModel;
 import com.pablords.parking.adapters.outbound.database.jpa.models.CheckoutModel;
 import com.pablords.parking.adapters.outbound.database.jpa.models.SlotModel;
 import com.pablords.parking.adapters.outbound.database.jpa.repositories.JpaSlotRepository;
-import com.pablords.parking.core.entities.Checkout;
 
 public class TestUtils {
+  private final static LocalDateTime NOW = LocalDateTime.now();
 
   public static void mockSlotRepository(JpaSlotRepository jpaSlotRepositoryMock, ArrayList<SlotModel> slots) {
     // Mock para buscar o primeiro slot disponível
@@ -40,7 +40,7 @@ public class TestUtils {
     CheckinModel createdCheckin = new CheckinModel();
     createdCheckin.setCar(car);
     createdCheckin.setId(UUID.fromString("f5d4b3b4-1b4b-4b4b-8b4b-4b4b4b4b4b4b"));
-    createdCheckin.setCheckInTime(LocalDateTime.now());
+    createdCheckin.setCheckInTime(NOW);
     createdCheckin.setSlot(slots.get(0));
     return createdCheckin;
   }
@@ -52,6 +52,8 @@ public class TestUtils {
     car.setColor("Black");
     car.setModel("A4");
     car.setId(UUID.fromString("f5d4b3b4-1b4b-4b4b-8b4b-4b4b4b4b4b4b"));
+    car.setCreatedAt(NOW);
+    car.setUpdatedAt(NOW);
     return car;
   }
 
@@ -69,7 +71,7 @@ public class TestUtils {
   public static CheckoutModel createCheckoutModel(CheckinModel createdCheckin) {
     CheckoutModel checkout = new CheckoutModel();
     checkout.setCheckinId(createdCheckin.getId());
-    checkout.setCheckOutTime(LocalDateTime.now());
+    checkout.setCheckOutTime(NOW.plusHours(2));
     checkout.setId(UUID.fromString("f5d4b3b4-1b4b-4b4b-8b4b-4b4b4b4b4b4b"));
     return checkout;
   }

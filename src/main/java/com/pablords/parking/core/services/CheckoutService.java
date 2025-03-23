@@ -1,7 +1,5 @@
 package com.pablords.parking.core.services;
 
-import java.time.Clock;
-
 import com.pablords.parking.core.entities.Car;
 import com.pablords.parking.core.entities.Checkin;
 import com.pablords.parking.core.entities.Checkout;
@@ -62,6 +60,7 @@ public class CheckoutService implements CheckoutServicePort {
     }
 
     private void validateCheckinTime(Checkin checkin) {
+        log.info("Validando horário de checkin: {}", checkin);
         if (checkin.getCheckInTime() == null) {
             throw new CheckinTimeMissingException(ErrorMessages.CHECKIN_TIME_IS_MISSING);
         }
@@ -80,13 +79,15 @@ public class CheckoutService implements CheckoutServicePort {
     }
 
     private void updateSlotAndCheckin(Checkin checkin) {
+        log.info("Liberando slot e atualizando checkin: {}", checkin);
         Slot slot = checkin.getSlot();
         slot.free();
         slotRepository.save(slot);
         checkinRepository.save(checkin);
     }
 
-    public void sendCheckoutMessage(Checkout checkout) {
+    private void sendCheckoutMessage(Checkout checkout) {
+        log.info("Publicando mensagem de checkout: {}", checkout);
         try {
             checkoutProducer.sendCheckoutMessage(checkout);
         } catch (Exception e) {

@@ -28,7 +28,7 @@ public class CarMapper {
         return modelMapper.map(createCarDTO, Car.class);
     }
 
-    public static CarResponseDTO toResponse(Car car) {
+    public static CarResponseDTO toDTO(Car car) {
         log.info("Mapeando Car para CarResponseDTO: {}", car);
         modelMapper.typeMap(Car.class, CarResponseDTO.class).addMappings(mapper -> {
             mapper.map(src -> src.getPlate().getValue(),

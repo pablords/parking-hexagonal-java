@@ -30,6 +30,10 @@ public class Checkout {
     this.checkin.setCheckOutTime(this.getCheckOutTime());
   }
 
+  public Checkout() {
+    this.clock = Clock.systemDefaultZone();
+  }
+
 
   public void freeSlot() {
     checkin.getSlot().free();
