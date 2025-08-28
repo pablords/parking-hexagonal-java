@@ -8,28 +8,25 @@ import com.pablords.parking.core.valueobjects.Plate;
 
 import lombok.extern.slf4j.Slf4j;
 
-import org.modelmapper.ModelMapper;
 @Slf4j
 public class CheckinMapper {
 
-    private static final ModelMapper modelMapper = new ModelMapper();
-
-    public static Car toEntity(CheckinRequestDTO checkinRequestDTO) {
-        log.info("Mapeando CheckinRequestDTO para Car: {}", checkinRequestDTO);
-        new Plate(checkinRequestDTO.getPlate());
-        modelMapper.typeMap(CheckinRequestDTO.class, Car.class)
-                .addMappings(mapper -> mapper.skip(Car::setPlate)) // Skip default mapping for Plate
-                .setPostConverter(context -> {
-                    var source = context.getSource();
-                    var destination = context.getDestination();
-                    destination.setPlate(new Plate(source.getPlate()));
-                    return destination;
-                });
-        return modelMapper.map(checkinRequestDTO, Car.class);
+    public static Car toEntity(CheckinRequestDTO dto) {
+        log.info("Mapeando CheckinRequestDTO para Car: {}", dto);
+        return new Car(
+            new Plate(dto.plate()),
+            dto.brand(),
+            dto.color(),
+            dto.model()
+        );
     }
 
     public static CheckinResponseDTO toDTO(Checkin checkin) {
         log.info("Mapeando Checkin para CheckinResponseDTO: {}", checkin);
-        return modelMapper.map(checkin, CheckinResponseDTO.class);
+        return new CheckinResponseDTO(
+            checkin.getId(),
+            checkin.getSlot(),
+            checkin.getCheckInTime()
+        );
     }
 }

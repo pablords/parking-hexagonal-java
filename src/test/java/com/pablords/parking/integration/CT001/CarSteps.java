@@ -59,7 +59,7 @@ public class CarSteps {
         CarResponseDTO carResponseDTO = objectMapper.readValue(responseContent, CarResponseDTO.class);
         switch (HttpStatus.valueOf(status)) {
             case CREATED:
-                assertNotNull(carResponseDTO.getId());
+                assertNotNull(carResponseDTO.id());
                 assertEquals(responseStatus.value(), status);
                 break;
             case UNPROCESSABLE_ENTITY:

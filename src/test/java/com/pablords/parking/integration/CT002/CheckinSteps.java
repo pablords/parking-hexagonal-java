@@ -86,8 +86,8 @@ public class CheckinSteps {
 
         var jsonFileContent = new String(Files.readAllBytes(Paths.get(jsonPath)));
         var carToCreate = objectMapper.readValue(jsonFileContent, CarRequestDTO.class);
-        var car = new Car(new Plate(carToCreate.getPlate()), carToCreate.getBrand(), carToCreate.getColor(),
-                carToCreate.getModel());
+        var car = new Car(new Plate(carToCreate.plate()), carToCreate.brand(), carToCreate.color(),
+                carToCreate.model());
         var checkin = checkinServicePort.checkIn(car);
         assertEquals(plate, checkin.getCar().getPlate().getValue(), "O carro deveria estar estacionado, mas não está!");
     }
@@ -129,7 +129,7 @@ public class CheckinSteps {
         CheckinResponseDTO checkinResponseDTO = objectMapper.readValue(responseContent, CheckinResponseDTO.class);
         switch (HttpStatus.valueOf(status)) {
             case CREATED:
-                assertNotNull(checkinResponseDTO.getId());
+                assertNotNull(checkinResponseDTO.id());
                 assertEquals(responseStatus.value(), status);
                 break;
             case UNPROCESSABLE_ENTITY:
@@ -148,7 +148,7 @@ public class CheckinSteps {
     @E("a resposta deve conter um timestamp de check-in")
     public void theResponseShouldContainACheckInTimestamp() throws Exception {
         CheckinResponseDTO checkinResponseDTO = objectMapper.readValue(responseContent, CheckinResponseDTO.class);
-        assertNotNull(checkinResponseDTO.getCheckInTime());
+        assertNotNull(checkinResponseDTO.checkInTime());
     }
 
 }

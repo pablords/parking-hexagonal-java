@@ -101,7 +101,7 @@ public class CheckoutSteps {
     CheckoutResponseDTO checkoutResponseDTO = objectMapper.readValue(responseContent, CheckoutResponseDTO.class);
     switch (HttpStatus.valueOf(status)) {
       case CREATED:
-        org.junit.jupiter.api.Assertions.assertNotNull(checkoutResponseDTO.getCheckin().getId());
+        org.junit.jupiter.api.Assertions.assertNotNull(checkoutResponseDTO.checkin().id());
         assertEquals(responseStatus.value(), status);
         break;
       case UNPROCESSABLE_ENTITY:
@@ -130,7 +130,7 @@ public class CheckoutSteps {
   @E("a resposta deve conter um timestamp de checkout")
   public void the_response_should_contain_a_check_in_timestamp() throws Exception {
     CheckoutResponseDTO checkoutResponseDTO = objectMapper.readValue(responseContent, CheckoutResponseDTO.class);
-    assertNotNull(checkoutResponseDTO.getCheckOutTime(), "Checkout timestamp não foi retornado na resposta.");
+    assertNotNull(checkoutResponseDTO.checkOutTime(), "Checkout timestamp não foi retornado na resposta.");
   }
 
 }

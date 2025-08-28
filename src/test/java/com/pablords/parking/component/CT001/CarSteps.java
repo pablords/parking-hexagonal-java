@@ -74,12 +74,12 @@ public class CarSteps {
 
     switch (HttpStatus.valueOf(status)) {
       case CREATED:
-        assertNotNull(carResponseDTO.getId());
-        assertEquals("f7f6b3e3-4b7b-4b7b-8b7b-4b7b7b7b7b7b", carResponseDTO.getId().toString());
-        assertEquals("ABC1234", carResponseDTO.getPlate());
-        assertEquals("Audi", carResponseDTO.getBrand());
-        assertEquals("Black", carResponseDTO.getColor());
-        assertEquals("A4", carResponseDTO.getModel());
+        assertNotNull(carResponseDTO.id());
+        assertEquals("f7f6b3e3-4b7b-4b7b-8b7b-4b7b7b7b7b7b", carResponseDTO.id().toString());
+        assertEquals("ABC1234", carResponseDTO.plate());
+        assertEquals("Audi", carResponseDTO.brand());
+        assertEquals("Black", carResponseDTO.color());
+        assertEquals("A4", carResponseDTO.model());
         assertEquals(status, responseStatus.value());
         break;
       case UNPROCESSABLE_ENTITY:

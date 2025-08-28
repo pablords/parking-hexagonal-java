@@ -32,12 +32,12 @@ public class CheckinController implements SwaggerCheckin {
     @Transactional
     public CheckinResponseDTO checkin(@RequestBody @Valid CheckinRequestDTO checkinRequestDTO) {
         log.info("Recebendo requisição para estacionamento do carro com a placa: {}, payload={}",
-        checkinRequestDTO.getPlate(), checkinRequestDTO.toString());
+        checkinRequestDTO.plate(), checkinRequestDTO.toString());
         var checkin = CheckinMapper.toEntity(checkinRequestDTO);
         var persistedCheckin = checkinServicePort.checkIn(checkin);
         var checkinResponse = CheckinMapper.toDTO(persistedCheckin);
         log.info("Respondendo com status={} para carro com a placa: {} response={}", HttpStatus.CREATED,
-        checkinRequestDTO.getPlate(), checkinResponse.toString());
+        checkinRequestDTO.plate(), checkinResponse.toString());
         return checkinResponse;
     }
 }

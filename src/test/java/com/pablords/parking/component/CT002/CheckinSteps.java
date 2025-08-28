@@ -137,8 +137,8 @@ public class CheckinSteps {
     ApiErrorDTO error = objectMapper.readValue(responseContent, ApiErrorDTO.class);
     switch (HttpStatus.valueOf(status)) {
       case CREATED:
-        assertNotNull(checkinResponseDTO.getId());
-        assertNotNull(checkinResponseDTO.getCheckInTime());
+        assertNotNull(checkinResponseDTO.id());
+        assertNotNull(checkinResponseDTO.checkInTime());
         assertEquals(status, responseStatus.value());
         break;
       case UNPROCESSABLE_ENTITY:
@@ -160,7 +160,7 @@ public class CheckinSteps {
   @E("a resposta deve conter um timestamp de check-in")
   public void theResponseShouldContainACheckInTimestamp() throws Exception {
     CheckinResponseDTO checkinResponseDTO = objectMapper.readValue(responseContent, CheckinResponseDTO.class);
-    assertNotNull(checkinResponseDTO.getCheckInTime(), "Checkin timestamp não foi retornado na resposta.");
+    assertNotNull(checkinResponseDTO.checkInTime(), "Checkin timestamp não foi retornado na resposta.");
   }
 
 }

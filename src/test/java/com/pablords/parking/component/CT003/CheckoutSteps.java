@@ -118,7 +118,7 @@ public class CheckoutSteps {
     ApiErrorDTO error = objectMapper.readValue(responseContent, ApiErrorDTO.class);
     switch (HttpStatus.valueOf(status)) {
       case CREATED:
-        assertNotNull(checkoutResponseDTO.getCheckOutTime(), "Checkout timestamp não foi retornado na resposta.");
+        assertNotNull(checkoutResponseDTO.checkOutTime(), "Checkout timestamp não foi retornado na resposta.");
         assertEquals(status, responseStatus.value());
         break;
       case UNPROCESSABLE_ENTITY:
@@ -149,7 +149,7 @@ public class CheckoutSteps {
   @E("a resposta deve conter um timestamp de checkout")
   public void theResponseShouldContainACheckoutTimestamp() throws Exception {
     CheckoutResponseDTO checkoutResponseDTO = objectMapper.readValue(responseContent, CheckoutResponseDTO.class);
-    assertNotNull(checkoutResponseDTO.getCheckOutTime(), "Checkout timestamp não foi retornado na resposta.");
+    assertNotNull(checkoutResponseDTO.checkOutTime(), "Checkout timestamp não foi retornado na resposta.");
   }
 
 }

@@ -33,11 +33,11 @@ public class CheckoutController implements SwaggerCheckout {
     @Transactional
     public CheckoutResponseDTO checkOut(@RequestBody @Valid CheckoutRequestDTO checkoutRequestDTO) {
         log.info("Recebendo requisição para checkout do carro com a placa: {} o payload={}",
-                checkoutRequestDTO.getPlate(), checkoutRequestDTO);
-        var response = checkoutServicePort.checkout(checkoutRequestDTO.getPlate());
+                checkoutRequestDTO.plate(), checkoutRequestDTO);
+        var response = checkoutServicePort.checkout(checkoutRequestDTO.plate());
         var checkoutResponseDTO = CheckoutMapper.toDTO(response);
         log.info("Respondendo com status={} para carro com a placa: {} response={}", HttpStatus.CREATED,
-                checkoutRequestDTO.getPlate(), checkoutResponseDTO.toString());
+                checkoutRequestDTO.plate(), checkoutResponseDTO.toString());
         return checkoutResponseDTO;
     }
 }
