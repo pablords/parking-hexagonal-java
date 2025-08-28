@@ -36,8 +36,9 @@ public class CarController implements SwaggerCar {
     log.info("Recebendo requisição para criação de carro com payload={}", createCarDto.toString());
     var car = CarMapper.toEntity(createCarDto);
     var createdCar = this.carServicePort.create(car);
-    log.info("Respondendo com status={} para carro com response={}", HttpStatus.CREATED, createdCar.toString());
-    return CarMapper.toDTO(createdCar);
+    var createdCarDto = CarMapper.toDTO(createdCar);
+    log.info("Respondendo com status={} para carro com response={}", HttpStatus.CREATED, createdCarDto.toString());
+    return createdCarDto;
   }
 
   @GetMapping

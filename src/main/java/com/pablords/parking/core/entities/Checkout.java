@@ -5,6 +5,7 @@ import java.math.RoundingMode;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.UUID;
+import java.time.*;
 
 import com.pablords.parking.core.exceptions.CheckinTimeMissingException;
 import com.pablords.parking.core.exceptions.ErrorMessages;
@@ -19,8 +20,18 @@ public class Checkout {
   private Double parkingFee;
   private final Clock clock;
 
+
+  /**
+   * Atualiza a taxa de estacionamento calculando novamente o valor.
+   * Método público para uso externo controlado.
+   */
+  public void updateParkingFee() {
+    this.calculateParkingFee();
+  }
+
   public Checkout(Checkin checkin) {
     this(checkin, Clock.systemDefaultZone()); // Mantém compatibilidade com o construtor existente
+    this.calculateParkingFee();
   }
 
   public Checkout(Checkin checkin, Clock clock) {
@@ -28,6 +39,7 @@ public class Checkout {
     this.clock = clock;
     this.checkOutTime = LocalDateTime.now(clock);
     this.checkin.setCheckOutTime(this.getCheckOutTime());
+    this.calculateParkingFee();
   }
 
   public Checkout() {
@@ -77,7 +89,7 @@ public class Checkout {
         '}';
   }
 
-  public void calculateParkingFee() {
+  private void calculateParkingFee() {
     final double HOURLY_RATE_IN_CENTS = 2.50;
     final double MINUTES_IN_HOUR = 60;
     final double MINUTE_RATE_IN_CENTS = HOURLY_RATE_IN_CENTS / MINUTES_IN_HOUR;
@@ -89,13 +101,11 @@ public class Checkout {
       throw new CheckinTimeMissingException(ErrorMessages.CHECKIN_TIME_IS_MISSING);
     }
 
-    long seconds = java.time.Duration.between(checkInTime, this.getCheckOutTime()).getSeconds();
+    long seconds = Duration.between(checkInTime, this.getCheckOutTime()).getSeconds();
     log.info("Seconds: {}", seconds);
     long minutes = (long) Math.ceil(seconds / MINUTES_IN_HOUR);
     log.info("Minutes: {}", minutes);
-    double ratePerMinute = MINUTE_RATE_IN_CENTS;
-    log.info("Rate per minute: {}", ratePerMinute);
-    Double totalFee = minutes * ratePerMinute;
+    double totalFee = minutes * MINUTE_RATE_IN_CENTS;
     log.info("Total fee: {}", totalFee);
     BigDecimal totalDecimal = BigDecimal.valueOf(totalFee).setScale(2, RoundingMode.HALF_UP);
     log.info("Total fee rounded: {}", totalDecimal.doubleValue());

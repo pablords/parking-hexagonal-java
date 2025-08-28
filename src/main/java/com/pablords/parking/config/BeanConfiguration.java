@@ -44,8 +44,9 @@ public class BeanConfiguration {
       CheckoutRepositoryPort checkoutRepository,
       SlotRepositoryPort slotRepository,
       CarRepositoryPort carRepository,
-      CheckoutProducerPort checkoutProducer) {
-    return new CheckoutService(checkinRepository, checkoutRepository, slotRepository, carRepository, checkoutProducer);
+      CheckoutProducerPort checkoutProducer,
+      Clock clock) {
+    return new CheckoutService(checkinRepository, checkoutRepository, slotRepository, carRepository, checkoutProducer, clock);
   }
 
   @Bean

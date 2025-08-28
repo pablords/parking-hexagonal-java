@@ -1,5 +1,7 @@
 package com.pablords.parking.core.services;
 
+import java.time.Clock;
+
 import com.pablords.parking.core.entities.Car;
 import com.pablords.parking.core.entities.Checkin;
 import com.pablords.parking.core.entities.Checkout;
@@ -19,79 +21,80 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class CheckoutService implements CheckoutServicePort {
+  private final Clock clock;
+  private final CheckinRepositoryPort checkinRepository;
+  private final CheckoutRepositoryPort checkoutRepository;
+  private final SlotRepositoryPort slotRepository;
+  private final CarRepositoryPort carRepository;
+  private final CheckoutProducerPort checkoutProducer;
 
-    private final CheckinRepositoryPort checkinRepository;
-    private final CheckoutRepositoryPort checkoutRepository;
-    private final SlotRepositoryPort slotRepository;
-    private final CarRepositoryPort carRepository;
-    private final CheckoutProducerPort checkoutProducer;
+  public CheckoutService(
+      CheckinRepositoryPort checkinRepository,
+      CheckoutRepositoryPort checkoutRepository,
+      SlotRepositoryPort slotRepository,
+      CarRepositoryPort carRepository,
+      CheckoutProducerPort checkoutProducer,
+      Clock clock) {
+    this.checkinRepository = checkinRepository;
+    this.checkoutRepository = checkoutRepository;
+    this.slotRepository = slotRepository;
+    this.carRepository = carRepository;
+    this.checkoutProducer = checkoutProducer;
+    this.clock = clock;
+  }
 
-    public CheckoutService(
-            CheckinRepositoryPort checkinRepository,
-            CheckoutRepositoryPort checkoutRepository,
-            SlotRepositoryPort slotRepository,
-            CarRepositoryPort carRepository,
-            CheckoutProducerPort checkoutProducer) {
-        this.checkinRepository = checkinRepository;
-        this.checkoutRepository = checkoutRepository;
-        this.slotRepository = slotRepository;
-        this.carRepository = carRepository;
-        this.checkoutProducer = checkoutProducer;
+  public Checkout checkout(String plate) {
+    var checkinByPlate = getCheckinByPlate(plate);
+    var carByPlate = getCarByPlate(plate);
+
+    validateCheckinTime(checkinByPlate);
+
+    checkinByPlate.setCar(carByPlate);
+
+    Checkout checkout = new Checkout(checkinByPlate, this.clock);
+
+    updateSlotAndCheckin(checkinByPlate);
+
+    sendCheckoutMessage(checkout);
+
+    var savedCheckout = checkoutRepository.save(checkout);
+    log.info("Checkout realizado com sucesso: {}", savedCheckout);
+    return savedCheckout;
+  }
+
+  private void validateCheckinTime(Checkin checkin) {
+    log.info("Validando horário de checkin: {}", checkin);
+    if (checkin.getCheckInTime() == null) {
+      throw new CheckinTimeMissingException(ErrorMessages.CHECKIN_TIME_IS_MISSING);
     }
+  }
 
-    public Checkout checkout(String plate) {
-        var checkinByPlate = getCheckinByPlate(plate);
-        var carByPlate = getCarByPlate(plate);
+  private Checkin getCheckinByPlate(String plate) {
+    return checkinRepository.findByPlate(plate)
+        .orElseThrow(() -> new CheckinNotFoundException(
+            String.format(ErrorMessages.CHECKIN_NOT_FOUND_BY_PLATE, plate)));
+  }
 
-        validateCheckinTime(checkinByPlate);
+  private Car getCarByPlate(String plate) {
+    return carRepository.findByPlate(plate)
+        .orElseThrow(() -> new CarNotFoundException(
+            String.format(ErrorMessages.CAR_NOT_FOUND_BY_PLATE, plate)));
+  }
 
-        checkinByPlate.setCar(carByPlate);
+  private void updateSlotAndCheckin(Checkin checkin) {
+    log.info("Liberando slot e atualizando checkin: {}", checkin);
+    Slot slot = checkin.getSlot();
+    slot.free();
+    slotRepository.save(slot);
+    checkinRepository.save(checkin);
+  }
 
-        Checkout checkout = new Checkout(checkinByPlate);
-        checkout.calculateParkingFee();
-
-        updateSlotAndCheckin(checkinByPlate);
-
-        sendCheckoutMessage(checkout);
-
-        var savedCheckout = checkoutRepository.save(checkout);
-        log.info("Checkout realizado com sucesso: {}", savedCheckout);
-        return savedCheckout;
+  private void sendCheckoutMessage(Checkout checkout) {
+    log.info("Publicando mensagem de checkout: {}", checkout);
+    try {
+      checkoutProducer.sendCheckoutMessage(checkout);
+    } catch (Exception e) {
+      log.error("Erro ao publicar mensagem: {}", e.getMessage());
     }
-
-    private void validateCheckinTime(Checkin checkin) {
-        log.info("Validando horário de checkin: {}", checkin);
-        if (checkin.getCheckInTime() == null) {
-            throw new CheckinTimeMissingException(ErrorMessages.CHECKIN_TIME_IS_MISSING);
-        }
-    }
-
-    private Checkin getCheckinByPlate(String plate) {
-        return checkinRepository.findByPlate(plate)
-                .orElseThrow(() -> new CheckinNotFoundException(
-                        String.format(ErrorMessages.CHECKIN_NOT_FOUND_BY_PLATE, plate)));
-    }
-
-    private Car getCarByPlate(String plate) {
-        return carRepository.findByPlate(plate)
-                .orElseThrow(() -> new CarNotFoundException(
-                        String.format(ErrorMessages.CAR_NOT_FOUND_BY_PLATE, plate)));
-    }
-
-    private void updateSlotAndCheckin(Checkin checkin) {
-        log.info("Liberando slot e atualizando checkin: {}", checkin);
-        Slot slot = checkin.getSlot();
-        slot.free();
-        slotRepository.save(slot);
-        checkinRepository.save(checkin);
-    }
-
-    private void sendCheckoutMessage(Checkout checkout) {
-        log.info("Publicando mensagem de checkout: {}", checkout);
-        try {
-            checkoutProducer.sendCheckoutMessage(checkout);
-        } catch (Exception e) {
-            log.error("Erro ao publicar mensagem: {}", e.getMessage());
-        }
-    }
+  }
 }

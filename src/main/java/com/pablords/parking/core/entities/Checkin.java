@@ -2,8 +2,6 @@ package com.pablords.parking.core.entities;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
 import java.util.UUID;
 
 public class Checkin {
@@ -24,7 +22,6 @@ public class Checkin {
   }
 
   public Checkin() {
-    //TODO Auto-generated constructor stub
   }
 
   public LocalDateTime getCheckInTime() {

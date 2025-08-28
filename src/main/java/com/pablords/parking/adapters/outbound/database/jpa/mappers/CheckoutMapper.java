@@ -19,11 +19,14 @@ public class CheckoutMapper {
 
   public static Checkout toEntity(CheckoutModel model, Checkin checkin) {
     log.info("Mapeando CheckoutModel para Checkout: {}", model.toString());
-    modelMapper.typeMap(CheckoutModel.class, Checkout.class)
-        .setPostConverter(context -> {
-          context.getDestination().setCheckin(checkin);
-          return  context.getDestination();
-        });
-    return modelMapper.map(model, Checkout.class);
+    Checkout checkout = modelMapper.map(model, Checkout.class);
+    checkout.setCheckin(checkin);
+    // Só calcula se ambos estiverem preenchidos
+    if (checkout.getCheckin() != null && checkout.getCheckOutTime() != null) {
+        checkout.updateParkingFee();
+    } else {
+        log.warn("Não foi possível calcular a taxa: checkin ou checkOutTime nulo. checkin={}, checkOutTime={}", checkout.getCheckin(), checkout.getCheckOutTime());
+    }
+    return checkout;
   }
 }
