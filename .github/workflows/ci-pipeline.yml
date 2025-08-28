@@ -17,6 +17,8 @@ jobs:
   build:
     name: Build and Test
     runs-on: ubuntu-latest
+    outputs:
+      VERSION: ${{ steps.project-version.outputs.VERSION }}
 
     steps:
       # Checkout do código
@@ -42,7 +44,10 @@ jobs:
       # Obtém a versão do projeto
       - name: Get Project Version
         id: project-version
-        run: echo "::set-output name=VERSION::$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)"
+        run: |
+          VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
 
       # Build da aplicação
       - name: Build Application
@@ -71,8 +76,7 @@ jobs:
           name: parking-application
           path: target/parking-*.jar
 
-    outputs:
-      VERSION: ${{ steps.project-version.outputs.VERSION }}
+
 
   package:
     name: Package Application as Docker Image
