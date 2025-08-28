@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import com.pablords.parking.adapters.inbound.http.Constants;
 import com.pablords.parking.adapters.inbound.http.dtos.CheckoutRequestDTO;
 import com.pablords.parking.adapters.inbound.http.dtos.CheckoutResponseDTO;
-import com.pablords.parking.adapters.inbound.http.handlers.ApiError;
+import com.pablords.parking.adapters.inbound.http.handlers.ApiErrorDTO;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -24,7 +24,7 @@ public interface SwaggerCheckout {
             @ApiResponse(responseCode = Constants.CREATED, description = "Requisição válida", content = {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = CheckoutResponseDTO.class), examples = @ExampleObject(value = "{\"checkin\":{\"id\":\"549611f8-e416-4e3f-84c3-7bea0754f8f0\",\"slot\":{\"id\":1,\"occupied\":false},\"checkInTime\":\"2025-02-02T09:32:00\"},\"checkOutTime\":\"2025-02-02T09:32:00\",\"parkingFee\":0}")) }),
             @ApiResponse(responseCode = Constants.NOT_FOUND, description = "Requisição inválida", content = {
-                    @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class), examples = @ExampleObject(value = "{\"status\":404,\"error\":\"NotFound\",\"message\":\"No check-in found for plate: KEZ3670\",\"path\":\"/api/v1/checkouts\",\"timestamp\":\"2025-02-02T09:32:58\"}")) }),
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = ApiErrorDTO.class), examples = @ExampleObject(value = "{\"status\":404,\"error\":\"NotFound\",\"message\":\"No check-in found for plate: KEZ3670\",\"path\":\"/api/v1/checkouts\",\"timestamp\":\"2025-02-02T09:32:58\"}")) }),
             @ApiResponse(responseCode = Constants.UNPROCESSABLE_ENTITY, description = "Erros de validação", content = {
                     @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"plate\":\"Plate cannot be empty\"}")) }),
     })

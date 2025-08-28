@@ -22,7 +22,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.pablords.parking.adapters.inbound.http.dtos.CheckinResponseDTO;
-import com.pablords.parking.adapters.inbound.http.handlers.ApiError;
+import com.pablords.parking.adapters.inbound.http.handlers.ApiErrorDTO;
 import com.pablords.parking.adapters.outbound.database.jpa.models.CarModel;
 import com.pablords.parking.adapters.outbound.database.jpa.models.CheckinModel;
 import com.pablords.parking.adapters.outbound.database.jpa.models.CheckoutModel;
@@ -134,7 +134,7 @@ public class CheckinSteps {
   @Entao("o status da resposta do checkin deve ser {int}")
   public void theResponseStatusShouldBe(int status) throws Exception {
     CheckinResponseDTO checkinResponseDTO = objectMapper.readValue(responseContent, CheckinResponseDTO.class);
-    ApiError error = objectMapper.readValue(responseContent, ApiError.class);
+    ApiErrorDTO error = objectMapper.readValue(responseContent, ApiErrorDTO.class);
     switch (HttpStatus.valueOf(status)) {
       case CREATED:
         assertNotNull(checkinResponseDTO.getId());
