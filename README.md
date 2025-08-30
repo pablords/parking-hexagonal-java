@@ -18,12 +18,17 @@ parking
 ├── adapters
 │   ├── inbound
 │   │   └── http
+│   │       ├── Constants.java
 │   │       ├── config
+│   │       │   ├── JacksonConfig.java
 │   │       │   └── SwaggerConfig.java
 │   │       ├── controllers
 │   │       │   ├── CarController.java
 │   │       │   ├── CheckinController.java
-│   │       │   └── CheckoutController.java
+│   │       │   ├── CheckoutController.java
+│   │       │   ├── SwaggerCar.java
+│   │       │   ├── SwaggerCheckin.java
+│   │       │   └── SwaggerCheckout.java
 │   │       ├── dtos
 │   │       │   ├── CarRequestDTO.java
 │   │       │   ├── CarResponseDTO.java
@@ -32,11 +37,14 @@ parking
 │   │       │   ├── CheckoutRequestDTO.java
 │   │       │   └── CheckoutResponseDTO.java
 │   │       ├── handlers
-│   │       │   ├── ApiError.java
+│   │       │   ├── ApiErrorDTO.java
+│   │       │   ├── ApiErrorFactory.java
+│   │       │   ├── ExceptionStatusMapper.java
 │   │       │   └── GlobalExceptionHandler.java
 │   │       └── mappers
 │   │           ├── CarMapper.java
-│   │           └── CheckinMapper.java
+│   │           ├── CheckinMapper.java
+│   │           └── CheckoutMapper.java
 │   └── outbound
 │       ├── database
 │       │   └── jpa
@@ -54,10 +62,10 @@ parking
 │       │           ├── CarRepositoryAdapter.java
 │       │           ├── CheckinRepositoryAdapter.java
 │       │           ├── CheckoutRepositoryAdapter.java
-│       │           ├── JpaRepositoryCar.java
-│       │           ├── JpaRepositoryCheckin.java
-│       │           ├── JpaRepositoryCheckout.java
-│       │           ├── JpaRepositorySlot.java
+│       │           ├── JpaCarRepository.java
+│       │           ├── JpaCheckinRepository.java
+│       │           ├── JpaCheckoutRepository.java
+│       │           ├── JpaSlotRepository.java
 │       │           └── SlotRepositoryAdapter.java
 │       └── messaging
 │           ├── config
@@ -65,7 +73,8 @@ parking
 │           └── producers
 │               └── CheckoutProducerAdapter.java
 ├── config
-│   └── BeanConfiguration.java
+│   ├── BeanConfiguration.java
+│   └── ClockConfig.java
 └── core
     ├── entities
     │   ├── Car.java
@@ -90,6 +99,8 @@ parking
     │   │       ├── CheckoutServicePort.java
     │   │       └── SlotServicePort.java
     │   └── outbound
+    │       ├── producers
+    │       │   └── CheckoutProducerPort.java
     │       └── repositories
     │           ├── CarRepositoryPort.java
     │           ├── CheckinRepositoryPort.java
@@ -104,7 +115,6 @@ parking
     │   └── StringUtils.java
     └── valueobjects
         └── Plate.java
-
 ```
 
 
