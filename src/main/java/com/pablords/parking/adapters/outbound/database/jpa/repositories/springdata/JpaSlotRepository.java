@@ -1,4 +1,4 @@
-package com.pablords.parking.adapters.outbound.database.jpa.repositories;
+package com.pablords.parking.adapters.outbound.database.jpa.repositories.springdata;
 
 import org.springframework.stereotype.Repository;
 

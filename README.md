@@ -59,14 +59,16 @@ parking
 │       │       │   ├── CheckoutModel.java
 │       │       │   └── SlotModel.java
 │       │       └── repositories
-│       │           ├── CarRepositoryAdapter.java
-│       │           ├── CheckinRepositoryAdapter.java
-│       │           ├── CheckoutRepositoryAdapter.java
-│       │           ├── JpaCarRepository.java
-│       │           ├── JpaCheckinRepository.java
-│       │           ├── JpaCheckoutRepository.java
-│       │           ├── JpaSlotRepository.java
-│       │           └── SlotRepositoryAdapter.java
+│       │           ├── adapters
+│       │           │   ├── CarRepositoryAdapter.java
+│       │           │   ├── CheckinRepositoryAdapter.java
+│       │           │   ├── CheckoutRepositoryAdapter.java
+│       │           │   └── SlotRepositoryAdapter.java
+│       │           └── springdata
+│       │               ├── JpaCarRepository.java
+│       │               ├── JpaCheckinRepository.java
+│       │               ├── JpaCheckoutRepository.java
+│       │               └── JpaSlotRepository.java
 │       └── messaging
 │           ├── config
 │           │   └── RabbitMQConfig.java
@@ -115,6 +117,7 @@ parking
     │   └── StringUtils.java
     └── valueobjects
         └── Plate.java
+
 ```
 
 

@@ -1,4 +1,4 @@
-package com.pablords.parking.adapters.outbound.database.jpa.repositories;
+package com.pablords.parking.adapters.outbound.database.jpa.repositories.adapters;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.pablords.parking.adapters.outbound.database.jpa.mappers.CarMapper;
 import com.pablords.parking.adapters.outbound.database.jpa.models.CarModel;
+import com.pablords.parking.adapters.outbound.database.jpa.repositories.springdata.JpaCarRepository;
 
 @Component
 @Slf4j

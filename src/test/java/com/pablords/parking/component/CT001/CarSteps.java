@@ -21,7 +21,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.pablords.parking.adapters.inbound.http.dtos.CarResponseDTO;
 import com.pablords.parking.adapters.inbound.http.handlers.ApiErrorDTO;
 import com.pablords.parking.adapters.outbound.database.jpa.models.CarModel;
-import com.pablords.parking.adapters.outbound.database.jpa.repositories.JpaCarRepository;
+import com.pablords.parking.adapters.outbound.database.jpa.repositories.springdata.JpaCarRepository;
 
 import io.cucumber.java.Before;
 import io.cucumber.java.pt.Dado;

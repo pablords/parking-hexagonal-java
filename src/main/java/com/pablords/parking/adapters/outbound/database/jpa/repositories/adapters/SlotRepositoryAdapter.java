@@ -1,6 +1,7 @@
-package com.pablords.parking.adapters.outbound.database.jpa.repositories;
+package com.pablords.parking.adapters.outbound.database.jpa.repositories.adapters;
 
 import com.pablords.parking.adapters.outbound.database.jpa.mappers.SlotMapper;
+import com.pablords.parking.adapters.outbound.database.jpa.repositories.springdata.JpaSlotRepository;
 import com.pablords.parking.core.entities.Slot;
 import com.pablords.parking.core.ports.outbound.repositories.SlotRepositoryPort;
 import org.springframework.stereotype.Component;

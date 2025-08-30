@@ -12,7 +12,7 @@ import com.pablords.parking.adapters.outbound.database.jpa.models.CarModel;
 import com.pablords.parking.adapters.outbound.database.jpa.models.CheckinModel;
 import com.pablords.parking.adapters.outbound.database.jpa.models.CheckoutModel;
 import com.pablords.parking.adapters.outbound.database.jpa.models.SlotModel;
-import com.pablords.parking.adapters.outbound.database.jpa.repositories.JpaSlotRepository;
+import com.pablords.parking.adapters.outbound.database.jpa.repositories.springdata.JpaSlotRepository;
 
 public class TestUtils {
   private final static LocalDateTime NOW = LocalDateTime.now();

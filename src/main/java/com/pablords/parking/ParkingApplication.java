@@ -7,10 +7,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-import com.pablords.parking.adapters.outbound.database.jpa.repositories.JpaCarRepository;
-import com.pablords.parking.adapters.outbound.database.jpa.repositories.JpaCheckinRepository;
-import com.pablords.parking.adapters.outbound.database.jpa.repositories.JpaCheckoutRepository;
-import com.pablords.parking.adapters.outbound.database.jpa.repositories.JpaSlotRepository;
+import com.pablords.parking.adapters.outbound.database.jpa.repositories.springdata.JpaCarRepository;
+import com.pablords.parking.adapters.outbound.database.jpa.repositories.springdata.JpaCheckinRepository;
+import com.pablords.parking.adapters.outbound.database.jpa.repositories.springdata.JpaCheckoutRepository;
+import com.pablords.parking.adapters.outbound.database.jpa.repositories.springdata.JpaSlotRepository;
 
 import lombok.extern.slf4j.Slf4j;
 

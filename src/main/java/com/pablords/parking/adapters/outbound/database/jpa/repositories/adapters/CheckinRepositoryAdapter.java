@@ -1,8 +1,10 @@
-package com.pablords.parking.adapters.outbound.database.jpa.repositories;
+package com.pablords.parking.adapters.outbound.database.jpa.repositories.adapters;
 
 import com.pablords.parking.adapters.outbound.database.jpa.mappers.CarMapper;
 import com.pablords.parking.adapters.outbound.database.jpa.mappers.CheckinMapper;
 import com.pablords.parking.adapters.outbound.database.jpa.models.CarModel;
+import com.pablords.parking.adapters.outbound.database.jpa.repositories.springdata.JpaCarRepository;
+import com.pablords.parking.adapters.outbound.database.jpa.repositories.springdata.JpaCheckinRepository;
 import com.pablords.parking.core.entities.Checkin;
 import com.pablords.parking.core.ports.outbound.repositories.CheckinRepositoryPort;
 

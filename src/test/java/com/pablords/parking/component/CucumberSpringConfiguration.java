@@ -7,10 +7,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.core.env.Environment;
 import org.springframework.test.context.ActiveProfiles;
 
-import com.pablords.parking.adapters.outbound.database.jpa.repositories.JpaCarRepository;
-import com.pablords.parking.adapters.outbound.database.jpa.repositories.JpaCheckinRepository;
-import com.pablords.parking.adapters.outbound.database.jpa.repositories.JpaCheckoutRepository;
-import com.pablords.parking.adapters.outbound.database.jpa.repositories.JpaSlotRepository;
+import com.pablords.parking.adapters.outbound.database.jpa.repositories.springdata.JpaCarRepository;
+import com.pablords.parking.adapters.outbound.database.jpa.repositories.springdata.JpaCheckinRepository;
+import com.pablords.parking.adapters.outbound.database.jpa.repositories.springdata.JpaCheckoutRepository;
+import com.pablords.parking.adapters.outbound.database.jpa.repositories.springdata.JpaSlotRepository;
 import com.pablords.parking.adapters.outbound.messaging.producers.CheckoutProducerAdapter;
 
 import io.cucumber.java.Before;

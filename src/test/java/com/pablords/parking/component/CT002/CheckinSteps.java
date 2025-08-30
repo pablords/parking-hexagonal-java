@@ -27,10 +27,10 @@ import com.pablords.parking.adapters.outbound.database.jpa.models.CarModel;
 import com.pablords.parking.adapters.outbound.database.jpa.models.CheckinModel;
 import com.pablords.parking.adapters.outbound.database.jpa.models.CheckoutModel;
 import com.pablords.parking.adapters.outbound.database.jpa.models.SlotModel;
-import com.pablords.parking.adapters.outbound.database.jpa.repositories.JpaCarRepository;
-import com.pablords.parking.adapters.outbound.database.jpa.repositories.JpaCheckinRepository;
-import com.pablords.parking.adapters.outbound.database.jpa.repositories.JpaCheckoutRepository;
-import com.pablords.parking.adapters.outbound.database.jpa.repositories.JpaSlotRepository;
+import com.pablords.parking.adapters.outbound.database.jpa.repositories.springdata.JpaCarRepository;
+import com.pablords.parking.adapters.outbound.database.jpa.repositories.springdata.JpaCheckinRepository;
+import com.pablords.parking.adapters.outbound.database.jpa.repositories.springdata.JpaCheckoutRepository;
+import com.pablords.parking.adapters.outbound.database.jpa.repositories.springdata.JpaSlotRepository;
 import com.pablords.parking.component.TestUtils;
 
 import io.cucumber.java.After;
