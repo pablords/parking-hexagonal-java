@@ -1,6 +1,5 @@
 package com.pablords.parking.adapters.inbound.http.mappers;
 
-import com.pablords.parking.adapters.inbound.http.dtos.CheckoutRequestDTO;
 import com.pablords.parking.adapters.inbound.http.dtos.CheckoutResponseDTO;
 import com.pablords.parking.core.entities.Checkout;
 
