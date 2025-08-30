@@ -8,5 +8,5 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public record CheckoutResponseDTO(
     CheckinResponseDTO checkin,
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "UTC") LocalDateTime checkOutTime,
-    Double parkingFee
-) {}
+    Double parkingFee) {
+}

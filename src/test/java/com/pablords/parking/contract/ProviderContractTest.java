@@ -46,7 +46,7 @@ import com.pablords.parking.core.valueobjects.Plate;
 // Caminho para os contratos "mockados"
 @PactFolder("consumer-api/pacts")
 // @PactBroker(url = "http://localhost:9292", // URL do Pact Broker
-//     authentication = @PactBrokerAuth(username = "admin", password = "password")
+// authentication = @PactBrokerAuth(username = "admin", password = "password")
 // // Se necessário autenticação
 // )
 @ActiveProfiles("contract-test")
@@ -79,14 +79,21 @@ class ProviderContractTest {
 
   @BeforeEach
   void setup() {
-
-    car = new Car(new Plate("ABC1234"), "Toyota", "Red", "Sedan");
-    car.setId(UUID.fromString("f5d4b3b4-1b4b-4b4b-8b4b-4b4b4b4b4b4b"));
-    slot = new Slot(1l, false);
+    // Definir um horário fixo para check-in e check-out
+    checkoutFixedClock = Clock.fixed(
+        LocalDateTime.parse("2015-01-01T15:00:00").atZone(zoneId).toInstant(),
+        zoneId);
 
     checkinFixedClock = Clock.fixed(
         LocalDateTime.parse("2015-01-01T14:00:00").atZone(zoneId).toInstant(),
         zoneId);
+
+    car = new Car(new Plate("ABC1234"), "Toyota", "Red", "Sedan");
+    car.setId(UUID.fromString("f5d4b3b4-1b4b-4b4b-8b4b-4b4b4b4b4b4b"));
+    slot = new Slot(1l, false);
+    checkin = new Checkin(slot, car, checkinFixedClock);
+    checkout = new Checkout(checkin, checkoutFixedClock);
+
     checkin = new Checkin(slot, car, checkinFixedClock);
     checkin.setId(UUID.fromString("f5d4b3b4-1b4b-4b4b-8b4b-4b4b4b4b4b4b"));
 
@@ -94,14 +101,9 @@ class ProviderContractTest {
         .truncatedTo(ChronoUnit.SECONDS);
     checkin.setCheckInTime(LocalDateTime.ofInstant(fixedCheckin, zoneId));
 
-    // Definir um horário fixo para check-in e check-out
-    checkoutFixedClock = Clock.fixed(
-        LocalDateTime.parse("2015-01-01T15:00:00").atZone(zoneId).toInstant(),
-        zoneId);
-
     var fixedCheckout = Instant.parse("2025-03-13T15:00:00Z")
         .truncatedTo(ChronoUnit.SECONDS);
-    checkin.setCheckOutTime(LocalDateTime.ofInstant(fixedCheckout, zoneId));
+    checkout.setCheckOutTime(LocalDateTime.ofInstant(fixedCheckout, zoneId));
 
     exceptionFixedClock = Clock.fixed(
         LocalDateTime.parse("2015-01-01T13:00:00").atZone(zoneId).toInstant(),

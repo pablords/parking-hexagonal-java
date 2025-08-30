@@ -2,8 +2,6 @@ package com.pablords.parking.core.entities;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.time.Clock;
-import java.time.LocalDateTime;
 import java.util.UUID;
 import java.time.*;
 
@@ -19,7 +17,6 @@ public class Checkout {
   private LocalDateTime checkOutTime;
   private Double parkingFee;
   private final Clock clock;
-
 
   /**
    * Atualiza a taxa de estacionamento calculando novamente o valor.
@@ -38,14 +35,12 @@ public class Checkout {
     this.checkin = checkin;
     this.clock = clock;
     this.checkOutTime = LocalDateTime.now(clock);
-    this.checkin.setCheckOutTime(this.getCheckOutTime());
     this.calculateParkingFee();
   }
 
   public Checkout() {
     this.clock = Clock.systemDefaultZone();
   }
-
 
   public void freeSlot() {
     checkin.getSlot().free();
@@ -77,6 +72,10 @@ public class Checkout {
 
   public void setCheckin(Checkin checkin) {
     this.checkin = checkin;
+  }
+
+  public void setCheckOutTime(LocalDateTime checkOutTime) {
+    this.checkOutTime = checkOutTime;
   }
 
   @Override

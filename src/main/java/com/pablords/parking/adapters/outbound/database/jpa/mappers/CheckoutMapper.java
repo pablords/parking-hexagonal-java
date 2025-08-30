@@ -1,32 +1,28 @@
 package com.pablords.parking.adapters.outbound.database.jpa.mappers;
 
-import org.modelmapper.ModelMapper;
+import java.time.LocalDateTime;
+
+import org.mapstruct.AfterMapping;
+import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
 
 import com.pablords.parking.adapters.outbound.database.jpa.models.CheckoutModel;
-import com.pablords.parking.core.entities.Checkin;
 import com.pablords.parking.core.entities.Checkout;
 
-import lombok.extern.slf4j.Slf4j;
+@Mapper(componentModel = "spring", uses = { CheckinMapper.class, CarMapper.class, SlotMapper.class })
 
-@Slf4j
-public class CheckoutMapper {
-  private static final ModelMapper modelMapper = new ModelMapper();
+public interface CheckoutMapper {
+  CheckoutModel toModel(Checkout checkout);
 
-  public static CheckoutModel toModel(Checkout checkout) {
-    log.info("Mapeando Checkout para CheckoutModel: {}", checkout.toString());
-    return modelMapper.map(checkout, CheckoutModel.class);
-  }
+  Checkout toEntity(CheckoutModel model);
 
-  public static Checkout toEntity(CheckoutModel model, Checkin checkin) {
-    log.info("Mapeando CheckoutModel para Checkout: {}", model.toString());
-    Checkout checkout = modelMapper.map(model, Checkout.class);
-    checkout.setCheckin(checkin);
-    // Só calcula se ambos estiverem preenchidos
-    if (checkout.getCheckin() != null && checkout.getCheckOutTime() != null) {
-        checkout.updateParkingFee();
-    } else {
-        log.warn("Não foi possível calcular a taxa: checkin ou checkOutTime nulo. checkin={}, checkOutTime={}", checkout.getCheckin(), checkout.getCheckOutTime());
+  @AfterMapping
+  default void calculateFee(@MappingTarget Checkout checkout) {
+    if (checkout.getCheckOutTime() == null) {
+      checkout.setCheckOutTime(LocalDateTime.now());
     }
-    return checkout;
+    if (checkout.getCheckin() != null && checkout.getCheckOutTime() != null) {
+      checkout.updateParkingFee();
+    }
   }
 }

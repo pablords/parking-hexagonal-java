@@ -11,26 +11,28 @@ import java.util.Optional;
 public class SlotRepositoryAdapter implements SlotRepositoryPort {
 
     private final JpaSlotRepository jpaRepositorySlot;
+    private final SlotMapper slotMapper;
 
-    public SlotRepositoryAdapter(JpaSlotRepository jpaRepositorySlot) {
+    public SlotRepositoryAdapter(JpaSlotRepository jpaRepositorySlot, SlotMapper slotMapper) {
         this.jpaRepositorySlot = jpaRepositorySlot;
+        this.slotMapper = slotMapper;
     }
 
     @Override
     public Optional<Slot> findAvailableSlot() {
         var slotModel = jpaRepositorySlot.findFirstByOccupiedFalse();
-        return slotModel.map(SlotMapper::toEntity);
+        return slotModel.map(slotMapper::toEntity);
     }
 
     @Override
     public Slot save(Slot slot) {
-        var createdSlot = jpaRepositorySlot.save(SlotMapper.toModel(slot));
-        return SlotMapper.toEntity(createdSlot);
+        var createdSlot = jpaRepositorySlot.save(slotMapper.toModel(slot));
+        return slotMapper.toEntity(createdSlot);
     }
 
     @Override
     public Optional<Slot> findById(Long id) {
         var slot = jpaRepositorySlot.findById(id);
-        return slot.map(SlotMapper::toEntity);
+        return slot.map(slotMapper::toEntity);
     }
 }

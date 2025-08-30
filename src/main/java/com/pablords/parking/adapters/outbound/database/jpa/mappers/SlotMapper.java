@@ -1,19 +1,15 @@
 package com.pablords.parking.adapters.outbound.database.jpa.mappers;
 
-import org.modelmapper.ModelMapper;
+import org.mapstruct.Mapper;
 
 import com.pablords.parking.adapters.outbound.database.jpa.models.SlotModel;
 import com.pablords.parking.core.entities.Slot;
 
-public class SlotMapper {
+@Mapper(componentModel = "spring")
+public interface SlotMapper {
 
-  private static final ModelMapper modelMapper = new ModelMapper();
+  SlotModel toModel(Slot slot);
 
-  public static SlotModel toModel(Slot slot) {
-    return modelMapper.map(slot, SlotModel.class);
-  }
+  Slot toEntity(SlotModel model);
 
-  public static Slot toEntity(SlotModel model) {
-    return modelMapper.map(model, Slot.class);
-  }
 }

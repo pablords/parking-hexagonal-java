@@ -13,7 +13,7 @@ public class CheckoutMapper {
     log.info("Mapeando Checkout para CheckoutResponseDTO: {}", checkout);
     return new CheckoutResponseDTO(
       CheckinMapper.toDTO(checkout.getCheckin()),
-      checkout.getCheckin().getCheckOutTime(),
+      checkout.getCheckOutTime(),
       checkout.getParkingFee()
     );
   }

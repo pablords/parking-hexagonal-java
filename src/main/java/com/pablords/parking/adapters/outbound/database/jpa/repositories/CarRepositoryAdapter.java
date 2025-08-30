@@ -20,35 +20,37 @@ import com.pablords.parking.adapters.outbound.database.jpa.models.CarModel;
 public class CarRepositoryAdapter implements CarRepositoryPort {
 
     private final JpaCarRepository jpaRepositoryCar;
+    private final CarMapper carMapper;
 
-    public CarRepositoryAdapter(JpaCarRepository jpaRepositoryCar) {
+    public CarRepositoryAdapter(JpaCarRepository jpaRepositoryCar, CarMapper carMapper) {
         this.jpaRepositoryCar = jpaRepositoryCar;
+        this.carMapper = carMapper;
     }
 
     @Override
     public Optional<Car> findById(UUID id) {
         log.info("Buscando carro com ID: {}", id);
-        return jpaRepositoryCar.findById(id).map(CarMapper::toEntity);
+        return jpaRepositoryCar.findById(id).map(carMapper::toEntity);
     }
 
     @Override
     public List<Car> find() {
         List<CarModel> carsModel = jpaRepositoryCar.findAll();
         return carsModel.stream()
-                .map(CarMapper::toEntity)
+                .map(carMapper::toEntity)
                 .collect(Collectors.toList());
     }
 
     @Override
     public Car save(Car car) {
         log.info("Persistindo carro: {}", car.toString());
-        CarModel carModel = CarMapper.toModel(car);
+        CarModel carModel = carMapper.toModel(car);
 
         if (!this.existsByPlate(car.getPlate().getValue())) {
             carModel = jpaRepositoryCar.save(carModel);
         }
 
-        return CarMapper.toEntity(carModel);
+        return carMapper.toEntity(carModel);
     }
 
     @Override
@@ -58,7 +60,7 @@ public class CarRepositoryAdapter implements CarRepositoryPort {
 
     @Override
     public Optional<Car> findByPlate(String plate) {
-        return jpaRepositoryCar.findByPlate(plate).map(CarMapper::toEntity);
+        return jpaRepositoryCar.findByPlate(plate).map(carMapper::toEntity);
     }
 
 }

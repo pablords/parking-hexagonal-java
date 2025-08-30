@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 
@@ -12,7 +13,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.ToString;
@@ -22,24 +23,24 @@ import lombok.ToString;
 @Data
 @ToString
 public class CheckinModel {
-    @Column(name = "id")
-    @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    private UUID id;
+  @Column(name = "id")
+  @Id
+  @GeneratedValue(generator = "UUID")
+  @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+  private UUID id;
 
-    @Column(name = "checkInTime")
-    private LocalDateTime checkInTime;
+  @Column(name = "checkInTime")
+  private LocalDateTime checkInTime;
 
-    @Column(name = "checkOutTime")
-    private LocalDateTime checkOutTime;
+  @ManyToOne()
+  @JoinColumn(name = "car_id", referencedColumnName = "id") // Mapeamento da chave estrangeira
+  private CarModel car;
 
-    @ManyToOne()
-    @JoinColumn(name = "car_id", referencedColumnName = "id") // Mapeamento da chave estrangeira
-    private CarModel car;
+  @ManyToOne()
+  @JoinColumn(name = "slot_id", referencedColumnName = "id") // Mapeamento da chave estrangeira
+  private SlotModel slot;
 
-    @ManyToOne()
-    @JoinColumn(name = "slot_id", referencedColumnName = "id") // Mapeamento da chave estrangeira
-    private SlotModel slot;
+  @OneToOne(mappedBy = "checkin", cascade = CascadeType.REMOVE, orphanRemoval = true)
+  private CheckoutModel checkout;
 
 }

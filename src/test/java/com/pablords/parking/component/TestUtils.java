@@ -70,9 +70,10 @@ public class TestUtils {
 
   public static CheckoutModel createCheckoutModel(CheckinModel createdCheckin) {
     CheckoutModel checkout = new CheckoutModel();
-    checkout.setCheckinId(createdCheckin.getId());
-    checkout.setCheckOutTime(NOW.plusHours(2));
+    checkout.setCheckin(createdCheckin);
+    createdCheckin.setCheckout(checkout);
     checkout.setId(UUID.fromString("f5d4b3b4-1b4b-4b4b-8b4b-4b4b4b4b4b4b"));
+    checkout.setCheckOutTime(NOW.plusHours(2));
     return checkout;
   }
 }

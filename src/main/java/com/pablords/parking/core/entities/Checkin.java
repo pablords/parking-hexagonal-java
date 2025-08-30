@@ -9,7 +9,6 @@ public class Checkin {
   private Slot slot;
   private Car car;
   private LocalDateTime checkInTime;
-  private LocalDateTime checkOutTime;
 
   public Checkin(Slot slot, Car car) {
     this(slot, car, Clock.systemDefaultZone());
@@ -44,13 +43,6 @@ public class Checkin {
     this.id = id;
   }
 
-  public void setCheckOutTime(LocalDateTime checkOutTime) {
-    this.checkOutTime = checkOutTime;
-  }
-
-  public LocalDateTime getCheckOutTime() {
-    return this.checkOutTime;
-  }
 
   public void setCheckInTime(LocalDateTime minusHours) {
     this.checkInTime = minusHours;
@@ -66,7 +58,7 @@ public class Checkin {
 
   @Override
   public String toString() {
-    return "Checkin [car=" + car + ", checkInTime=" + checkInTime + ", checkOutTime=" + checkOutTime + ", id=" + id
+    return "Checkin [car=" + car + ", checkInTime=" + checkInTime + ", id=" + id
         + ", slot=" + slot.toString() + "]";
   }
 }

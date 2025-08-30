@@ -54,6 +54,7 @@ public class CheckoutSteps {
   @Before
   public void setUp() {
     // Limpando a tabelas do banco H2
+    jdbcTemplate.execute("DELETE FROM checkouts");
     jdbcTemplate.execute("DELETE FROM checkins");
     jdbcTemplate.execute("DELETE FROM slots");
 

@@ -5,10 +5,14 @@ import java.util.UUID;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 
@@ -16,18 +20,19 @@ import lombok.Data;
 @Table(name = "checkouts")
 @Data
 public class CheckoutModel {
-    @Column(name = "id")
-    @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    private UUID id;
+  @Column(name = "id")
+  @Id
+  @GeneratedValue(generator = "UUID")
+  @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+  private UUID id;
 
-    @Column(name = "checkinId")
-    private UUID checkinId;
+  @OneToOne
+  @JoinColumn(name = "checkin_id", referencedColumnName = "id")
+  private CheckinModel checkin;
 
-    @Column(name = "checkOutTime")
-    private LocalDateTime checkOutTime;
+  @Column(name = "checkOutTime")
+  private LocalDateTime checkOutTime;
 
-    @Column(name = "parkingFee")
-    private Double parkingFee;
+  @Column(name = "parkingFee")
+  private Double parkingFee;
 }

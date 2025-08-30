@@ -17,16 +17,18 @@ import org.springframework.stereotype.Component;
 public class CheckoutRepositoryAdapter implements CheckoutRepositoryPort {
 
     private final JpaCheckoutRepository jpaRepositoryCheckout;
+    private final CheckoutMapper checkoutMapper;
 
-    public CheckoutRepositoryAdapter(JpaCheckoutRepository jpaRepositoryCheckout) {
+    public CheckoutRepositoryAdapter(JpaCheckoutRepository jpaRepositoryCheckout, CheckoutMapper checkoutMapper) {
         this.jpaRepositoryCheckout = jpaRepositoryCheckout;
+        this.checkoutMapper = checkoutMapper;
     }
 
     @Override
     public Checkout save(Checkout checkout) {
         log.info("Persistindo checkout: {}", checkout.toString());
-        var createdCheckout = jpaRepositoryCheckout.save(CheckoutMapper.toModel(checkout));
-        return CheckoutMapper.toEntity(createdCheckout, checkout.getCheckin());
+        var createdCheckout = jpaRepositoryCheckout.save(checkoutMapper.toModel(checkout));
+        return checkoutMapper.toEntity(createdCheckout);
     }
 
     @Override
@@ -39,6 +41,6 @@ public class CheckoutRepositoryAdapter implements CheckoutRepositoryPort {
 
         var checkin = new Checkin();
         checkin.setId(checkin.getId());
-        return Optional.of(CheckoutMapper.toEntity(optionalCheckoutModel.get(), checkin));
+        return Optional.of(checkoutMapper.toEntity(optionalCheckoutModel.get()));
     }
 }
