@@ -1,6 +1,5 @@
 package com.pablords.parking.adapters.inbound.http.handlers;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.http.HttpStatus;

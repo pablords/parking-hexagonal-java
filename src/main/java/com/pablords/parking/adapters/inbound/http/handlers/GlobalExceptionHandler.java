@@ -59,9 +59,9 @@ public class GlobalExceptionHandler {
 
   private Map<String, String> extractValidationErrors(MethodArgumentNotValidException ex) {
     Map<String, String> errors = new HashMap<>();
-    ex.getBindingResult().getFieldErrors().forEach(error -> {
-      errors.put(error.getField(), error.getDefaultMessage());
-    });
+    ex.getBindingResult().getFieldErrors().forEach(error ->
+      errors.put(error.getField(), error.getDefaultMessage())
+    );
     return errors;
   }
 }

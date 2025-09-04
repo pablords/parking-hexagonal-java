@@ -11,9 +11,11 @@ public interface CheckinMapper {
 
   @Mapping(target = "car", source = "car")
   @Mapping(target = "slot", source = "slot")
+  @Mapping(target = "checkout", ignore = true)
   CheckinModel toModel(Checkin checkin);
 
   @Mapping(target = "car", source = "car")
   @Mapping(target = "slot", source = "slot")
+  @Mapping(target = "checkout", ignore = true)
   Checkin toEntity(CheckinModel model);
 }

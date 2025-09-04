@@ -57,8 +57,8 @@ class CheckoutServiceUnitTest {
   private Car car;
   private UUID uuid;
 
-  private final static LocalDateTime CHECKIN_TIME = LocalDateTime.of(2025, 8, 1, 8, 0, 42, 956738000);
-  private static final LocalDateTime CHECKOUT_TIME = LocalDateTime.of(2025, 8, 1, 10, 0, 42, 956738000);
+  private final LocalDateTime CHECKIN_TIME = LocalDateTime.of(2025, 8, 1, 8, 0, 42, 956738000);
+  private final LocalDateTime CHECKOUT_TIME = LocalDateTime.of(2025, 8, 1, 10, 0, 42, 956738000);
   ZoneId zone = ZoneId.systemDefault();
   Clock checkoutClock = Clock.fixed(CHECKOUT_TIME.atZone(zone).toInstant(), zone);
 

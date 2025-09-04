@@ -16,7 +16,7 @@ public class Checkout {
   private Checkin checkin;
   private LocalDateTime checkOutTime;
   private Double parkingFee;
-  private final Clock clock;
+  final Clock clock;
 
   /**
    * Atualiza a taxa de estacionamento calculando novamente o valor.

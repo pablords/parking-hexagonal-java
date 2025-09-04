@@ -263,7 +263,6 @@
             <artifactId>maven</artifactId>
             <version>4.1.11</version>
             <configuration>
-              <!-- <pactBrokerUrl>http://localhost:9292</pactBrokerUrl>  -->
               <serviceProviders>
                 <serviceProvider>
                   <name>ParkingService</name>

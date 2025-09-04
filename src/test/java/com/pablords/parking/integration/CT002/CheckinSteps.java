@@ -76,7 +76,7 @@ public class CheckinSteps {
     public void thatIAmInTheApiEndpoint(String plate) {
         Optional<Checkin> existingCheckin = checkinRepositoryPort.findByPlate(plate);
         var slots = jdbcTemplate.query("SELECT occupied FROM slots", (rs, rowNum) -> rs.getBoolean("occupied"));
-        slots.forEach(slot -> assertEquals(false, slot));;
+        slots.forEach(slot -> assertEquals(false, slot));
         assertTrue(!existingCheckin.isPresent(), "O carro não deveria estar estacionado, mas está!");
     }
 
@@ -119,8 +119,7 @@ public class CheckinSteps {
 
     @Entao("o slot com id {int} deve ser ocupado")
     public void theSlotWithIdShouldBeOccupied(int slotId) {
-        var isOccupied = jdbcTemplate.queryForObject("SELECT occupied FROM slots WHERE id = ?", new Object[] { slotId },
-                Boolean.class);
+        var isOccupied = jdbcTemplate.queryForObject("SELECT occupied FROM slots WHERE id = ?", Boolean.class, slotId);
         assertEquals(true, isOccupied);
     }
 

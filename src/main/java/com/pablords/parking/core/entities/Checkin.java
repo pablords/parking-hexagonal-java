@@ -8,6 +8,8 @@ public class Checkin {
   private UUID id;
   private Slot slot;
   private Car car;
+  private Checkout checkout;
+
   private LocalDateTime checkInTime;
 
   public Checkin(Slot slot, Car car) {
@@ -43,7 +45,6 @@ public class Checkin {
     this.id = id;
   }
 
-
   public void setCheckInTime(LocalDateTime minusHours) {
     this.checkInTime = minusHours;
   }
@@ -54,6 +55,14 @@ public class Checkin {
 
   public void setSlot(Slot slot) {
     this.slot = slot;
+  }
+
+  public Checkout getCheckout() {
+    return checkout;
+  }
+
+  public void setCheckout(Checkout checkout) {
+    this.checkout = checkout;
   }
 
   @Override

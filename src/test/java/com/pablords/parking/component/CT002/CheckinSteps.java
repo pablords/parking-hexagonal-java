@@ -54,7 +54,7 @@ public class CheckinSteps {
 
   private CheckinModel createdCheckin;
   private ArrayList<SlotModel> slots;
-  private CheckoutModel checkout;
+  CheckoutModel checkout;
   private CarModel car;
 
   private HttpStatus responseStatus;

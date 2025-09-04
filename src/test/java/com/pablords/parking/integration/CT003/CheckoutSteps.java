@@ -41,9 +41,9 @@ public class CheckoutSteps {
   @Autowired
   private JdbcTemplate jdbcTemplate;
   @Autowired
-  private CheckinServicePort checkinServicePort;
+  CheckinServicePort checkinServicePort;
   @Autowired
-  private CheckinRepositoryPort checkinRepositoryPort;
+  CheckinRepositoryPort checkinRepositoryPort;
 
   @Value("${features.request.path}")
   private String featuresRequestPath;
@@ -123,8 +123,7 @@ public class CheckoutSteps {
 
   @E("o slot com id {int} deve ser liberado")
   public void theSlotWithIdMustBeReleased(Integer slotId) {
-    var isOccupied = jdbcTemplate.queryForObject("SELECT occupied FROM slots WHERE id = ?", new Object[] { slotId },
-        Boolean.class);
+    var isOccupied = jdbcTemplate.queryForObject("SELECT occupied FROM slots WHERE id = ?", Boolean.class, slotId);
     assertTrue(!isOccupied, "O slot não foi liberado.");
   }
 
