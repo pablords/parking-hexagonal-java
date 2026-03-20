@@ -2,20 +2,20 @@
 
 | **Critério**            | **Testes Unitários** | **Testes de Componentes** | **Testes de Contrato** | **Testes de Integração** |
 |------------------------|-------------------|----------------------|-------------------|--------------------|
-| **O que testa?** | Métodos e classes isoladas | Um componente específico (ex: Service, Controller) | Toda a aplicação isolada, mockando dependências externas | Integração entre a aplicação e sistemas externos |
-| **Infraestrutura usada?** | ❌ Não | 🔹 Apenas infraestrutura interna (ex: banco H2) | 🔹 Mocka banco e APIs externas | ✅ Banco de dados real e APIs externas |
-| **Fronteiras externas mockadas?** | ✅ Sim | ✅ Sim (mas pode testar repositórios reais) | ✅ Sim (banco, APIs externas e mensageria são mockados) | ❌ Não (tudo real) |
-| **Velocidade de execução** | ⚡ Muito rápido | ⚡ Rápido | 🚀 Médio | 🐢 Lento |
-| **Objetivo** | Validar regras de negócio | Validar funcionalidades isoladas | Validar comunicação e contrato da API | Validar a aplicação em um ambiente real |
-| **Exemplo de ferramenta** | JUnit, Mockito | SpringBootTest + MockBean | Cucumber, Pact, MockServer | Testcontainers, WireMock |
-| **Maior confiabilidade** | ❌ Baixa (testa apenas partes isoladas) | 🔹 Média (testa componentes, mas mocka partes) | ✅ Alta (testa toda a aplicação, mockando apenas o mundo externo) | ✅ Muito Alta (testa como o sistema funciona em produção) |
+| **O que testa?** | Métodos e classes isoladas | Todo o fluxo da aplicação mockando fronteiras externas | Contrato de comunicação entre serviços | Integração entre a aplicação e sistemas externos |
+| **Infraestrutura usada?** | ❌ Não | 🔹 Banco em memória (H2) e mocks de APIs | 🔹 Mocka banco e APIs externas | ✅ Banco de dados real e APIs externas |
+| **Fronteiras externas mockadas?** | ✅ Sim | ✅ Sim | ✅ Sim | ❌ Não (tudo real) |
+| **Velocidade de execução** | ⚡ Muito rápido | 🚀 Médio | 🚀 Médio | 🐢 Lento |
+| **Objetivo** | Validar regras de negócio | Validar fluxos de negócio fim a fim em isolamento | Validar comunicação e contrato da API | Validar a aplicação em um ambiente real |
+| **Exemplo de ferramenta** | JUnit, Mockito | SpringBootTest, Cucumber, MockBean | Pact, MockServer | Testcontainers, WireMock |
+| **Maior confiabilidade** | ❌ Baixa (testa apenas partes isoladas) | ✅ Alta (testa toda a aplicação em isolamento) | 🔹 Média (foca apenas no contrato) | ✅ Muito Alta (testa como o sistema funciona em produção) |
 
 ---
 
 ## 🏆 Quando usar cada tipo de teste?
 - **Testes Unitários:** Para validar regras de negócio sem dependências externas.
-- **Testes de Componentes:** Para validar componentes internos sem testar APIs externas.
-- **Testes de Contrato:** Para garantir que a API se comporta corretamente mesmo mockando o mundo externo.
+- **Testes de Componentes:** Para validar o fluxo completo da aplicação mockando as fronteiras externas.
+- **Testes de Contrato:** Para garantir que o contrato entre serviços não seja quebrado.
 - **Testes de Integração:** Para validar como a aplicação interage com bancos reais, APIs e serviços externos.
 
 1. Rodando testes por feature
