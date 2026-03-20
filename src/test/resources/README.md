@@ -3,7 +3,7 @@
 | **Critério**            | **Testes Unitários** | **Testes de Componentes** | **Testes de Contrato** | **Testes de Integração** |
 |------------------------|-------------------|----------------------|-------------------|--------------------|
 | **O que testa?** | Métodos e classes isoladas | Todo o fluxo da aplicação mockando fronteiras externas | Contrato de comunicação entre serviços | Integração entre a aplicação e sistemas externos |
-| **Infraestrutura usada?** | ❌ Não | 🔹 Banco em memória (H2) e mocks de APIs | 🔹 Mocka banco e APIs externas | ✅ Banco de dados real e APIs externas |
+| **Infraestrutura usada?** | ❌ Não | 🔹 Mocka banco e APIs externas | 🔹 Mocka banco e APIs externas | ✅ Banco de dados real e APIs externas |
 | **Fronteiras externas mockadas?** | ✅ Sim | ✅ Sim | ✅ Sim | ❌ Não (tudo real) |
 | **Velocidade de execução** | ⚡ Muito rápido | 🚀 Médio | 🚀 Médio | 🐢 Lento |
 | **Objetivo** | Validar regras de negócio | Validar fluxos de negócio fim a fim em isolamento | Validar comunicação e contrato da API | Validar a aplicação em um ambiente real |
